@@ -88,16 +88,16 @@
     <section class="card">
       <h2>Original Demand Letter Text</h2>
       <div>
-        <p>As my clients have now completed all necessary medical treatment for injuries sustained in the referenced accident, this letter serves as a formal and final demand for settlement of their individual bodily injury claims. The damages are substantial, well-documented, and directly related to your insured's clear negligence. We seek full and just compensation without delay.</p>
+        <p>As my clients have now completed all necessary medical treatment for injuries sustained in the referenced accident, this letter serves as a formal and final demand for settlement of their injuries.</p>
 
         <p>This correspondence is submitted solely for settlement purposes and may not be used for any other intent without the express written consent of this office.</p>
 
         <h3>Liability</h3>
-        <p>The subject incident occurred on December 25, 2025, as my clients' vehicle was traveling northbound on I-15 when their vehicle was struck in the rear as it stopped for traffic. Mr. Alpha's vehicle was also traveling northbound when he failed to stop and struck our client's vehicle.</p>
+        <p>The subject incident occurred on December 25, 2025, as my clients' vehicle was traveling northbound on I-15 when their vehicle was struck in the rear as it stopped for traffic.</p>
         <p>Following an investigation, Mr. Alpha was cited for failure to decrease speed (citation#11009141).</p>
 
         <h3>Damages</h3>
-        <p>Our clients were admitted to UMC for emergency treatment and diagnosis. The emergency room physician, Dr. Bentley Doc ordered cervical spine and lumbar spine x-rays and administered and prescribed the proper medication for Mrs. Q. Dr. John Doc attended Mr. Q ordering a cervical spine x-ray. They were both found to have suffered injuries as a result of the accident, and taken off work.</p>
+        <p>Our clients were admitted to UMC for emergency treatment and diagnosis. The emergency room physician, Dr. Bentley Doc ordered cervical spine and lumbar spine x-rays and administered treatment.</p>
         <p>On December 29, 2025 our clients sought further treatment at Desert Inn Medical Center with Mark Doc, D.O. and Frank Doc.</p>
         <p>Based on the findings and the physical examinations, the following diagnosis of the injuries sustained by Mr. &amp; Mrs. Q as a result of the subject accident were made:</p>
         <ul id="diagList">
@@ -106,7 +106,7 @@
           <li>BILATERAL UPPER EXTREMITY RADICULOPATHY (numbness/tingling, worse on right)</li>
           <li>Mild bilateral sensory deficit</li>
         </ul>
-        <p>Mr. Q has treated with pain management modalities, chiropractic manipulative therapy, and medication. Intramuscular injection was administered because ongoing neck pain persisted; he was referred to Dr. G for an electrodiagnostic study.</p>
+        <p>Mr. Q has treated with pain management modalities, chiropractic manipulative therapy, and medication. Intramuscular injection was administered because ongoing neck pain persisted.</p>
       </div>
     </section>
   </section>
@@ -151,15 +151,13 @@
         <p><strong>From:</strong> ${office.value}</p>
         <p><strong>To:</strong> ${recipient.value}</p>
         <p><strong>Date:</strong> ${formatDate(new Date())}</p>
-        <p>As my clients have now completed all necessary medical treatment for injuries sustained in the referenced accident, this letter serves as a formal and final demand for settlement of their individual bodily injury claims. The damages are substantial, well-documented, and directly related to your insured's clear negligence. We seek full and just compensation without delay.</p>
+        <p>As my clients have now completed all necessary medical treatment for injuries sustained in the referenced accident, this letter serves as a formal and final demand for settlement of their injuries.</p>
         <p>This correspondence is submitted solely for settlement purposes and may not be used for any other intent without the express written consent of this office.</p>
         <h3>Liability</h3>
-        <p>The subject incident occurred on ${dateStr || 'December 25, 2025'}, as my clients' vehicle was traveling northbound on ${location.value || 'I-15'} when their vehicle was struck in the rear as it stopped for traffic. Mr. Alpha's vehicle was also traveling northbound when he failed to stop and struck our client's vehicle.</p>
-        <p>Following an investigation, Mr. Alpha was cited for failure to decrease speed (citation#${citation.value || '11009141'}).
-
-</p>
+        <p>The subject incident occurred on ${dateStr || 'December 25, 2025'}, as my clients' vehicle was traveling northbound on ${location.value || 'I-15'} when their vehicle was struck in the rear as it stopped for traffic.</p>
+        <p>Following an investigation, Mr. Alpha was cited for failure to decrease speed (citation#${citation.value || '11009141'}).</p>
         <h3>Damages</h3>
-        <p>Our clients were admitted to ${medicalER.value || 'UMC'} for emergency treatment and diagnosis. The emergency room physician ordered cervical spine and lumbar spine x-rays and administered and prescribed the proper medication for ${client1.value || 'Mrs. Q'}. A cervical spine x-ray was also ordered for ${client2.value || 'Mr. Q'}. They were both found to have suffered injuries as a result of the accident and taken off work.</p>
+        <p>Our clients were admitted to ${medicalER.value || 'UMC'} for emergency treatment and diagnosis. The emergency room physician ordered cervical spine and lumbar spine x-rays and administered treatment.</p>
         <p>On December 29, 2025 our clients sought further treatment at ${medical2.value || 'Desert Inn Medical Center'}.</p>
         <p>Based on the findings and physical examinations, the following diagnoses were made for ${client2.value || 'Mr. Q'} and ${client1.value || 'Mrs. Q'}:</p>
         <ul>${diagHTML}</ul>
@@ -172,7 +170,7 @@
       previewText.innerHTML = buildPreview();
     }
 
-    [office,recipient,incidentDate,location,citation,medicalER,medical2,client1,client2,diagnoses].forEach(el=>{
+    [office, recipient, incidentDate, location, citation, medicalER, medical2, client1, client2, diagnoses].forEach(el => {
       el.addEventListener('input', updatePreview);
       el.addEventListener('change', updatePreview);
     });
@@ -185,191 +183,20 @@
       }
     });
 
-    printBtn.addEventListener('click', ()=>window.print());
+    printBtn.addEventListener('click', () => window.print());
 
-    copyBtn.addEventListener('click', async ()=>{
+    copyBtn.addEventListener('click', async () => {
       const text = previewText.innerText || buildPreview();
-      try{
+      try {
         await navigator.clipboard.writeText(text);
         copyBtn.textContent = 'Copied!';
-        setTimeout(()=>copyBtn.textContent='Copy Text',1200);
-      }catch(e){
+        setTimeout(() => copyBtn.textContent = 'Copy Text', 1200);
+      } catch(e) {
         copyBtn.textContent = 'Copy failed';
       }
     });
 
     updatePreview();
-  </script>
-</body>
-  </html>        <label>Medical Facility (ER)</label>
-        <input type="text" id="medicalER" value="UMC" />
-      </div>
-      <div class="field">
-        <label>Secondary Facility</label>
-        <input type="text" id="medical2" value="Desert Inn Medical Center" />
-      </div>
-      <div class="field">
-        <label>Client 1 Name</label>
-        <input type="text" id="client1" value="Mrs. Q" />
-      </div>
-      <div class="field">
-        <label>Client 2 Name</label>
-        <input type="text" id="client2" value="Mr. Q" />
-      </div>
-      <div class="field">
-        <label>Additional Diagnoses (optional)</label>
-        <textarea id="diagnoses" rows="4">SEVERE THORACIC and CERVICAL NECK STRAIN/SPRAIN; BILATERAL TRAPEZIUS MUSCLE STRAIN/SPRAIN; BILATERAL UPPER EXTREMITY RADICULOPATHY; Mild bilateral sensory deficit</textarea>
-      </div>
-    </section>
-
-    <section class="card hi" id="previewCard" style="display:none">
-      <h2>Live Preview</h2>
-      <div id="previewText"></div>
-    </section>
-
-    <section class="card">
-      <h2>Original Demand Letter Text</h2>
-      <div>
-        <p>As my clients have now completed all necessary medical treatment for injuries sustained in the referenced accident, this letter serves as a formal and final demand for settlement of their individual bodily injury claims. The damages are substantial, well-documented, and directly related to your insured's clear negligence. We seek full and just compensation without delay.</p>
-
-        <p>This correspondence is submitted solely for settlement purposes and may not be used for any other intent without the express written consent of this office.</p>
-
-        <h3>Liability</h3>
-        <p>The subject incident occurred on December 25, 2025, as my clients' vehicle was traveling northbound on I-15 when their vehicle was struck in the rear as it stopped for traffic. Mr. Alpha's vehicle was also traveling northbound when he failed to stop and struck our client's vehicle.</p>
-        <p>Following an investigation, Mr. Alpha was cited for failure to decrease speed (citation#11009141).</p>
-
-        <h3>Damages</h3>
-        <p>Our clients were admitted to UMC for emergency treatment and diagnosis. The emergency room physician, Dr. Bentley Doc ordered cervical spine and lumbar spine x-rays and administered and prescribed the proper medication for Mrs. Q. Dr. John Doc attended Mr. Q ordering a cervical spine x-ray. They were both found to have suffered injuries as a result of the accident, and taken off work.</p>
-        <p>On December 29, 2025 our clients sought further treatment at Desert Inn Medical Center with Mark Doc, D.O. and Frank Doc.</p>
-        <p>Based on the findings and the physical examinations, the following diagnosis of the injuries sustained by Mr. &amp; Mrs. Q as a result of the subject accident were made:</p>
-        <ul id="diagList">
-          <li>SEVERE THORACIC and CERVICAL NECK STRAIN/SPRAIN</li>
-          <li>BILATERAL TRAPEZIUS MUSCLE STRAIN/SPRAIN</li>
-          <li>BILATERAL UPPER EXTREMITY RADICULOPATHY (numbness/tingling, worse on right)</li>
-          <li>Mild bilateral sensory deficit</li>
-        </ul>
-        <p>Mr. Q has treated with pain management modalities, chiropractic manipulative therapy, and medication. Intramuscular injection was administered because ongoing neck pain persisted; he was referred to Dr. G for an electrodiagnostic study.</p>
-      </div>
-    </section>
-  </section>
-
-  <footer class="footer">
-    © 2026 BCPcorner — Interactive Demand Letter Template
-  </footer>
-
-  <script>
-    <script>
-  const office = document.getElementById('office');
-  const recipient = document.getElementById('recipient');
-  const incidentDate = document.getElementById('incidentDate');
-  const location = document.getElementById('location');
-  const citation = document.getElementById('citation');
-  const medicalER = document.getElementById('medicalER');
-  const medical2 = document.getElementById('medical2');
-  const client1 = document.getElementById('client1');
-  const client2 = document.getElementById('client2');
-  const diagnoses = document.getElementById('diagnoses');
-  const previewCard = document.getElementById('previewCard');
-  const previewText = document.getElementById('previewText');
-  const togglePreview = document.getElementById('togglePreview');
-  const printBtn = document.getElementById('printBtn');
-  const copyBtn = document.getElementById('copyBtn');
-
-  function formatDate(d){
-    if(!d) return '';
-    const dt = new Date(d);
-    const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-    return months[dt.getMonth()] + ' ' + dt.getDate() + ', ' + dt.getFullYear();
-  }
-
-  function parseDiag(text){
-    return text.split(/;\s*/).map(s=>s.trim()).filter(Boolean);
-  }
-
-  function buildPreview(){
-    const dateStr = formatDate(incidentDate.value);
-    const diagItems = parseDiag(diagnoses.value);
-    const diagHTML = diagItems.map(s => `<li>${s}</li>`).join('');
-    return `
-      <p><strong>From:</strong> ${office.value}</p>
-      <p><strong>To:</strong> ${recipient.value}</p>
-      <p><strong>Date:</strong> ${formatDate(new Date())}</p>
-      <p>As my clients have now completed all necessary medical treatment for injuries sustained in the referenced accident, this letter serves as a formal and final demand for settlement of their individual bodily injury claims. The damages are substantial, well-documented, and directly related to your insured's clear negligence. We seek full and just compensation without delay.</p>
-      <p>This correspondence is submitted solely for settlement purposes and may not be used for any other intent without the express written consent of this office.</p>
-      <h3>Liability</h3>
-      <p>The subject incident occurred on ${dateStr || 'December 25, 2025'}, as my clients' vehicle was traveling northbound on ${location.value || 'I-15'} when their vehicle was struck in the rear as it stopped for traffic. Mr. Alpha's vehicle was also traveling northbound when he failed to stop and struck our client's vehicle.</p>
-      <p>Following an investigation, Mr. Alpha was cited for failure to decrease speed (citation#${citation.value || '11009141'}).
-
-</p>
-      <h3>Damages</h3>
-      <p>Our clients were admitted to ${medicalER.value || 'UMC'} for emergency treatment and diagnosis. The emergency room physician ordered cervical spine and lumbar spine x-rays and administered and prescribed the proper medication for ${client1.value || 'Mrs. Q'}. A cervical spine x-ray was also ordered for ${client2.value || 'Mr. Q'}. They were both found to have suffered injuries as a result of the accident and taken off work.</p>
-      <p>On December 29, 2025 our clients sought further treatment at ${medical2.value || 'Desert Inn Medical Center'}.</p>
-      <p>Based on the findings and physical examinations, the following diagnoses were made for ${client2.value || 'Mr. Q'} and ${client1.value || 'Mrs. Q'}:</p>
-      <ul>${diagHTML}</ul>
-      <p>We seek full and just compensation without delay.</p>
-      <p>Sincerely,<br/>${office.value}</p>
-    `;
-  }
-
-  function updatePreview(){
-    previewText.innerHTML = buildPreview();
-  }
-
-  // Attach input/change listeners
-  [office,recipient,incidentDate,location,citation,medicalER,medical2,client1,client2,diagnoses].forEach(el=>{
-    el.addEventListener('input', updatePreview);
-    el.addEventListener('change', updatePreview);
-  });
-
-  // FIXED toggle logic
-  togglePreview.addEventListener('click', function(){
-    if (previewCard.style.display === 'none' || previewCard.style.display === '') {
-      previewCard.style.display = 'block';
-    } else {
-      previewCard.style.display = 'none';
-    }
-  });
-
-  printBtn.addEventListener('click', ()=>window.print());
-
-  copyBtn.addEventListener('click', async ()=>{
-    const text = previewText.innerText || buildPreview();
-    try{
-      await navigator.clipboard.writeText(text);
-      copyBtn.textContent = 'Copied!';
-      setTimeout(()=>copyBtn.textContent='Copy Text',1200);
-    }catch(e){
-      copyBtn.textContent = 'Copy failed';
-    }
-  });
-
-  // Initial build
-  updatePreview();
-</script>
-
-
-    function parseDiag(text){
-      return text.split(/;\s*/).map(s=>s.trim()).filter(Boolean);
-    }
-
-    function buildPreview(){
-      const dateStr = formatDate(incidentDate.value);
-      const diagItems = parseDiag(diagnoses.value);
-      const diagHTML = diagItems.map(s => `<li>${s}</li>`).join('');
-
-      return `
-        <p><strong>From:</strong> ${office.value}</p>
-        <p><strong>To:</strong> ${recipient.value}</p>
-        <p><strong>Date:</strong> ${formatDate(new Date())}</p>
-        <p>As my clients have now completed all necessary medical treatment for injuries sustained in the referenced accident, this letter serves as a formal and final demand for settlement of their individual bodily injury claims. The damages are substantial, well-documented, and directly related to your insured's clear negligence. We seek full and just compensation without delay.</p>
-        <p>This correspondence is submitted solely for settlement purposes and may not be used for any other intent without the express written consent of this office.</p>
-        <h3>Liability</h3>
-        <p>The subject incident occurred on ${dateStr || 'December 25, 2025'}, as my clients' vehicle was traveling northbound on ${location.value || 'I-15'} when their vehicle was struck in the rear as it stopped for traffic. Mr. Alpha's vehicle was also traveling northbound when he failed to stop and struck our client's vehicle.</p>
-        <p>Following an investigation, Mr. Alpha was cited for failure to decrease speed (citation#${citation.value || '11009141'}).</p>
-        <h3>Damages</h3>
-        <p>Our clients were admitted to ${medicalER.value || 'UMC'} for emergency treatment and diagnosis. The emergency room physician ordered cervical spine and lumbar spine x-rays and administered and prescribed the proper medication for ${client1.value || 'Mrs. Q'}. A cervical spine x-ray was also ordered for ${client2.value || 'Mr. Q'}. They were both found to have suffered injuries as a result of the accident and taken off work.</p>
-
-      
   </script>
 </body>
 </html>
