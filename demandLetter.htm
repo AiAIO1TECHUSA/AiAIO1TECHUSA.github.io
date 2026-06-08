@@ -170,16 +170,20 @@
       previewText.innerHTML = buildPreview();
     }
 
+    // Add event listeners to all input fields
     [office, recipient, incidentDate, location, citation, medicalER, medical2, client1, client2, diagnoses].forEach(el => {
       el.addEventListener('input', updatePreview);
       el.addEventListener('change', updatePreview);
     });
 
+    // Toggle preview visibility and ensure it updates
     togglePreview.addEventListener('click', function(){
-      if (previewCard.style.display === 'none' || previewCard.style.display === '') {
-        previewCard.style.display = 'block';
-      } else {
-        previewCard.style.display = 'none';
+      const isHidden = previewCard.style.display === 'none' || previewCard.style.display === '';
+      previewCard.style.display = isHidden ? 'block' : 'none';
+      
+      // Force update when showing preview to ensure content is current
+      if (isHidden) {
+        updatePreview();
       }
     });
 
@@ -196,6 +200,7 @@
       }
     });
 
+    // Initialize preview on page load
     updatePreview();
   </script>
 </body>
