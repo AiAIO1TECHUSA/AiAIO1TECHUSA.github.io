@@ -2,26 +2,97 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Personal Injury Demand Letter — Interactive</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Personal Injury Demand Letter Interactive</title>
   <style>
-    body{font-family:Arial,Helvetica,sans-serif;line-height:1.6;margin:0;background:#f7f7f8;color:#1f2937}
-    .wrap{max-width:980px;margin:0 auto;padding:28px}
-    .card{background:#fff;border-radius:14px;padding:28px;margin:18px 0;box-shadow:0 8px 24px rgba(0,0,0,.08)}
-    h1,h2,h3{margin-top:0}
-    .btn{display:inline-block;padding:10px 16px;border-radius:999px;background:#0f172a;color:#fff;border:none;cursor:pointer}
-    .btn:hover{background:#1e293b}
-    .hi{background:#e0f2fe;padding:10px 14px;border-radius:10px;margin:8px 0}
-    .field{display:flex;flex-direction:column;margin:10px 0}
-    .field label{font-weight:700;margin-bottom:6px}
-    .field input,.field select,.field textarea{padding:10px;border:1px solid #d1d5db;border-radius:8px}
-    .tag{display:inline-block;background:#dbeafe;color:#1d4ed8;padding:6px 12px;border-radius:999px;font-size:.9rem}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
-    .service{border:1px solid #e5e7eb;border-radius:12px;padding:18px;background:#fff}
-    .footer{padding:28px 24px;text-align:center;color:#6b7280}
-    @media print{
-      .btn,.field{display:none}
-      .card{box-shadow:none}
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      background: #f7f7f8;
+      color: #1f2937;
+    }
+    .wrap {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 28px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 28px;
+      margin: 18px 0;
+      box-shadow: 0 8px 24px rgba(0,0,0,.08);
+    }
+    h1, h2, h3 {
+      margin-top: 0;
+    }
+    .btn {
+      display: inline-block;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: #0f172a;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+    .btn:hover {
+      background: #1e293b;
+    }
+    .hi {
+      background: #e0f2fe;
+      padding: 10px 14px;
+      border-radius: 10px;
+      margin: 8px 0;
+    }
+    .field {
+      display: flex;
+      flex-direction: column;
+      margin: 10px 0;
+    }
+    .field label {
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .field input,
+    .field select,
+    .field textarea {
+      padding: 10px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font: inherit;
+    }
+    .tag {
+      display: inline-block;
+      background: #dbeafe;
+      color: #1d4ed8;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: .9rem;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 18px;
+    }
+    .service {
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 18px;
+      background: #fff;
+    }
+    .footer {
+      padding: 28px 24px;
+      text-align: center;
+      color: #6b7280;
+    }
+    @media print {
+      .btn, .field {
+        display: none;
+      }
+      .card {
+        box-shadow: none;
+      }
     }
   </style>
 </head>
@@ -29,12 +100,189 @@
   <section class="wrap">
     <section class="card">
       <span class="tag">Settlement Demand Template</span>
-      <h1>Personal Injury Demand Letter — Interactive</h1>
+      <h1>Personal Injury Demand Letter Interactive</h1>
       <p>This document is submitted solely for settlement purposes and may not be used for any other intent without the express written consent of this office.</p>
       <button class="btn" id="togglePreview">Toggle Live Preview</button>
-      <button class="btn" id="printBtn" style="margin-left:8px">Print</button>
-      <button class="btn" id="copyBtn" style="margin-left:8px;background:#1d4ed8">Copy Text</button>
+      <button class="btn" id="printBtn" style="margin-left:8px;">Print</button>
+      <button class="btn" id="copyBtn" style="margin-left:8px;background:#1d4ed8;">Copy Text</button>
     </section>
+
+    <section class="card" id="formCard">
+      <h2>Editable Fields</h2>
+
+      <div class="field">
+        <label for="office">Your Office</label>
+        <input type="text" id="office" value="Smith & Associates" />
+      </div>
+
+      <div class="field">
+        <label for="recipient">Recipient Insurance Company</label>
+        <input type="text" id="recipient" value="Alpha Insurance Co." />
+      </div>
+
+      <div class="field">
+        <label for="incidentDate">Incident Date</label>
+        <input type="date" id="incidentDate" value="2025-12-25" />
+      </div>
+
+      <div class="field">
+        <label for="location">Location</label>
+        <input type="text" id="location" value="I-15 Northbound" />
+      </div>
+
+      <div class="field">
+        <label for="citation">Citation Number</label>
+        <input type="text" id="citation" value="11009141" />
+      </div>
+
+      <div class="field">
+        <label for="medicalER">Medical Facility ER</label>
+        <input type="text" id="medicalER" value="UMC" />
+      </div>
+
+      <div class="field">
+        <label for="medical2">Secondary Facility</label>
+        <input type="text" id="medical2" value="Desert Inn Medical Center" />
+      </div>
+
+      <div class="field">
+        <label for="client1">Client 1 Name</label>
+        <input type="text" id="client1" value="Mrs. Q" />
+      </div>
+
+      <div class="field">
+        <label for="client2">Client 2 Name</label>
+        <input type="text" id="client2" value="Mr. Q" />
+      </div>
+
+      <div class="field">
+        <label for="diagnoses">Additional Diagnoses (one per line)</label>
+        <textarea id="diagnoses" rows="4">SEVERE THORACIC and CERVICAL NECK STRAIN/SPRAIN
+BILATERAL TRAPEZIUS MUSCLE STRAIN/SPRAIN
+BILATERAL UPPER EXTREMITY RADICULOPATHY, Mild bilateral sensory deficit</textarea>
+      </div>
+    </section>
+
+    <section class="card hi" id="previewCard" style="display:none;">
+      <h2>Live Preview</h2>
+      <div id="previewText"></div>
+    </section>
+
+    <section class="card">
+      <h2>Original Demand Letter Text</h2>
+      <div>
+        <p>As my clients have now completed all necessary medical treatment for injuries sustained in the referenced accident, this letter serves as a formal and final demand for settlement of their injuries.</p>
+        <p>This correspondence is submitted solely for settlement purposes and may not be used for any other intent without the express written consent of this office.</p>
+
+        <h3>Liability</h3>
+        <p>The subject incident occurred on December 25, 2025, as my clients' vehicle was traveling northbound on I-15 when their vehicle was struck in the rear as it stopped for traffic.</p>
+        <p>Following an investigation, Mr. Alpha was cited for failure to decrease speed (citation #11009141).</p>
+
+        <h3>Damages</h3>
+        <p>Our clients were admitted to UMC for emergency treatment and diagnosis. The emergency room physician, Dr. Bentley Doc, ordered cervical spine and lumbar spine x-rays and administered treatment.</p>
+        <p>On December 29, 2025 our clients sought further treatment at Desert Inn Medical Center with Mark Doc, D.O. and Frank Doc.</p>
+        <p>Based on the findings and the physical examinations, the following diagnosis of the injuries sustained by Mr. &amp; Mrs. Q as a result of the subject accident were made:</p>
+        <ul>
+          <li>SEVERE THORACIC and CERVICAL NECK STRAIN/SPRAIN</li>
+          <li>BILATERAL TRAPEZIUS MUSCLE STRAIN/SPRAIN</li>
+          <li>BILATERAL UPPER EXTREMITY RADICULOPATHY, numbness/tingling, worse on right</li>
+          <li>Mild bilateral sensory deficit</li>
+        </ul>
+        <p>Mr. Q has treated with pain management modalities, chiropractic manipulative therapy, and medication. Intramuscular injection was administered because ongoing neck pain persisted.</p>
+      </div>
+    </section>
+
+    <footer class="footer">2026 BCPcorner Interactive Demand Letter Template</footer>
+  </section>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const office = document.getElementById("office");
+      const recipient = document.getElementById("recipient");
+      const incidentDate = document.getElementById("incidentDate");
+      const location = document.getElementById("location");
+      const citation = document.getElementById("citation");
+      const medicalER = document.getElementById("medicalER");
+      const medical2 = document.getElementById("medical2");
+      const client1 = document.getElementById("client1");
+      const client2 = document.getElementById("client2");
+      const diagnoses = document.getElementById("diagnoses");
+
+      const previewCard = document.getElementById("previewCard");
+      const previewText = document.getElementById("previewText");
+      const togglePreview = document.getElementById("togglePreview");
+      const printBtn = document.getElementById("printBtn");
+      const copyBtn = document.getElementById("copyBtn");
+
+      function formatDate(value) {
+        if (!value) return "";
+        const dt = new Date(value + "T00:00:00");
+        const months = [
+          "January", "February", "March", "April", "May", "June",
+          "July", "August", "September", "October", "November", "December"
+        ];
+        return `${months[dt.getMonth()]} ${dt.getDate()}, ${dt.getFullYear()}`;
+      }
+
+      function parseDiag(text) {
+        return text.split("\n").map(s => s.trim()).filter(Boolean);
+      }
+
+      function buildPreview() {
+        const dateStr = formatDate(incidentDate.value);
+        const diagItems = parseDiag(diagnoses.value);
+        const diagHTML = diagItems.map(item => `<li>${item}</li>`).join("");
+
+        return `
+          <p><strong>From:</strong> ${office.value}</p>
+          <p><strong>To:</strong> ${recipient.value}</p>
+          <p><strong>Date:</strong> ${dateStr}</p>
+          <p>As my clients have now completed all necessary medical treatment for injuries sustained in the referenced accident, this letter serves as a formal and final demand for settlement of their injuries.</p>
+          <p>This correspondence is submitted solely for settlement purposes and may not be used for any other intent without the express written consent of this office.</p>
+          <h3>Liability</h3>
+          <p>The subject incident occurred on ${dateStr}, as my clients' vehicle was traveling northbound on ${location.value} when their vehicle was struck in the rear as it stopped for traffic.</p>
+          <p>Following an investigation, Mr. Alpha was cited for failure to decrease speed, citation ${citation.value}.</p>
+          <h3>Damages</h3>
+          <p>Our clients were admitted to ${medicalER.value} for emergency treatment and diagnosis. The emergency room physician ordered cervical spine and lumbar spine x-rays and administered treatment.</p>
+          <p>On December 29, 2025 our clients sought further treatment at ${medical2.value}.</p>
+          <p>Based on the findings and physical examinations, the following diagnoses were made for ${client2.value} and ${client1.value}:</p>
+          <ul>${diagHTML}</ul>
+          <p>We seek full and just compensation without delay.</p>
+          <p>Sincerely,<br>${office.value}</p>
+        `;
+      }
+
+      function updatePreview() {
+        previewText.innerHTML = buildPreview();
+      }
+
+      [office, recipient, incidentDate, location, citation, medicalER, medical2, client1, client2, diagnoses]
+        .forEach(el => el.addEventListener("input", updatePreview));
+
+      togglePreview.addEventListener("click", () => {
+        const isHidden = previewCard.style.display === "none" || !previewCard.style.display;
+        previewCard.style.display = isHidden ? "block" : "none";
+        if (isHidden) updatePreview();
+      });
+
+      printBtn.addEventListener("click", () => window.print());
+
+      copyBtn.addEventListener("click", async () => {
+        const text = previewText.innerText || buildPreview();
+        try {
+          await navigator.clipboard.writeText(text);
+          copyBtn.textContent = "Copied!";
+          setTimeout(() => (copyBtn.textContent = "Copy Text"), 1200);
+        } catch (e) {
+          copyBtn.textContent = "Copy failed";
+        }
+      });
+
+      updatePreview();
+    });
+  </script>
+</body>
+</html>    </section>
 
     <section class="card" id="formCard">
       <h2>Editable Fields</h2>
