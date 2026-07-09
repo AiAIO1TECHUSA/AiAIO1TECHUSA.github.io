@@ -4,111 +4,241 @@ html, body { height: 100%; margin: 0; }
 
 /* Page background and default text */
 body {
-  background: #0f2226; /* dark bluish-gray like screenshot */
+  background: #1a1a1a; /* dark background */
   color: #fff;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: Georgia, 'Times New Roman', serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
+  font-size: 14px;
 }
 
-/* Hero area fills the viewport; container coordinates absolute byline */
-.hero {
-  min-height: 100vh;
-  display: flex;
-  align-items: flex-start; /* headings start near top like screenshot */
-  justify-content: center;
-  position: relative; /* for absolute byline placement */
-  padding-top: 8px;
-  padding-left: 6%;
-  padding-right: 6%;
+main {
+  margin: 0;
+  padding: 20px;
 }
 
-/* Inner container centers text */
-.hero-inner {
-  width: 100%;
-  max-width: 1600px;
+/* Hero/Header Section */
+.heading {
   text-align: center;
-  padding-top: 8px;
-  padding-bottom: 120px; /* give room so byline appears lower on tall screens */
+  margin-bottom: 40px;
+  padding: 20px 0;
 }
 
-/* Orange brand (top) */
-.brand {
-  margin: 0;
-  color: #ff4c00; /* bright orange */
-  font-family: 'Anton', Impact, 'Arial Black', sans-serif;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  line-height: 0.9;
-  text-transform: none;
-  /* Very large and responsive to match screenshot scale on mobile */
-  font-size: 13.5vw;
-  text-shadow: 0 2px 0 rgba(0,0,0,0.25);
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-/* Big stacked headline (two lines) */
-.bigline {
-  margin: 18px 0 12px;
+.hero-title {
+  font-size: 32px;
+  font-weight: bold;
+  color: #ff6600;
+  margin: 10px 0;
+  font-family: Arial, sans-serif;
+}
+
+.hero-subtitle {
+  font-size: 16px;
+  color: #ccc;
+  margin: 10px 0;
+}
+
+.author {
+  font-size: 12px;
+  color: #999;
+  margin: 10px 0;
+}
+
+.author-name a {
+  color: #00ccff;
+  text-decoration: none;
+}
+
+.author-name a:hover {
+  text-decoration: underline;
+}
+
+.publish-date {
+  font-size: 12px;
+  color: #666;
+  margin: 5px 0;
+}
+
+.social-icons {
+  margin: 15px 0;
+}
+
+.social-icons a {
+  display: inline-block;
+  margin: 0 10px;
+  color: #00ccff;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.social-icons a:hover {
+  color: #ff6600;
+}
+
+/* Multi-column text section */
+.text {
+  column-count: 3;
+  column-gap: 30px;
+  column-rule: 1px solid #333;
+  text-align: justify;
+  text-align-last: left;
+  hyphens: auto;
+  margin-bottom: 40px;
+}
+
+.text p {
+  margin: 0 0 15px 0;
+  orphans: 2;
+  widows: 2;
+}
+
+.text li {
+  margin-bottom: 20px;
+}
+
+.first-paragraph {
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+.quote {
+  color: #00ccff;
+  font-style: italic;
+  margin: 15px 0;
+}
+
+.text a {
+  color: #00ccff;
+  text-decoration: none;
+}
+
+.text a:hover {
+  text-decoration: underline;
+  color: #ff6600;
+}
+
+blockquote {
+  border-left: 3px solid #ff6600;
+  padding-left: 15px;
+  margin: 20px 0;
+  color: #ccc;
+  font-style: italic;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #333;
+  margin: 15px 0;
+}
+
+/* Text with images section */
+.text-with-images {
+  display: flex;
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.brief-history {
+  flex: 1;
+  min-width: 0;
+}
+
+.list-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #ff6600;
+  margin-bottom: 15px;
+}
+
+.lists {
+  list-style: none;
   padding: 0;
-  color: #ff4c00;
-  font-family: 'Anton', Impact, 'Arial Black', sans-serif;
-  font-weight: 700;
-  line-height: 0.98;
-  font-size: 13.5vw; /* match brand scale so lines visually align */
-  text-shadow: 0 2px 0 rgba(0,0,0,0.25);
-}
-
-/* Force the second phrase onto its own line and slightly space it */
-.bigline .break {
-  display: block;
-  margin-top: 6px;
-}
-
-/* Contact line: centered, serif font, smaller and elegant */
-.contact {
-  margin: 48px 0 0;
-  color: #f6f6f6;
-  font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
-  font-weight: 400;
-  font-size: 4.6vw;
-  letter-spacing: 0.01em;
-  line-height: 1.2;
-}
-
-/* Byline — small, bottom-left like the screenshot */
-.byline {
-  position: absolute;
-  left: 6%;
-  bottom: 18px;
-  color: rgba(255,255,255,0.88);
-  font-size: 3.6vw;
-  text-align: left;
   margin: 0;
-  padding: 0;
 }
 
-/* Cap sizes for large/desktop screens so headings don't grow indefinitely */
-@media (min-width: 1200px) {
-  .brand, .bigline {
-    font-size: 140px;
+.lists li {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #333;
+}
+
+.list-subtitle {
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  margin: 10px 0;
+}
+
+.image-wrapper {
+  flex: 0 0 auto;
+  text-align: center;
+}
+
+.image-wrapper img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.image-quote {
+  font-size: 14px;
+  color: #ccc;
+  margin-top: 20px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .text {
+    column-count: 2;
   }
-  .contact {
-    font-size: 30px;
+  
+  .text-with-images {
+    flex-direction: column;
   }
-  .byline {
-    font-size: 18px;
+  
+  .image-wrapper {
+    width: 100%;
   }
 }
 
-/* Fine-tune very small screens to avoid clipping */
-@media (max-width: 360px) {
-  .brand, .bigline {
-    font-size: 52vw;
+@media (max-width: 768px) {
+  .text {
+    column-count: 1;
   }
-  .contact {
-    font-size: 6.4vw;
+  
+  .hero-title {
+    font-size: 24px;
   }
-  .byline {
-    font-size: 4.6vw;
+  
+  body {
+    font-size: 13px;
   }
+}
+
+/* Prevent column breaks for readability */
+.lists li {
+  break-inside: avoid;
+}
+
+figure {
+  margin: 0 0 20px 0;
+}
+
+figure img {
+  max-width: 100%;
+  height: auto;
+}
+
+figcaption {
+  font-size: 12px;
+  color: #999;
+  margin-top: 10px;
 }
