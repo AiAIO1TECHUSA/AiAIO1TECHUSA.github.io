@@ -331,6 +331,7 @@ figcaption {
     font-size: 13px;
   }
 }
+
 /* Contact Section */
 .contact-section {
     margin: 40px auto;
@@ -393,71 +394,11 @@ figcaption {
     background-color: #028a57;
 }
 /* Payment Section */
-.payment-section {
-    margin: 40px auto;
-    padding: 25px;
-    max-width: 700px;
-    background: #f9f9f9;
-    border-radius: 10px;
-    border: 2px solid #e0e0e0;
-}
-
-.payment-title {
-    text-align: center;
-    font-size: 28px;
-    margin-bottom: 15px;
-    color: #333;
-}
-
-.payment-description {
-    text-align: center;
-    font-size: 16px;
-    margin-bottom: 25px;
-    color: #555;
-}
-
-/* Chime Button */
-.chime-button {
-    display: block;
-    width: 100%;
-    text-align: center;
-    background-color: #00b956;
-    color: white;
-    padding: 14px;
-    font-size: 18px;
-    border-radius: 8px;
-    text-decoration: none;
-    transition: background-color 0.3s ease;
-    font-weight: bold;
-}
-
-.chime-button:hover {
-    background-color: #009b48;
-}
-
-/* QR Code */
-.qr-wrapper {
-    margin-top: 25px;
-    text-align: center;
-}
-
-.qr-image {
-    width: 180px;
-    height: 180px;
-    border-radius: 10px;
-    border: 2px solid #ccc;
-}
-
-.qr-note {
-    margin-top: 10px;
-    font-size: 14px;
-    color: #666;
-}
-/* Payment Methods Section */
+.payment-section,
 .payment-methods {
     margin: 40px auto;
-    padding: 25px;
-    max-width: 800px;
+    padding: 1rem;
+    max-width: 900px;
     background: #f9f9f9;
     border-radius: 10px;
     border: 2px solid #e0e0e0;
@@ -480,9 +421,10 @@ figcaption {
 /* Grid Layout */
 .payment-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 20px;
-    text-align: center;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1rem 1.25rem;
+    align-items: center;
+    justify-items: center;
 }
 
 /* Payment Option */
@@ -490,24 +432,129 @@ figcaption {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 15px;
-    background: white;
+    justify-content: center;
+    padding: 0.9rem;
+    background: #ffffff;
     border-radius: 8px;
-    border: 1px solid #ddd;
+    border: 1px solid #e6e6e6;
     text-decoration: none;
     color: #333;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+    width: 100%;
+    max-width: 220px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
 }
 
 .pay-option:hover {
     transform: translateY(-4px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
 }
 
 /* Icons */
 .pay-icon {
     width: 60px;
     height: auto;
-    margin-bottom: 1
-0px;
+    margin-bottom: 10px;
+    display: block;
 }
+
+.pay-option span {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* Chime Button */
+.chime-button {
+    display: inline-block;
+    padding: 12px 18px;
+    background-color: #00b956;
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background-color 0.3s ease, box-shadow 0.15s ease;
+    font-weight: 700;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+}
+
+.chime-button:hover,
+.chime-button:focus {
+    background-color: #009b48;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    outline: none;
+}
+
+.chime-button:focus {
+    box-shadow: 0 0 0 3px rgba(0,185,86,0.18);
+}
+
+/* QR Code */
+.qr-wrapper {
+    margin-top: 25px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.qr-image {
+    width: 100%;
+    max-width: 180px;
+    height: auto;
+    border-radius: 10px;
+    border: 2px solid #ccc;
+}
+
+.qr-note {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #666;
+}
+
+/* Accessibility: focus state for pay-option links */
+.pay-option:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0,140,255,0.12);
+    transform: translateY(-2px);
+}
+
+/* Small screen tweaks specific to payment area */
+@media (max-width: 640px) {
+    .payment-grid {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 0.75rem;
+    }
+
+    .pay-option {
+        max-width: 100%;
+        padding: 0.75rem;
+    }
+
+    .chime-button {
+        display: block;
+        width: 100%;
+        text-align: center;
+    }
+
+    .qr-image {
+        max-width: 160px;
+    }
+}
+
+@media (max-width: 480px) {
+    .payment-section,
+    .payment-methods {
+        padding: 0.75rem;
+        margin: 1rem 0;
+    }
+
+    .hero-title {
+        font-size: 20px;
+    }
+
+    .pay-icon { width: 44px; }
+    .qr-image { max-width: 120px; }
+}
+
+
