@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT AI - Information Technology 103</title>
+    <style>
+        /* Modern Reset and Variables */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        :root {
+            --primary-color: #007acc;
+            --secondary-color: #1e1e24;
+            --bg-light: #f4f6f9;
+            --text-dark: #333;
+            --text-light: #fff;
+            --accent-color: #ff9900;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--bg-light);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header Style */
+        header {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            padding: 25px 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 5px;
+        }
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Layout Container */
+        .wrapper {
+            display: flex;
+            flex: 1;
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* Responsive Sidebar Navigation */
+        nav {
+            width: 280px;
+            background-color: var(--secondary-color);
+            padding: 20px 10px;
+        }
+        nav h3 {
+            color: var(--text-light);
+            padding-left: 15px;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* Interactive Search Input Box */
+        .search-box {
+            width: 90%;
+            margin: 0 auto 20px auto;
+            display: block;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            background-color: #2d2d35;
+            color: white;
+        }
+        .search-box:focus {
+            outline: 2px solid var(--primary-color);
+        }
+
+        nav ul {
+            list-style: none;
+        }
+        nav ul li a {
+            display: block;
+            color: #cdcdcd;
+            padding: 12px 15px;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-bottom: 5px;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+        nav ul li a:hover, nav ul li a.active {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            padding-left: 22px;
+        }
+
+        /* Main Content Container */
+        main {
+            flex: 1;
+            padding: 30px;
+            background-color: #ffffff;
+        }
+
+        /* Content Sections */
+        section {
+            margin-bottom: 40px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        section:last-child {
+            border-bottom: none;
+        }
+        h2 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+        }
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        /* Highlights & Alerts */
+        .highlight-box {
+            background-color: #eef7ff;
+            border-left: 5px solid var(--primary-color);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .contact-card {
+            background-color: #fff8ee;
+            border: 1px solid #ffe3b3;
+            padding: 20px;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+
+        /* Code Block Container with Copy Feature */
+        .code-container {
+            position: relative;
+            margin: 15px 0;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            font-size: 0.75rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .copy-btn:hover {
+            background-color: #005999;
+        }
+        code, pre {
+            background-color: #272822;
+            color: #f8f8f2;
+            font-family: 'Consolas', 'Courier New', Courier, monospace;
+            border-radius: 4px;
+        }
+        pre {
+            padding: 20px 15px 15px 15px;
+            overflow-x: auto;
+            font-size: 0.9rem;
+        }
+        code {
+            padding: 2px 6px;
+            font-size: 0.9em;
+            background-color: #eaedad;
+            color: #c7254e;
+        }
+        pre code {
+            padding: 0;
+            background-color: transparent;
+            color: inherit;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--secondary-color);
+            color: #888;
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9rem;
+            margin-top: auto;
+            border-top: 3px solid var(--primary-color);
+        }
+
+        /* Responsive Breakpoints (RWD) */
+        @media (max-width: 900px) {
+            .wrapper {
+                flex-direction: column;
+            }
+            nav {
+                width: 100%;
+                padding: 15px;
+            }
+            .search-box {
+                width: 100%;
+                margin-bottom: 15px;
+            }
+            nav ul {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+                gap: 5px;
+            }
+            main {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <h1>IT AI</h1>
+        <p>Information Technology 103 — Small Business Solutions & Tech Blog</p>
+    </header>
+
+    <!-- Main Flex Layout Setup -->
+    <div class="wrapper">
+        
+        <!-- Navigation Menu Sidebar -->
+        <nav>
+            <h3>Navigation</h3>
+            <input type="text" id="menuSearch" class="search-box" placeholder="Search topics...">
+            <ul id="navList">
+                <li><a href="#intro">Introduction</a></li>
+                <li><a href="#know">What You Should Know</a></li>
+                <li><a href="#performance">PC & Performance</a></li>
+                <li><a href="#network">Network World</a></li>
+                <li><a href="#ping">Ping Test</a></li>
+                <li><a href="#virus">Virus Scan</a></li>
+                <li><a href="#restore">Restore Without Disk</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main>
+            
+            <!-- Section 1: Introduction -->
+            <section id="intro">
+                <h2>Introduction</h2>
+                <p>Small businesses need to invest capital into network upgrades. Yes, Windows Server 2012 includes Active Directory for small business. To install Active Directory on Windows Server 2012 R2 using Server Manager, you need to install <strong>“Active Directory Domain Services”</strong> on the Windows Server. Then the server should be promoted as a <strong>“Domain Controller”</strong>.</p>
+                
+                <p>You can also install and configure Windows Server Essentials or Windows Server Essentials Experience. Windows Server Essentials is an ideal first server for small businesses with up to 25 users and 50 devices. For organizations with up to 100 users and 200 devices, you can now use Windows Server 2012 R2 with the Windows Server Essentials Experience role installed. <em>Bing ChatBot-Small Business-CompTIA Security+ Certification-TheGeakSpeaks</em> Hybrid networks each client running Windows 11 wired or wireless 5 Stars.</p>
+                
+                <div class="highlight-box">
+                    <strong>Hardware Spotlight:</strong> NETGEAR Nighthawk WiFi 6E Router (RAXE300) | AXE7800 Tri-Band Wireless Gigabit Speed (Up to 7.8Gbps) | New 6GHz Band | 8-Streams Cover up to 2,500 sq. ft., 40 Devices. Speed of business Internet connections powered by Windows 11 and Microsoft Edge will increase productivity and reduce network bottlenecks.
+                </div>
+
+                <p><strong>Cyber Security:</strong> The NETGEAR ProSafe VPN Firewall 25-port with 4 Gigabit LAN is a business-class security firewall that includes an SPI firewall and an Intrusion Detection System. It has 25 dedicated VPN tunnels for secure data transmission and is backed by a 3-Year warranty. Firewalls and VPNs increase network speed for web-based Apps like the Microsoft 365 Suite of productivity software and file storage OneDrive Microsoft cloud-based Intranet for business. Access points are used to extend networks. Arrays can be used with the router or access point to provide WiFi connectivity to the cameras and then use a wired NVR to record the cameras over the LAN.</p>
+                
+                <p>Use wireless access points with IP cameras for long-range wireless. The main purpose of the access point is to take the network traffic from your IP camera and make it wireless while acting as a transparent bridge between your laptop WiFi radio and the camera.</p>
+
+                <p><strong>Virtual Business Networks Disadvantages:</strong> Cyber Security database and network isolation.</p>
+                <ul>
+
+Information Technology 103
+
+Small business needs to invest capital into network upgrades. Yes, Windows Server 2012 includes Active Directory for small business. To install Active Directory on Windows Server 2012 R2 using Server Manager, you need to install “Active Directory Domain Services” on the Windows Server. Then the server should be promoted as a “Domain Controller”1. You can also install and configure Windows Server Essentials or Windows Server Essentials Experience. Windows Server Essentials is an ideal first server for small businesses with up to 25 users and 50 devices. For organizations with up to 100 users and 200 devices, you can now use Windows Server 2012 R2 with the Windows Server Essentials Experience role installed2. Bing ChatBot-Small Business-CompTIA Security+ Certification-TheGeakSpeaks Hybrid networks each client running Windows 11 wired or wireless 5 Stars.
+NETGEAR Nighthawk WiFi 6E Router (RAXE300) | AXE7800 Tri-Band Wireless Gigabit Speed (Up to 7.8Gbps) | New 6GHz Band | 8-Streams Cover up to 2,500 sq. ft., 40 Devices
+Speed of business Internet connections powered by Windows 11 and Microsoft Edge will increase productivity and reduce network bootle necks
+
+Cyber Security - The NETGEAR ProSafe VPN Firewall 25-port with 4 Gigabit LAN is a business-class security firewall that includes an SPI firewall and an Intrusion Detection System. It has 25 dedicated VPN tunnels for secure data transmission and is backed by a 3-Year warranty. Firwalls and VPNs increase network speed for i.e. web based Apps 365 Microsoft Suute of productivity software and file storage OneDrive Microsoft cloud based Intranet for business. Access points are used to extend networks. Arrays can be used with the router or access point to provide WiFi connectivity to the cameras and then use a wired NVR to record the cameras over the LAN.
+Use wireless access points with IP cameras for long-range wireless The main purpose of the access point is to take the network traffic from your IP camera and make it wireless while acting as a transparent bridge between your laptop WiFi radio and the camera.
+
+    Virtual Business Networks-Disadvantages: Cyber Security database and network isolation. Option 1-Cisco Meraki is a cloud-based networking platform that includes wireless, switching, security, enterprise mobility management (EMM), and security cameras. It is centrally and securely managed from the cloud using a single web-based dashboard.
+    Amazon Web Services (AWS) provides a wide range of cloud computing services including Amazon S3 which is a highly-scalable cloud storage service that provides object storage through a web service interface. Amazon S3 provides secure 99.999% of the time uptime reliability on a durable and highly-scalable cloud storage for the objects that make up your static website. Your entire RWD responsive web design portfolio. Amazon S3 object storage allows.for reliable access from anywhere on web of Ai Art, Avatars, NFTs,etc. for your registered users and help visitors search for their answers on your website. You can use Amazon S3 to host a static website. On a static website, individual webpages include static content. This can include client-side scripts. Amazon S3 is used by many businesses of all sizes. The total cost of hosting your static website on AWS will vary depending on your usage. Typically, it will cost $1-3/month if you are outside the AWS Free Tier limits. Hosting your static website costs 0.50/month
+
+What you should already know
+
+Web Developer Internet Marketing Consultant Web Design Templates 725-203-9846 IC Contractor - 1099 - Invoice Marketing SEO -- Software Optimization Responsive Web Design Marketing Solutions
+Top Ranked Business Web Traffic Impressions-CTR #1TECHUSA Restore to Factory No Password! No Disk! No Problem! bcpcorner.altervista.org #1TECHUSA Phenomenal Cyber Security Pro Free of viruses - Super Fast Expert PC Restore to Factory New Forget Windows Restore Points bcpcorner.altervista.org Social Media Campaigns need to hammer out to fine detail your USP it will carve out your business niche on the Web. It is the most powerful tool in your box it will work if you’re willing to test, and test again, and implement these research and development guidance tips. Word Press savvy blogger since 2015 Recognized by Webcrawler that creates Internet Archieves of websites. My original Windows 10/11 Tech Blog generated over 2,000,000 SEO webcrawls in 2024 Blogs -- Altervista Google and Bing Search Social Platforms Twitter, LinkedIn, YouTube Specialist in Free -- OpenSource Apache Office -- Superior to Microsoft Advantages are apply to Mobile and Office In addition, BCPCORNER motto Basic Computer Programming Solutions Spes in local Small Business Websites Mobile Responsive Sites Cyber Security -- Computer Networks
+
+Dall-E the AI Art program that let's you design your images with short descriptions called prompts. The more concrete your input that resolves in a prompt the better the output selection options.
+
+This guide assumes you have the following basic background:
+
+    A general understanding of the Internet and the World Wide Web (WWW).
+    Good working knowledge of Windows 11 and Cyber Security.
+    Some form of experience. If you are new to technology in 2023 and websites powered by RWD, Listen to this, relax.
+
+PC and Performance
+
+Windows 11 64-bit PC Performance is hardware based. Ex: HP - Victus 15.6" Gaming Laptop - Intel Core i7-12650H - 16GB Memory - NVIDIA GeForce RTX 3050 Ti - 512GB SSD is a gaming laptop because of it's onboard graphics. For example, on this system type dxdiag on the run line (Windows logo + x) it will show the graphics as internal and not DAC.
+
+Your browser of choice to surf the .WWW web is Microsoft Edge (Internet Explorer 11 retired officially June 15, 2022) and Opera 89.0.4447.71 are the two newest browser versions, respectively, inclusive Mozilla 103, which I will illustrate here. Click on the 3 vertical dots in the lower-bottom right-hand corner, Open Menu, it is at the bottom of the menu the “X” represents Quit a stellar function to start fresh without cache of webpages perfect for web design.
+
+Things to know about PC performance
+ASUS - ROG Zephyrus 15.6" WQHD 165Hz Gaming Laptop- NVIDIA GeForce RTX 3060-AMD Ryzen 9 6900HS- Fast DDR5 Memory, PCIe SSD – with Mouse Pad (40GB RAM | 2TB PCIe SSD)
+This laptop was bench tested by -'thegeakspeaks' it currently is ranked 10 of 10 stars on Amazon.
+
+Network world
+
+To get started with entering command script, open the notepad.exe and write your first "Network world" script code: ipconfig /flushdns netsh int ip delete arpcache ipconfig /release  ipconfig /renew Select the code in the pad and hit Ctrl+Win logo Select Command Prompt(administrator) enter line by line each command hit enter watch them unfold on your PC network.
+Ping
+
+Ping to test your host server on a remote address by typing ping 8.8.8.8 on the address line of your browser.
+
+If it reaches Google's site your DNS server is working you have Internet
+
+You should clear your browser history cache 'everything' if it still displays unable to reach site.
+Virus scan
+
+
+You can scan for viruses in three easy steps Windows 11:
+
+Right-Click the Win Logo Select CMD Prompt Run as administrator type cut and paste code below enter. Then choose either MpCmdRun -Scan -ScanType 3 -File PATH\TO\FOLDER-FILES
+
+MpCmdRun -Scan -ScanType 2 cd C:\\ProgramData\\Microsoft\\Windows Defender\\Platform\\4.18* root scans and clean installs beyond scope see "The Geak Speaks"
+Restore without disk
+
+See below to gain access to safemode. Let's change the guest account to an administrator account in Windows, you can follow these steps: Sign in to your computer with an Administrator account. Press ⊞ Win + X and select “Control Panel” from the menu that appears. Click “User Accounts and Family Safety” from the available options. Click the “Remove user accounts” link. Click “Guest Account”. Press “Turn On”. Sign into your computer with an Administrator account. Press ⊞ Win + X and select “Task Manager” from the menu that appears. Click “Rename this PC”. Click the "Window Logo" select "Change account settings". Click “Change the Account Type”. Select the “Administrator” account type. Press “Change Account Type”.
+
+Registry ethical hacks start with critical backups type code below at the command line, then press the enter key.
+xcopy c:\ e:\ /s /e /h /i /c /y 
+
+SAFEBOOT Hold down the Windows Logo Key and tap the X-key select Run. Type msconfig and press enter. Then, press the Tab key once under the boot tab select safe boot placing a check mark in the box. In the options section select the network radial, apply. Restart the PC. GO TO KEYS BELOW BY USING THE ARROW TO THE LEFT TO EXPAND Go into safe mode use the Windows Logo Short-cut from previous step this time type regedit and enter. Go to
+HKEY_LOCAL_MACHINE; SYSTEM ; CONTROLSET001 ; DELETE
+
+PS Domain Backup
+
+You can open the Windows Power Shell Integrated Scripting Environment (ISE) by typing powershell_ise.exe in any command shell or in the Run box. You can also find and open PowerShell ISE using the Windows Search utility. Just type “powershell ise” in the search blank and press Enter. In PowerShell Integrated Scripting Environment (ISE) create a new script file. You can then save the script file with the name C:\PSBackup_AD_DC.ps1
+
+To backup your file server, you can manually back up data or use the Backup Wizard, which is included in the Backup feature. You can backup the system state configuration file and the entire drive or portions of it.
+Responsive Web Design
+
+Keys to SEO Search Engine Optimization
+Add-Search Engine (Bing.com) -DomainName "bcpcorner.altervista.org" -Submit(URL) Add-RWD "full path of index page" bots place your site at top of search engine on searches
+
+Facts below require elaboration an Influencer on Twitter drives all social media traffic in spectacular ways to LinkedIn, your blogs, website which you will need. Feeds on Twitter are trends with my Blogs on Altervista.org their traffic are dictly related. visit thegeakspeaks Make sure you like and comment on the Twitter.com and LinkedIn.com profiles using the social media bar on the blog. Ultimately, you want to have Twitter page open and sending tweets trending now Taylor Swift Eras Tour you're now known among the stars and socialites. Remember trending is important for followership which in essence is what you’re looking for is to be known to someone in your target audience. It is all about Who you know they will tell others by retweeting your content. Also, look at this particular Social Media tool as an ongoing channel of programming with videos, news, article links to your website the occasional photo of success. If you're not making mistakes, then you're not doing anything. I'm positive that a doer makes mistakes.
+
+-UCLA Coach Wooden
+
+LinkedIn a list of VIPs to introduce to you, collaboration is essential for success, use your advantage as a locally recognized Network Computer Technician and Cyber Security writer to drive the point home. You must go to a Premium Account Level immediately if not get Premium for one month free. Why? The InMail Feature can be used to reach out in a professional manner to those Vendors you want to WOW without this your missing out on potential quality collaboration.
+
+#1TECHUSA,The IT Industry Leader Former West Point Military Academy Instructor for Field Communications Committee, Tech Expert Blogs about 3 Decades for 3 Major IT Companies AT&T 'Computer_Network_Prototype', Logitech, Sprint
+
+USP Unique Selling Proposition Ex.
+#1TECHUSA Phenomenal Cyber Security Pro Free of viruses - Super Fast Expert PC Restore to Factory New Forget Windows Restore Points bcpcorner.altervista.org
+Social Media Campaigns need to hammer out to fine detail your USP it will carve out your business niche on the Web. It is the most powerful tool in your box it will work if you’re willing to test, and test again, and implement these research and development guidance tips. Research insights on how to get your website traffic first you want a volume of organic keywords and in-depth content. Concrete is this 1,800 visitors a month to the website with zero Google ADs. Now,the blog is an authority in it's niche Information Technology. According to Ahrefs, your blog bcpcorner.altervista.org/blog has the following SEO metrics as of April 2023:
+Domain Rating (DR): 19 URL Rating (UR): 17 Organic Keywords: 1.2K Organic Traffic: 1.1K
+Build a modern website developed by a professional bcpcorner.altervista.org/blog focuses on effective markup utilizing the latest in CSS3, HTML 5 and JavaScript. Set website goals these need to be both specific and attainable. In September, a Launch of 2023 RWD-Responsive Web Design upgrades will be wrapping in-depth content with E-commerce and API engagement in an immersive Ai-package. The backbone is Code it will be designed for business and industry. Strategic results on Blogger and Altervista since 2007. Without a single bit of advertising costs. Pure SOCIAL MEDIA campaigns. Just quality relevant content. Recent results branding bcpcorner it's pseudo neuroscience personality 'The Geak Speaks' took it from 3 visitors to 1,800 per month these connections include 1,400 new visitors each month. LinkedIn, Twitter, YouTube. Analytics prove this engagement. Views on media are up 700 percent ex. 900 media views all organic from a single source thread Ai-Art trending metaverse, ChatGPT, and Taylor Swift. Trends make numbers surge forward a tremendous difference from the start of the Project.
+PowerShell ISE
+
+To create a new script file in PowerShell ISE, you can click on the “New” button on the toolbar or go to “File” and then click on “New”. You can then start typing your script in the editor.
+powershell_ise.exe C:\PSBackup_AD_DC.ps1
+
+To create a user account on PowerShell, you can use the New-LocalUser cmdlet. The following command creates a new local user account without a password:
+New-LocalUser -Name "user_name" -Description "Description of your new account." -NoPassword However, You can replace user_name with the name you want to give the account and Description of your new account. Add a temporary password to this new account as below. Set-MsolUserPassword –UserPrincipalName –NewPassword -ForceChangePassword $True
+
+Add Domain Client
+
+To add a new client to a domain using PowerShell cmdlet, you can use the Add-Computer cmdlet. This cmdlet adds the local computer or remote computers to a domain or workgroup, or moves them from one domain to another. It also creates a domain account if the computer is added to the domain without an account. This command adds the local computer to the “domain.com” domain and then restarts the computer to make the change effective. You will be prompted for credentials when running this command Here is an example of how you can use this cmdlet: code below
+
+    Here are six of the most common PowerShell cmdlets that you can use to code:
+        Get-Command: This cmdlet lets you view all the PowerShell commands installed on your computer. You can use the Get-Command followed by a search query to find commands for a specific feature
+        Get-Help: This cmdlet is part of PowerShell’s integrated help system. It helps you find necessary information for the command, concepts, and functions, identify alias, scripts, and more
+        Clear-Host: This cmdlet clears the PowerShell console screen
+        Set-Location: This cmdlet changes the current location in the PowerShell console
+        Get-ChildItem: This cmdlet lists all files and directories in the current directory
+        Get-Alias: This cmdlet lists all aliases for PowerShell commands
+
+Active Directory
+
+Users and Granting Active Directory permissions in Powershell.
+Add-Computer -DomainName "domain.com" -Credential (Get-Credential) -Restart attrib +r "full path of file with extension" Add-PublicFolderClientPermission "blabla" -User Default -AccessRights Owner Add-ADGroupMember -Identity "GroupName" -Members "UserName" You can use the Add-ADGroupMember cmdlet to add a user to an Active Directory group. An example of how to add a user to a group using PowerShell as shown above.
+PC Repair
+
+    Run Kaspersky Removal Tool root scan after complete select all select continue viruses will be deleted. Once complete it is important to delete any remaining objects. Any questions email me! #1techusa
+
+Reference 
