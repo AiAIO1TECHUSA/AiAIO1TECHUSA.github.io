@@ -453,3 +453,61 @@ figcaption {
     font-size: 14px;
     color: #666;
 }
+/* Payment Methods Section */
+.payment-methods {
+    margin: 40px auto;
+    padding: 25px;
+    max-width: 800px;
+    background: #f9f9f9;
+    border-radius: 10px;
+    border: 2px solid #e0e0e0;
+}
+
+.payment-title {
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.payment-description {
+    text-align: center;
+    font-size: 16px;
+    margin-bottom: 25px;
+    color: #555;
+}
+
+/* Grid Layout */
+.payment-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 20px;
+    text-align: center;
+}
+
+/* Payment Option */
+.pay-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px;
+    background: white;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    text-decoration: none;
+    color: #333;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pay-option:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Icons */
+.pay-icon {
+    width: 60px;
+    height: auto;
+    margin-bottom: 1
+0px;
+}
