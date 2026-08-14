@@ -1,14 +1,445 @@
-<html>
-  <head>
-  </head>
-  <body>
-    <script type="text/javascript" src="/aes.js">
-    </script>
-    <script>
-      function toNumbers(d){var e=[];d.replace(/(..)/g,function(d){e.push(parseInt(d,16))});return e}function toHex(){for(var d=[],d=1==arguments.length&amp;&amp;arguments[0].constructor==Array?arguments[0]:arguments,e=&#34;&#34;,f=0;f&lt;d.length;f++)e+=(16&gt;d[f]?&#34;0&#34;:&#34;&#34;)+d[f].toString(16);return e.toLowerCase()}var a=toNumbers(&#34;f655ba9d09a112d4968c63579db590b4&#34;),b=toNumbers(&#34;98344c2eee86c3994890592585b49f80&#34;),c=toNumbers(&#34;f6c677a72181f45684c53f39d3f0a25b&#34;);document.cookie=&#34;__test=&#34;+toHex(slowAES.decrypt(c,2,a,b))+&#34;; max-age=21600; expires=Thu, 31-Dec-37 23:55:55 GMT; path=/&#34;; location.href=&#34;https://1techusa.thsite.top/AiParalegal.html?i=1&#34;;
-    </script>
-    <noscript>
-      This site requires Javascript to work, please enable Javascript in your browser or use a browser with Javascript support
-    </noscript>
-  </body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>Cyber Security and RWD</title>
+
+    <link rel="stylesheet" href="newsletter.css">
+    <link rel="modulepreload" href="aes.js">
+
+    <style>
+    /* Responsive payment styles added inline so the payment section works without additional CSS edits */
+    .payment-methods, .payment-section {
+        padding: 1rem;
+        background: #f9f9f9;
+        border-radius: 8px;
+        margin: 1rem 0;
+    }
+    .payment-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 1rem;
+        align-items: center;
+    }
+    .pay-option {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.75rem;
+        background: #fff;
+        border-radius: 8px;
+        text-align: center;
+        text-decoration: none;
+        color: inherit;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        border: 1px solid rgba(0,0,0,0.05);
+        transition: transform 160ms ease, box-shadow 160ms ease;
+    }
+    .pay-option:hover { transform: translateY(-4px); box-shadow: 0 6px 18px rgba(0,0,0,0.12); }
+    .pay-icon { width: 48px; height: auto; display: block; }
+
+    .payment-title { margin: 0 0 0.5rem 0; font-size: 1.25rem; }
+    .payment-description { margin: 0 0 0.75rem 0; color: #333; }
+
+    /* Simple visible banner for the payment placeholders */
+    .payment-banner {
+        font-size: 1.25rem;
+        font-weight: 700;
+        text-align: center;
+        background: #fff3cd; /* soft yellow */
+        color: #856404; /* dark yellow/brown for contrast */
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        margin-bottom: 0.75rem;
+        border: 1px solid #ffeeba;
+    }
+
+    .chime-button {
+        display: inline-block;
+        padding: 0.65rem 1rem;
+        background: #00a86b;
+        color: #fff;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .qr-wrapper { display: flex; align-items: center; gap: 1rem; margin-top: 0.75rem; flex-wrap: wrap; }
+    .qr-image { max-width: 160px; height: auto; border: 1px solid #ddd; border-radius: 6px; }
+
+    /* Small screen tweaks */
+    @media (max-width: 480px) {
+        .hero-title { font-size: 1.25rem; }
+        .pay-icon { width: 40px; }
+        .qr-image { max-width: 120px; }
+        .payment-methods, .payment-section { padding: 0.75rem; }
+    }
+    </style>
+</head>
+
+<body>
+
+<main>
+
+    <!-- ===========================
+         HEADER / HERO SECTION
+    ============================ -->
+    <section class="heading">
+        <header class="hero">
+
+            <figure>
+                <a href="https://about.me/the1techusa">
+                    <img src="images/logoBCP.png" alt="BCP Corner logo" loading="lazy">
+                    <figcaption>
+                        BCP Basic Computer Programming Solutions Corner — BCPcorner Motto: "it just works"
+                    </figcaption>
+                </a>
+            </figure>
+
+            <a href="https://about.me/the1techusa">
+                <h1 class="hero-title">
+                    IT Solutions BCPCORNER — Basic Computer Programming Corner
+                </h1>
+            </a>
+
+            <p class="hero-subtitle">
+                <a href="mailto:patlucero2025@proton.me">
+                    <span style="color: hsl(127, 34%, 100%);">Contact Email</span>
+                </a>
+<section class="contact-section">
+    <h2 class="contact-title">Message Me</h2>
+
+    <form class="contact-form" action="https://formsubmit.co/patlucero2025@proton.me" method="POST">
+
+         <!-- Protect from spam -->
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_subject" value="New message from your website">
+        <input type="hidden" name="_template" value="table">
+
+        <label for="name">Your Name</label>
+        <input type="text" id="name" name="name" required placeholder="Enter your name">
+
+        <label for="email">Your Email</label>
+        <input type="email" id="email" name="email" required placeholder="Enter your email">
+
+        <label for="message">Message</label>
+        <textarea id="message" name="message" required placeholder="Write your message here..."></textarea>
+
+        <button type="submit" class="contact-submit">Send Message</button>
+    </form>
+</section>
+
+            </p>
+
+        </header>
+
+        <div class="author">
+            <p class="author-name">
+                By
+                <a href="https://about.me/the1techusa" target="_blank">
+                    #1techusa and Paralegal
+                </a>
+            </p>
+            <p class="publish-date" id="publish-date">July 9, 2026</p>
+        </div>
+
+        <div class="social-icons">
+            <a href="https://www.facebook.com/"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://twitter.com/thegeakspeaks"><i class="fab fa-twitter"></i></a>
+            <a href="https://instagram.com/"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.linkedin.com/"><i class="fab fa-linkedin-in"></i></a>
+            <a href="https://www.youtube.com/"><i class="fab fa-youtube"></i></a>
+        </div>
+    </section>
+
+    <!-- ===========================
+         MULTI-COLUMN ARTICLE
+    ============================ -->
+    <section class="text">
+
+        <p class="first-paragraph">
+            Update Android 5.1.1 Fire HD 8 7th Generation runs Google Play Store version 4.0 above...
+            AppStore up to date with latest version.
+        </p>
+
+        <p class="quote">
+            Hint: Microsoft Windows 11 updated you can move on to enable virtualization...
+            — Android Authority
+        </p>
+
+        <p>
+            Highlight-select search web https://apps.microsoft.com/ to install ThunderVPN...
+        </p>
+
+        <p>
+            JavaScript programming knowledge is best applied in office workflow automation...
+        </p>
+
+        <p>
+            Sign-in to your Wi-Fi Network — use a Starbucks Wi-Fi connection...
+        </p>
+
+        <p>
+            Next, go to proxynova.com — choose an Elite connection...
+        </p>
+
+        <p>
+            Now test your speed. You will be completely anonymous...
+        </p>
+
+        <!-- ===========================
+             TECHUSA + AI SECTION
+        ============================ -->
+        <p>
+            <a href="http://atechi.thsite.top/replicateTechUp2023.html">
+                Overview of services provided specifically to law firms and small businesses...
+            </a>
+        </p>
+
+        <ul class="lists">
+            <li>
+                <a href="https://aiaio1techusa.github.io/IT2026.htm"><strong>#TechUSA</strong></a>
+                <p>
+                    AiTech – Chat GPT‑4 built‑in grid includes 16,000 specialized GPUs...
+                    <em>Source: The Economist, The World Ahead 2024</em>
+                </p>
+            </li>
+        </ul>
+
+        <p>
+            🚀 <strong>Ai_Talent Proposal Overview</strong><br>
+            #1TechUSA presents a strategic suite of services...
+        </p>
+
+        <p>
+            🔧 <strong>Core Services</strong>
+        </p>
+
+        <ul class="lists">
+            <li>
+                <p>
+                    <span class="list-subtitle">Internet Network Speed Optimization</span><br>
+                    Tailored solutions for Windows 11 and Android...
+                </p>
+            </li>
+            <li>
+                <p>
+                    <span class="list-subtitle">Tech Insights &amp; Tips</span><br>
+                    Curated updates and expert guidance...
+                </p>
+            </li>
+        </ul>
+
+        <!-- ===========================
+             SEM / SEO / BUSINESS
+        ============================ -->
+        <ul class="lists">
+            <li>
+                <p>
+                    <span class="list-subtitle">SEM Campaigns &amp; SEO Customization</span><br>
+                    Launch targeted Search Engine Marketing campaigns...
+                </p>
+            </li>
+            <li>
+                <p>
+                    <span class="list-subtitle">Responsive Web Development (Coming Soon)</span><br>
+                    Future-proof your online presence...
+                </p>
+            </li>
+        </ul>
+
+        <p>
+            📈 <strong>Business-Centric Approach</strong><br>
+            Each proposal is customized...
+        </p>
+
+        <hr>
+
+        <p class="quote">
+            ⚠️ <strong>Disclaimer:</strong><br>
+            This document is a cost estimate only...
+        </p>
+
+        <p>
+            ALPHV has access to MGM's entire network...
+        </p>
+
+        <blockquote>
+            <strong>Quote on Twitter Post:</strong><br><br>
+            "All ALPHV ransomware group did to compromise MGM Resorts was hop on LinkedIn..."
+        </blockquote>
+
+        <!-- ===========================
+             INSPIRATIONAL SECTION
+        ============================ -->
+        <blockquote>
+            <hr>
+            <p class="quote">
+                "Every single day wake-up to learn more — it's amazing to make a change each day in your life."
+            </p>
+            <hr>
+        </blockquote>
+
+        <p>
+            <strong>#MindUp</strong> — Find a special place out in nature...
+        </p>
+
+        <p>The power to change is The Grace of God.</p>
+
+        <p>
+            Have fun, sit back — <strong>#WatchAFlick</strong>...
+        </p>
+
+    </section>
+
+    <!-- ===========================
+         IMAGE GRID + SERVICES
+    ============================ -->
+    <section class="text text-with-images">
+
+        <article class="brief-history">
+            <h3 class="list-title">Services and Plans</h3>
+            <p>Descriptions and prices</p>
+
+            <ul class="lists">
+
+                <li>
+                    <h4 class="list-subtitle">Personal Injury Medical Chronology...</h4>
+                    <p>Issue: Microsoft Office integration...</p>
+                    <hr>
+                    <p>Costs = $30 per billable hour</p>
+                </li>
+
+                <li>
+                    <h4 class="list-subtitle">Web 3.0 Magazine Layout...</h4>
+                    <p>Issue: Lack of effective use of technology...</p>
+                    <hr>
+                    <p>Costs = $20 per billable hour</p>
+                </li>
+
+                <li>
+                    <h4 class="list-subtitle">JavaScript AI Workflow</h4>
+                    <p>Issue: Lack of client communications...</p>
+                    <hr>
+                    <p>Costs = $50 per hour […]</p>
+                </li>
+
+                <li>
+                    <h4 class="list-subtitle">Cyber Security &amp; Performance Updates</h4>
+                    <hr>
+                    <p>$100 — includes 2 devices</p>
+                    <p>#1 Security and Speed/Performance service...</p>
+                </li>
+
+                <li>
+                    <h4 class="list-subtitle">A+Tech Yelp Me 2</h4>
+                    <p>
+                        Updated August 20th, 2025 —
+                        <a href="https://youtu.be/hGY0icwlDGY?si=Fr3SKsmPFzciFXbH">Official trailer</a>
+                    </p>
+                </li>
+
+                <li>
+                    <h4 class="list-subtitle">Dark Harvest — 2023</h4>
+                    <p>
+                        October coming soon —
+                        <a href="https://youtu.be/Pge4NmBzdkE?si=bKR5j8HLSIFeNDQ5">Official trailer</a>
+                    </p>
+                </li>
+
+            </ul>
+        </article>
+        <section class="payment-methods">
+    <div class="payment-banner" aria-live="polite">Payments — Coming Soon</div>
+    <h2 class="payment-title">Payment Methods</h2>
+
+    <p class="payment-description">
+       COMING SOON Choose your preferred payment method below. All payments are secure.
+    </p>
+
+    <div class="payment-grid">
+
+        <!-- PayPal -->
+        <a href="https://www.paypal.com/paypalme/YOURNAME" class="pay-option" target="_blank" rel="noopener">
+            <img src="images/paypal.png" alt="PayPal" class="pay-icon">
+            <span>PayPal</span>
+        </a>
+
+        <!-- Apple Pay (via Stripe or Square link) -->
+        <a href="https://YOUR-APPLE-PAY-LINK" class="pay-option" target="_blank" rel="noopener">
+            <img src="images/applepay.png" alt="Apple Pay" class="pay-icon">
+            <span>Apple Pay</span>
+        </a>
+
+        <!-- Visa / MasterCard (via Stripe or Square checkout) -->
+        <a href="https://YOUR-CARD-CHECKOUT-LINK" class="pay-option" target="_blank" rel="noopener">
+            <img src="images/cards.png" alt="Visa MasterCard" class="pay-icon">
+            <span>Credit/Debit Card</span>
+        </a>
+
+        <!-- Chime Pay -->
+        <a href="https://pay.chime.com/YOUR-CHIME-LINK" class="pay-option" target="_blank" rel="noopener">
+            <img src="images/chime.png" alt="Chime Pay" class="pay-icon">
+            <span>Chime Pay</span>
+        </a>
+
+    </div>
+   
+    </section>
+<section class="payment-section">
+    <h2 class="payment-title">Chime Payment</h2>
+
+    <p class="payment-description">
+        You can send secure payments directly through Chime using the button below.
+        Fast, safe, and convenient.
+    </p>
+
+    <!-- Chime Pay Button -->
+    <a href="https://app.chime.com/link/qr?u=Patrico-Lucero" class="chime-button" target="_blank" rel="noopener">
+        Pay with Chime
+    </a>
+
+    <!-- Optional QR Code -->
+    <div class="qr-wrapper">
+        <img src="images/chimeQR.png" alt="Chime Payment QR Code" class="qr-image">
+        <p class="qr-note">Scan with your Chime app</p>
+    </div>
+</section>
+
+        <aside class="image-wrapper">
+
+            <div>
+                <img src="images/USMC_Force_Recon_Caption.png" alt="USMC Force Recon Rotated" loading="lazy" width="400" height="400">
+                <blockquote class="image-quote">
+                    <hr>
+                    <p class="quote">
+                        Skills. Will. Refill. Keys to Life and Success...
+                    </p>
+                    <hr>
+                </blockquote>
+            </div>
+
+            <div>
+                <img src="images/USMC_Semper_FI_Caption.png" alt="Semper FI USMC Hat" loading="lazy" width="600" height="400">
+            </div>
+
+        </aside>
+
+    </section>
+
+</main>
+
+<script>
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    const today = new Date().toLocaleDateString('en-US', options);
+    document.getElementById('publish-date').textContent = today;
+</script>
+
+</body>
 </html>
