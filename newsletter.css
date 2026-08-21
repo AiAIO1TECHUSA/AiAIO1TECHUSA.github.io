@@ -242,6 +242,11 @@ figcaption {
   font-size: 13px;
   margin: 8px 0;
 }
+.payment-methods {
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+}
 
 /* Product grid (used for product cards/images) */
 .image-wrapper {
