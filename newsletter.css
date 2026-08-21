@@ -329,3 +329,21 @@ figcaption {
     font-size: 13px;
   }
 }
+.payment-logos {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    margin: 20px 0;
+}
+
+.pay-logo {
+    height: 40px;
+    width: auto;
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+}
+
+.pay-logo:hover {
+    opacity: 1;
+  
+    }
