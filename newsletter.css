@@ -376,7 +376,27 @@ figcaption {
   opacity: 1;
   transform: translateY(-2px);
 }
-
+.payment-methods {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  margin: 20px 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+.payment-methods img {
+  margin: 15px auto;
+  max-width: 300px;
+  display: block;
+ .payment-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 18px;
+  margin-top: 20px;
+ }
+  }
 /* Responsive adjustments: reduce column-count on smaller screens */
 @media (max-width: 1024px) {
   .text {
