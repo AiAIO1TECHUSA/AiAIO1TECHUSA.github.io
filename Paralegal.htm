@@ -73,12 +73,33 @@
     .qr-wrapper { display: flex; align-items: center; gap: 1rem; margin-top: 0.75rem; flex-wrap: wrap; }
     .qr-image { max-width: 160px; height: auto; border: 1px solid #ddd; border-radius: 6px; }
 
+    /* Payment logos container - displayed at top */
+    .payment-logos {
+        display: flex;
+        justify-content: center;
+        gap: 25px;
+        margin: 15px 0 25px 0;
+        flex-wrap: wrap;
+    }
+    
+    .pay-logo {
+        height: 40px;
+        width: auto;
+        opacity: 0.9;
+        transition: opacity 0.3s ease;
+    }
+    
+    .pay-logo:hover {
+        opacity: 1;
+    }
+
     /* Small screen tweaks */
     @media (max-width: 480px) {
         .hero-title { font-size: 1.25rem; }
         .pay-icon { width: 40px; }
         .qr-image { max-width: 120px; }
         .payment-methods, .payment-section { padding: 0.75rem; }
+        .pay-logo { height: 32px; }
     }
     </style>
 </head>
@@ -367,12 +388,14 @@
                COMING SOON Choose your preferred payment method below. All payments are secure.
             </p>
 
+            <!-- Payment logos displayed at top -->
+            <div class="payment-logos">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png" alt="Visa" class="pay-logo">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Mastercard-logo.png" alt="MasterCard" class="pay-logo">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" class="pay-logo">
+            </div>
+
             <div class="payment-grid">
-                <div class="payment-logos">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png" alt="Visa" class="pay-logo">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Mastercard-logo.png" alt="MasterCard" class="pay-logo">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" class="pay-logo">
-</div>
                 <!-- PayPal -->
                 <a href="https://buy.stripe.com/4gMcN7a9e1Yn5uogxm8AE00" class="pay-option" target="_blank" rel="noopener">
                     <img src="images/paypal.png" alt="PayPal" class="pay-icon">
@@ -390,9 +413,6 @@
                     <img src="images/cards.png" alt="Visa MasterCard" class="pay-icon">
                     <span>Credit/Debit Card</span>
                 </a>
-
-               
-
             </div>
         </section>
 
