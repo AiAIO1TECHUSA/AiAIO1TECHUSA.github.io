@@ -80,17 +80,39 @@
         gap: 25px;
         margin: 15px 0 25px 0;
         flex-wrap: wrap;
+        align-items: center;
     }
     
     .pay-logo {
         height: 40px;
         width: auto;
-        opacity: 0.9;
-        transition: opacity 0.3s ease;
+        opacity: 0.95;
+        transition: opacity 0.3s ease, transform 0.2s ease;
     }
     
     .pay-logo:hover {
         opacity: 1;
+        transform: translateY(-3px);
+    }
+
+    /* larger mastercard in footer */
+    .mastercard-large { height: 56px; }
+
+    /* Visa white background option so the logo shows on any background */
+    .visa-white {
+        background: #ffffff; /* white background */
+        padding: 6px 10px;
+        border-radius: 6px;
+        display: inline-block;
+    }
+
+    /* Product card footer visual tweaks */
+    .product-card-footer {
+        background: #ffffff; /* ensure white background in footer */
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        margin-top: 0.75rem;
     }
 
     /* Small screen tweaks */
@@ -100,6 +122,7 @@
         .qr-image { max-width: 120px; }
         .payment-methods, .payment-section { padding: 0.75rem; }
         .pay-logo { height: 32px; }
+        .mastercard-large { height: 44px; }
     }
     </style>
 </head>
@@ -254,7 +277,7 @@
             </li>
             <li>
                 <p>
-                    <span class="list-subtitle">Tech Insights &amp; Tips</span><br>
+                    <span class="list-subtitle">Tech Insights &amp; Tips</span>
                     Curated updates and expert guidance...
                 </p>
             </li>
@@ -389,7 +412,6 @@
             </p>
 
             <!-- Payment logos displayed at top -->
-           
 
             <div class="payment-grid">
                 <!-- PayPal -->
@@ -449,28 +471,69 @@
                     </p>
                     <hr>
                 </blockquote>
-            </div>
 
-            <!-- Product card footer inserted below the Skeleton T-shirt image block -->
-            <div class="product-card-footer">
-                <h3 class="product-title">USMC Skeleton T‑Shirt</h3>
-                <p class="product-price">$44.99 (Shipping Included)</p>
+                <!-- Product card footer inserted below the Skeleton T-shirt image block -->
+                <div class="product-card-footer">
+                    <h3 class="product-title">USMC Skeleton T‑Shirt</h3>
+                    <p class="product-price">$44.99 (Shipping Included)</p>
 
-                <a href="https://buy.stripe.com/4gMcN7a9e1Yn5uogxm8AE00" 
-                   class="stripe-button" target="_blank" rel="noopener">
-                   Buy Now
-                </a>
+                    <a href="https://buy.stripe.com/4gMcN7a9e1Yn5uogxm8AE00" 
+                       class="stripe-button" target="_blank" rel="noopener">
+                       Buy Now
+                    </a>
 
-                <div class="payment-logos">
-                    <a href="https://buy.stripe.com/4gMcN7a9e1Yn5uogxm8AE00" target="_blank" rel="noopener"><img src="https://cdn.jsdelivr.net/gh/aaronfagan/svg-credit-card-icons/logos/visa.svg" class="pay-logo"></a>
-                    <a href="https://buy.stripe.com/4gMcN7a9e1Yn5uogxm8AE00" target="_blank" rel="noopener"><img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Mastercard-logo.png" class="pay-logo"></a>
-                    <a href="https://buy.stripe.com/4gMcN7a9e1Yn5uogxm8AE00" target="_blank" rel="noopener"><img src="https://developer.apple.com/apple-pay/marketing/images/apple-pay-logo.svg" class="pay-logo"></a>
-                    <a href="https://buy.stripe.com/4gMcN7a9e1Yn5uogxm8AE00" target="_blank" rel="noopener"><img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" class="pay-logo"></a>
+                    <div class="payment-logos" aria-hidden="false">
+                        <a href="https://buy.stripe.com/4gMcN7a9e1Yn5uogxm8AE00" target="_blank" rel="noopener" class="visa-white">
+                            <img src="https://cdn.jsdelivr.net/gh/encharm/Font-Awesome-SVG-PNG/brands/white/visa.svg" class="pay-logo" alt="Visa (white)">
+                        </a>
+
+                        <a href="https://buy.stripe.com/4gMcN7a9e1Yn5uogxm8AE00" target="_blank" rel="noopener">
+                            <img src="https://cdn.jsdelivr.net/gh/aaronfagan/svg-credit-card-icons/logos/visa.svg" class="pay-logo" alt="Visa">
+                        </a>
+
+                        <a href="https://buy.stripe.com/4gMcN7a9e1Yn5uogxm8AE00" target="_blank" rel="noopener">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Mastercard-logo.png" class="pay-logo mastercard-large" alt="MasterCard">
+                        </a>
+
+                        <a href="https://buy.stripe.com/4gMcN7a9e1Yn5uogxm8AE00" target="_blank" rel="noopener">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" class="pay-logo" alt="PayPal">
+                        </a>
+                    </div>
                 </div>
             </div>
 
             <div>
                 <img src="images/USMC_AbsolutelyDestroyed 800 x 800-1.png" alt="Marines T Absolutely Destroyed" loading="lazy" width="auto" height="auto">
+
+                <!-- Duplicate the product card footer so both images have identical cards -->
+                <div class="product-card-footer">
+                    <h3 class="product-title">USMC Absolutely Destroyed T‑Shirt</h3>
+                    <p class="product-price">$44.99 (Shipping Included)</p>
+
+                    <a href="https://buy.stripe.com/4gMcN7a9e1Yn5uogxm8AE00" 
+                       class="stripe-button" target="_blank" rel="noopener">
+                       Buy Now
+                    </a>
+
+                    <div class="payment-logos" aria-hidden="false">
+                        <a href="https://buy.stripe.com/4gMcN7a9e1Yn5uogxm8AE00" target="_blank" rel="noopener" class="visa-white">
+                            <img src="https://cdn.jsdelivr.net/gh/encharm/Font-Awesome-SVG-PNG/brands/white/visa.svg" class="pay-logo" alt="Visa (white)">
+                        </a>
+
+                        <a href="https://buy.stripe.com/4gMcN7a9e1Yn5uogxm8AE00" target="_blank" rel="noopener">
+                            <img src="https://cdn.jsdelivr.net/gh/aaronfagan/svg-credit-card-icons/logos/visa.svg" class="pay-logo" alt="Visa">
+                        </a>
+
+                        <a href="https://buy.stripe.com/4gMcN7a9e1Yn5uogxm8AE00" target="_blank" rel="noopener">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Mastercard-logo.png" class="pay-logo mastercard-large" alt="MasterCard">
+                        </a>
+
+                        <a href="https://buy.stripe.com/4gMcN7a9e1Yn5uogxm8AE00" target="_blank" rel="noopener">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" class="pay-logo" alt="PayPal">
+                        </a>
+                    </div>
+                </div>
+
             </div>
 
         </aside>
