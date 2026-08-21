@@ -189,15 +189,17 @@ figcaption {
 }
 
 /* Images and image section remain grid-based to avoid breaking column flow */
+/* Use two columns for product images/cards so each product occupies its own column */
 .text-with-images {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 25px;
   margin-top: 40px;
 }
 
+/* Brief / list layout remains full width */
 .brief-history {
-  grid-column: 1 / 4;
+  grid-column: 1 / -1;
 }
 
 .list-title {
@@ -205,11 +207,11 @@ figcaption {
   font-weight: bold;
   color: #ff6600;
   margin-bottom: 15px;
-  grid-column: 1 / 4;
+  grid-column: 1 / -1;
 }
 
 .brief-history > p {
-  grid-column: 1 / 4;
+  grid-column: 1 / -1;
 }
 
 .lists {
@@ -219,7 +221,7 @@ figcaption {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 25px;
-  grid-column: 1 / 4;
+  grid-column: 1 / -1;
 }
 
 .lists li {
@@ -241,23 +243,94 @@ figcaption {
   margin: 8px 0;
 }
 
+/* Product grid (used for product cards/images) */
 .image-wrapper {
-  grid-column: 1 / 4;
+  grid-column: 1 / -1;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr); /* two columns for products */
   gap: 25px;
   margin-top: 30px;
   align-items: start;
 }
 
+/* Each product card sits inside the grid cell */
+.product-card {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch; /* stretch so image and footer fill card width */
+  padding: 16px;
+  margin: 0;
+  background: #ffffff;
+  color: #111;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  width: 100%;
+  max-width: 100%; /* let grid control column width */
+  box-sizing: border-box;
+}
+
+/* Image in product card fills available width, footer sits directly below */
+.product-card img,
 .image-wrapper img {
   width: 100%;
   height: auto;
   border-radius: 8px;
-  max-width: 400px;
+  display: block;
+  object-fit: contain;
   justify-self: center;
 }
 
+/* Footer directly below the image for each product */
+.product-card-footer {
+  text-align: center;
+  margin-top: 12px;
+  padding-top: 8px;
+  color: #333;
+  font-size: 14px;
+  line-height: 1.3;
+  /* visually separate footer from image (optional subtle divider) */
+}
+
+/* Product card footer details (price, divider, actions/button) */
+.product-card-divider {
+  height: 1px;
+  background: #e6e6e6;
+  opacity: 0.6;
+  margin: 12px 0;
+}
+
+.product-card-price {
+  font-size: 16px;
+  font-weight: 700;
+  color: #ff6600;
+  margin-bottom: 8px;
+}
+
+.product-card-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+}
+
+.product-card-button {
+  background: #ff6600;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  font-weight: 600;
+}
+
+.product-card-button:hover {
+  background: #e05500;
+  transform: translateY(-1px);
+}
+
+/* image-quote (if used) remains centered */
 .image-quote {
   text-align: center;
   color: #ccc;
@@ -272,6 +345,31 @@ figcaption {
 
 .image-quote hr {
   grid-column: auto;
+}
+
+/* Payment logos: consolidate rules and keep consistent sizing (MasterCard/Visa) */
+.payment-logos {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 20px 0;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.pay-logo {
+  height: 28px; /* consistent size for MasterCard / Visa and other logos */
+  width: auto;
+  opacity: 0.95;
+  transition: opacity 0.3s ease, transform 0.15s ease;
+  display: inline-block;
+  vertical-align: middle;
+  object-fit: contain;
+}
+
+.pay-logo:hover {
+  opacity: 1;
+  transform: translateY(-2px);
 }
 
 /* Responsive adjustments: reduce column-count on smaller screens */
@@ -303,7 +401,7 @@ figcaption {
   }
 
   .image-wrapper {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr; /* single column on narrower screens */
   }
 
   .hero-title {
@@ -328,60 +426,4 @@ figcaption {
   .lists li p {
     font-size: 13px;
   }
-}
-.payment-logos {
-    display: flex;
-    justify-content: center;
-    gap: 25px;
-    margin: 20px 0;
-}
-
-.pay-logo {
-    height: 40px;
-    width: auto;
-    opacity: 0.9;
-    transition: opacity 0.3s ease;
-}
-
-.pay-logo:hover {
-    opacity: 1;
-  
-    }
-
-/* Product card styles inserted per request */
-.product-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    margin: 20px;
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    max-width: 350px;
-}
-
-.image-wrapper {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 30px;
-}
-
-.product-card-footer {
-    text-align: center;
-    margin-top: 15px;
-}
-
-.payment-logos {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-top: 10px;
-}
-
-.pay-logo {
-    height: 28px;
-    width: auto;
 }
