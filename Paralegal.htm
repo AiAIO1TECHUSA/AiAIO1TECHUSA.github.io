@@ -614,6 +614,7 @@
     const today = new Date().toLocaleDateString('en-US', options);
     document.getElementById('publish-date').textContent = today;
 </script>
+    <script>
 document.querySelectorAll(".shipping-button").forEach(button => {
   button.addEventListener("click", () => {
     const product = button.getAttribute("data-product");
@@ -641,5 +642,6 @@ document.getElementById("generate-receipt").addEventListener("click", () => {
   document.getElementById("r-carrier").textContent = carrier;
 }
     );
+    </script>
 </body>
 </html>
