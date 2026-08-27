@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Delivery Details</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .shipping-section {
+      max-width: 600px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .form-row {
+      margin-bottom: 12px;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 4px;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background: #ff6600;
+      color: #fff;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover {
+      background: #e05500;
+    }
+  </style>
+</head>
+<body>
+
+<section class="shipping-section">
+  <h2>Delivery Details</h2>
+
+  <form action="mailto:patlucero2025@proton.me" method="post" enctype="text/plain">
+
+    <div class="form-row">
+      <label>Product</label>
+      <input type="text" id="product" name="Product" readonly>
+    </div>
+
+    <div class="form-row">
+      <label>Recipient Name</label>
+      <input type="text" name="Recipient Name" required>
+    </div>
+
+    <div class="form-row">
+      <label>Address Line 1</label>
+      <input type="text" name="Address Line 1" required>
+    </div>
+
+    <div class="form-row">
+      <label>Address Line 2</label>
+      <input type="text" name="Address Line 2">
+    </div>
+
+    <div class="form-row">
+      <label>City</label>
+      <input type="text" name="City" required>
+    </div>
+
+    <div class="form-row">
+      <label>State / Province</label>
+      <input type="text" name="State" required>
+    </div>
+
+    <div class="form-row">
+      <label>Postal Code</label>
+      <input type="text" name="Postal Code" required>
+    </div>
+
+    <div class="form-row">
+      <label>Country</label>
+      <input type="text" name="Country" required>
+    </div>
+
+    <div class="form-row">
+      <label>Carrier</label>
+      <select name="Carrier" required>
+        <option value="">Select Carrier</option>
+        <option value="DHL">DHL</option>
+        <option value="UPS">UPS</option>
+        <option value="FedEx">FedEx</option>
+      </select>
+    </div>
+
+    <button type="submit">Submit Delivery Details</button>
+  </form>
+</section>
+
+<script>
+  // Auto-fill product name from URL
+  const params = new URLSearchParams(window.location.search);
+  const product = params.get("product");
+  document.getElementById("product").value = product || "Unknown Product";
+</script>
+
+</body>
+</html>
