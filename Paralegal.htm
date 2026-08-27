@@ -542,7 +542,71 @@
                 </a>
             </div>
     </section>
-           
+     <section id="shipping-form-section" class="shipping-section" style="display:none;">
+  <h2>Delivery Details</h2>
+
+  <form id="shipping-form">
+    <p class="selected-product">
+      <strong>Product:</strong> <span id="product-name"></span>
+    </p>
+
+    <div class="form-row">
+      <label for="recipient-name">Recipient Name</label>
+      <input type="text" id="recipient-name" required>
+    </div>
+
+    <div class="form-row">
+      <label for="address-line1">Address Line 1</label>
+      <input type="text" id="address-line1" placeholder="1-9 Sackville St" required>
+    </div>
+
+    <div class="form-row">
+      <label for="address-line2">Address Line 2</label>
+      <input type="text" id="address-line2" placeholder="Suite / Unit (optional)">
+    </div>
+
+    <div class="form-row">
+      <label for="city">City</label>
+      <input type="text" id="city" placeholder="Collingwood" required>
+    </div>
+
+    <div class="form-row">
+      <label for="state">State / Province</label>
+      <input type="text" id="state" placeholder="VIC" required>
+    </div>
+
+    <div class="form-row">
+      <label for="postal-code">Postal Code</label>
+      <input type="text" id="postal-code" placeholder="3066" required>
+    </div>
+
+    <div class="form-row">
+      <label for="country">Country</label>
+      <input type="text" id="country" placeholder="Australia" required>
+    </div>
+
+    <div class="form-row">
+      <label for="carrier">Shipping Carrier</label>
+      <select id="carrier" required>
+        <option value="">Select a carrier</option>
+        <option value="DHL">DHL</option>
+        <option value="UPS">UPS</option>
+        <option value="FedEx">FedEx</option>
+      </select>
+    </div>
+
+    <button type="button" id="generate-receipt">Generate Receipt</button>
+  </form>
+
+  <div class="receipt" id="receipt">
+    <h3>Delivery Receipt</h3>
+    <p><strong>Product:</strong> <span id="r-product"></span></p>
+    <p><strong>Recipient:</strong> <span id="r-name"></span></p>
+    <p><strong>Address:</strong> <span id="r-address"></span></p>
+    <p><strong>Carrier:</strong> <span id="r-carrier"></span></p>
+  </div>
+         
+      </section>      
 </main>
 
 <script>
