@@ -460,6 +460,20 @@ figcaption {
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
+.shipping-button {
+  background: #ff6600;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+.shipping-button:hover {
+  background: #e05500;
+}
 
 .form-row {
   margin-bottom: 12px;
@@ -480,23 +494,9 @@ figcaption {
   box-sizing: border-box;
 }
 
-#generate-receipt {
-  margin-top: 10px;
-  padding: 10px 16px;
-  border: none;
-  border-radius: 8px;
-  background: #ff6600;
-  color: #fff;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-#generate-receipt:hover {
-  background: #e05500;
-}
-
 .receipt {
   margin-top: 20px;
   padding-top: 10px;
   border-top: 1px solid #ddd;
 }
+
