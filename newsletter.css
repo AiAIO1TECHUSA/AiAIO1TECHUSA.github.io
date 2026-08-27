@@ -463,12 +463,13 @@ figcaption {
 .shipping-button {
   background: #ff6600;
   color: #fff;
-  border: none;
-  padding: 8px 14px;
+  padding: 10px 16px;
   border-radius: 8px;
-  cursor: pointer;
+  display: block;
+  text-align: center;
+  margin-top: 15px;
   font-weight: 600;
-  margin-top: 10px;
+  text-decoration: none;
 }
 
 .shipping-button:hover {
