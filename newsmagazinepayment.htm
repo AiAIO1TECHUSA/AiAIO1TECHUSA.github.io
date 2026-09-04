@@ -12,6 +12,12 @@
 
     <style>
     /* Responsive payment styles added inline so the payment section works without additional CSS edits */
+    .core-services-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15em;   /* ← increased spacing between columns */
+        grid-column: 1 / -1;
+   }
     .payment-methods, .payment-section {
         padding: 1rem;
         background: #f9f9f9;
