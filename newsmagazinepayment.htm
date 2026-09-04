@@ -40,6 +40,13 @@
         border: 1px solid rgba(0,0,0,0.05);
         transition: transform 160ms ease, box-shadow 160ms ease;
     }
+        /* ⭐ Place your core-services grid HERE — not at the top */
+.core-services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3em;   /* balanced spacing */
+    grid-column: 1 / -1;
+}
     .pay-option:hover { transform: translateY(-4px); box-shadow: 0 6px 18px rgba(0,0,0,0.12); }
     .pay-icon { width: 48px; height: auto; display: block; }
 
