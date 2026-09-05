@@ -49,7 +49,24 @@
 }
         #core-services .invoice-table {
     margin-bottom: 3em; /* adds space before next section */
-        }
+        } 
+        .calendar-button {
+  display: inline-block;
+  background: #ff6600;
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  margin-top: 1em;
+}
+.calendar-button:hover {
+  background: #e05500;
+}
+#core-services-form {
+  margin-bottom: 8em; /* clean spacing */
+}
+        
     .pay-option:hover { transform: translateY(-4px); box-shadow: 0 6px 18px rgba(0,0,0,0.12); }
     .pay-icon { width: 48px; height: auto; display: block; }
 
@@ -320,51 +337,38 @@
         <h3 class="list-title">Services and Plans</h3>
         <p>Descriptions and prices</p>
 
-<section id="core-services">
-  <h2>Small Business Network & Server Package</h2>
-  <table class="invoice-table">
-    <thead>
-      <tr>
-        <th>Item</th>
-        <th>Description</th>
-        <th>Price (USD)</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Windows Server License</td>
-        <td>Domain logins, file permissions, secure shared drives</td>
-        <td>$900.00</td>
-      </tr>
-      <tr>
-        <td>Server Hardware</td>
-        <td>Enterprise‑grade tower with ECC RAM & RAID storage</td>
-        <td>$1,500.00</td>
-      </tr>
-      <tr>
-        <td>Business Router/Firewall</td>
-        <td>Secure internet access, VPN, network protection</td>
-        <td>$250.00</td>
-      </tr>
-      <tr>
-        <td>UPS Backup Power</td>
-        <td>Protects server from outages and power surges</td>
-        <td>$200.00</td>
-      </tr>
-      <tr>
-        <td>Install & Config</td>
-        <td>Server setup, users, permissions</td>
-        <td>$600.00</td>
-      </tr>
-      <tr>
-        <td>Monthly Maintenance</td>
-        <td>Updates, backups, monitoring, user changes</td>
-        <td>$150.00 / month</td>
-      </tr>
-    </tbody>
-  </table>
+<section id="core-services-form">
+  <h3>Build Your Service Package</h3>
+
+  <form id="serviceForm">
+
+    <!-- Core Network Items -->
+    <label><input type="checkbox" class="svc" data-price="900"> Windows Server License — $900</label><br>
+    <label><input type="checkbox" class="svc" data-price="1500"> Server Hardware — $1500</label><br>
+    <label><input type="checkbox" class="svc" data-price="250"> Business Router/Firewall — $250</label><br>
+    <label><input type="checkbox" class="svc" data-price="200"> UPS Backup Power — $200</label><br>
+    <label><input type="checkbox" class="svc" data-price="600"> Install & Config — $600</label><br>
+    <label><input type="checkbox" class="svc" data-price="150"> Monthly Maintenance — $150</label><br><br>
+
+    <!-- Additional Services -->
+    <label><input type="checkbox" class="svc" data-price="30"> Personal Injury Chronology — $30/hr</label><br>
+    <label><input type="checkbox" class="svc" data-price="20"> Web 3.0 Layout — $20/hr</label><br>
+    <label><input type="checkbox" class="svc" data-price="50"> JavaScript AI Workflow — $50/hr</label><br>
+    <label><input type="checkbox" class="svc" data-price="100"> Cyber Security Update — $100</label><br><br>
+
+    <!-- Total Output -->
+    <h4>Total: $<span id="totalPrice">0</span></h4>
+
+    <!-- Calendar Link -->
+    <a href="https://calendar.google.com" target="_blank" class="calendar-button">
+      Schedule Appointment
+    </a>
+
+  </form>
 </section>
 
+<section id="core-services-form"></section>
+    
 <!-- FIX: Only ONE UL, with your new class -->
 <ul id="core-services-list" class="lists core-services-grid">
 
@@ -609,6 +613,21 @@
     const today = new Date().toLocaleDateString('en-US', options);
     document.getElementById('publish-date').textContent = today;
 </script>
+<script>
+  const checkboxes = document.querySelectorAll('.svc');
+  const totalSpan = document.getElementById('totalPrice');
 
+  checkboxes.forEach(box => {
+    box.addEventListener('change', () => {
+      let total = 0;
+      checkboxes.forEach(item => {
+        if (item.checked) {
+          total += Number(item.dataset.price);
+        }
+      });
+      totalSpan.textContent = total.toFixed(2);
+    });
+  });
+</script>
 </body>
 </html>
