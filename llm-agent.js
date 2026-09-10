@@ -52,7 +52,8 @@ function reasonAboutProduct(name, details) {
         return "What I see: This looks like a general product. I’ll focus on making it easier to find and understand online.";
     }
 
-    return "What I see: " + reasoning.join(" ");
+    return "Identity read: " + reasoning.join("; ");
+
 }
 
 // Simple “scan” explanation (includes military signals)
@@ -76,34 +77,46 @@ function frontierAnalysis(details) {
         return "Quick scan: Nothing super specific jumps out, but it can still be sold as a solid, reliable product.";
     }
 
-    return "Quick scan: " + signals.join(" ");
+    return "Scan results: " + signals.join("; ");
+
 }
 
-// Recommended path in normal language (includes military angle)
-function chooseBestPath(details) {
+function chooseBestPath(name, details) {
     const d = (name + " " + details).toLowerCase();
 
     // Military / USMC apparel path
     if (d.includes("usmc") || d.includes("marine") || d.includes("marines"))
-        return "Best angle: Present this as a vintage Marine Corps heritage tee that honors tradition, pride, and service.";
+        return "Recommended angle: Position this as a vintage Marine Corps heritage piece — built on pride, tradition, and Recon identity.";
+
     if (d.includes("military") || d.includes("veteran") || d.includes("patriotic"))
-        return "Best angle: Sell this as patriotic military apparel that connects to service, sacrifice, and national pride.";
+        return "Recommended angle: Frame this as patriotic military apparel that connects directly to service, sacrifice, and national pride.";
 
     // Other domains
-    if (d.includes("legal")) return "Best angle: Sell this as a legal-tech or paralegal support tool.";
-    if (d.includes("ai") || d.includes("automation")) return "Best angle: Highlight how it saves time with AI or automation.";
-    if (d.includes("payment") || d.includes("stripe")) return "Best angle: Present it as a smooth, secure online payment or store solution.";
-    if (d.includes("cyber")) return "Best angle: Emphasize security and protection as the main benefit.";
+    if (d.includes("legal"))
+        return "Recommended angle: Present this as a legal‑tech or paralegal support tool designed for clarity, speed, and reliability.";
 
-    return "Best angle: Position this as a trustworthy, easy-to-use product that improves everyday work.";
+    if (d.includes("ai") || d.includes("automation"))
+        return "Recommended angle: Emphasize time‑saving automation and AI‑driven workflow efficiency.";
+
+    if (d.includes("payment") || d.includes("stripe"))
+        return "Recommended angle: Highlight secure, frictionless online payment capability.";
+
+    if (d.includes("cyber"))
+        return "Recommended angle: Lead with cybersecurity, protection, and modern digital resilience.";
+
+    // Default fallback
+    return "Recommended angle: Present this as a clean, dependable product with clear value and straightforward purpose.";
 }
 
-// Confidence score (baseline 0.55 if no tags found)
 function confidenceScore(extractedTags) {
     if (extractedTags.length === 0) {
-        return "0.55";
+        return "0.55"; // baseline confidence
     }
-    const score = Math.min(1, extractedTags.length / 10);
+
+    // Weighted confidence: tags matter more when they are military or identity-based
+    const weight = extractedTags.length * 0.12;
+    const score = Math.min(1, 0.55 + weight);
+
     return score.toFixed(2);
 }
 
