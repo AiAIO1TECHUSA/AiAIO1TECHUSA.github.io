@@ -81,7 +81,7 @@ function frontierAnalysis(details) {
 
 // Recommended path in normal language (includes military angle)
 function chooseBestPath(details) {
-    const d = details.toLowerCase();
+    const d = (name + " " + details).toLowerCase();
 
     // Military / USMC apparel path
     if (d.includes("usmc") || d.includes("marine") || d.includes("marines"))
