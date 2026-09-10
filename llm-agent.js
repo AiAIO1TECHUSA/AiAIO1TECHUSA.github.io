@@ -1,5 +1,5 @@
 // ===============================
-// Full Upgraded LLM Agent (E‑commerce Optimized)
+// Full Corrected LLM‑AGENT (E‑commerce Optimized, Frontier Style)
 // ===============================
 
 // Core tag generator with dynamic keyword extraction
@@ -25,7 +25,7 @@ function generateProductTagDescription(productName, productDetails) {
     return { description, extracted };
 }
 
-// Reasoning layer
+// Reasoning layer (with E‑commerce fallback)
 function reasonAboutProduct(name, details) {
     const reasoning = [];
     const d = details.toLowerCase();
@@ -41,13 +41,13 @@ function reasonAboutProduct(name, details) {
         reasoning.push("Modern, responsive design supports multi‑device usage.");
 
     if (reasoning.length === 0) {
-        return "Reasoning: Product appears general-purpose. Applying E‑commerce optimization heuristics to improve discoverability, clarity, and conversion potential.";
+        return "Reasoning: No domain-specific signals detected. Applying E‑commerce optimization heuristics to improve clarity, discoverability, and conversion potential.";
     }
 
     return "Reasoning: " + reasoning.join(" ");
 }
 
-// Frontier analysis layer
+// Frontier analysis layer (with E‑commerce fallback)
 function frontierAnalysis(details) {
     const signals = [];
     const d = details.toLowerCase();
@@ -59,13 +59,13 @@ function frontierAnalysis(details) {
     if (d.includes("stripe")) signals.push("Stripe E‑commerce integration frontier.");
 
     if (signals.length === 0) {
-        return "Frontier Scan: Baseline E‑commerce scan complete. No specialized domain indicators detected. Optimization will focus on universal retail performance factors.";
+        return "Frontier Scan: Baseline E‑commerce scan complete. No specialized indicators detected. Optimization will focus on universal retail performance factors.";
     }
 
     return "Frontier Scan: " + signals.join(" | ");
 }
 
-// Best path selector
+// Best path selector (with universal E‑commerce fallback)
 function chooseBestPath(details) {
     const d = details.toLowerCase();
 
@@ -77,10 +77,13 @@ function chooseBestPath(details) {
     return "Recommended Path: Universal E‑commerce Optimization — ideal for products without strong domain-specific signals.";
 }
 
-// Confidence score (minimum 0.35)
+// Confidence score (baseline 0.55 if no tags found)
 function confidenceScore(extractedTags) {
+    if (extractedTags.length === 0) {
+        return "0.55";
+    }
     const score = Math.min(1, extractedTags.length / 10);
-    return Math.max(0.35, score).toFixed(2);
+    return score.toFixed(2);
 }
 
 // Main agent function
@@ -100,7 +103,7 @@ function runLLMAgent(productName, productDetails) {
     );
 }
 
-// UI hook
+// UI hook (used by your frontier-style box)
 function runLLM() {
     const name = document.getElementById("productName").value;
     const details = document.getElementById("productDetails").value;
