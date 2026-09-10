@@ -549,3 +549,15 @@ figcaption {
 #core-services a {
     color: #ff6600;
 }
+a:hover {
+    color: #e05500; /* darker orange on hover */
+}
+
+a:active {
+    color: #cc4400; /* pressed / selected color */
+}
+
+a:focus {
+    color: #ff8800; /* keyboard navigation / accessibility */
+  
+  }
