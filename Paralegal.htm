@@ -193,14 +193,16 @@
 
   <div id="output" class="frontier-output"></div>
 </div>
+
 <script>
 function runLLM() {
     const name = document.getElementById("productName").value;
     const details = document.getElementById("productDetails").value;
-    const result = generateProductTagDescription(name, details);
+    const result = runLLMAgent(name, details);   // ✔ FIXED LINE
     document.getElementById("output").innerText = result;
 }
-</script>       
+</script>
+
         </header>
 
         <div class="author">
