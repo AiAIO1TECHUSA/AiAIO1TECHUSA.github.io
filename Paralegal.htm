@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
  <div class="page-container">
 <head>
@@ -193,16 +193,6 @@
 
   <div id="output" class="frontier-output"></div>
 </div>
-
-<script>
-function runLLM() {
-    const name = document.getElementById("productName").value;
-    const details = document.getElementById("productDetails").value;
-    const result = runLLMAgent(name, details);
-    document.getElementById("output").innerText = result;
-}
-</script>
-
         </header>
 
         <div class="author">
@@ -899,6 +889,14 @@ function runLLM() {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     const today = new Date().toLocaleDateString('en-US', options);
     document.getElementById('publish-date').textContent = today;
+</script>
+<script>
+function runLLM() {
+    const name = document.getElementById("productName").value;
+    const details = document.getElementById("productDetails").value;
+    const result = runLLMAgent(name, details);
+    document.getElementById("output").innerText = result;
+}
 </script>
 <script src="llm-agent.js"></script>
 </body>
