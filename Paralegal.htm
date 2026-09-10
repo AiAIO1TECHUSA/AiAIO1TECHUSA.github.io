@@ -177,12 +177,20 @@
     <img src="https://cdn.jsdelivr.net/gh/edent/SuperTinyIcons/images/svg/youtube.svg" alt="Vegas Concerts">
 </a>
     </div>
-   <div class="llm-box">
-  <h2>AI LLM Tag Generator — Live</h2>
-  <input id="productName" placeholder="Product Name">
-  <textarea id="productDetails" placeholder="Product Details"></textarea>
+ </section>
+   <div class="llm-agent-box">
+  <h2>AI LLM Product Tag Generator</h2>
+  <p>Generate SEO‑optimized product tag descriptions instantly using your live LLM agent.</p>
+
+  <label>Product Name</label>
+  <input id="productName" type="text" placeholder="Enter product name">
+
+  <label>Product Details</label>
+  <textarea id="productDetails" placeholder="Enter product details"></textarea>
+
   <button onclick="runLLM()">Generate Tags</button>
-  <p id="output"></p>
+
+  <div id="output" class="llm-output"></div>
 </div>
 <script>
 function runLLM() {
@@ -191,9 +199,7 @@ function runLLM() {
     const result = generateProductTagDescription(name, details);
     document.getElementById("output").innerText = result;
 }
-</script>
-</section>
-        
+</script>       
         </header>
 
         <div class="author">
