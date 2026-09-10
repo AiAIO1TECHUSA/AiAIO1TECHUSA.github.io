@@ -127,12 +127,3 @@ function runLLMAgent(productName, productDetails) {
         action
     );
 }
-
-// UI hook
-function runLLM() {
-    const name = document.getElementById("productName").value;
-    const details = document.getElementById("productDetails").value;
-    const result = runLLMAgent(name, details);
-    document.getElementById("output").innerText = result;
-}
-,
