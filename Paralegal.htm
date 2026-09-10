@@ -177,7 +177,21 @@
     <img src="https://cdn.jsdelivr.net/gh/edent/SuperTinyIcons/images/svg/youtube.svg" alt="Vegas Concerts">
 </a>
     </div>
-    <p class="social-note">E-commerce Ai Agent Coming Soon</p>
+   <div class="llm-box">
+  <h2>AI LLM Tag Generator — Live</h2>
+  <input id="productName" placeholder="Product Name">
+  <textarea id="productDetails" placeholder="Product Details"></textarea>
+  <button onclick="runLLM()">Generate Tags</button>
+  <p id="output"></p>
+</div>
+<script>
+function runLLM() {
+    const name = document.getElementById("productName").value;
+    const details = document.getElementById("productDetails").value;
+    const result = generateProductTagDescription(name, details);
+    document.getElementById("output").innerText = result;
+}
+</script>
 </section>
         
         </header>
@@ -877,6 +891,6 @@
     const today = new Date().toLocaleDateString('en-US', options);
     document.getElementById('publish-date').textContent = today;
 </script>
-
+<script src="llm-agent.js"></script>
 </body>
 </html>
