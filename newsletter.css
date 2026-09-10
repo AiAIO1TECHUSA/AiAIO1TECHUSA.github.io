@@ -715,3 +715,92 @@ a:focus {
     white-space: pre-wrap;
     line-height: 1.6;
 }
+/* ===============================
+   Military Intelligence Frontier UI
+   =============================== */
+
+.frontier-llm-box {
+    max-width: 700px;
+    margin: 50px auto;
+    padding: 30px;
+    background: #0b0b0b;
+    border: 2px solid #b22222; /* Marine Corps Scarlet */
+    border-radius: 12px;
+    box-shadow: 0 0 25px rgba(178, 34, 34, 0.35);
+    font-family: 'Courier New', monospace;
+    color: #f2f2f2;
+    text-transform: none;
+}
+
+.frontier-llm-box h2 {
+    margin-top: 0;
+    color: #b22222; /* Scarlet */
+    font-size: 1.9rem;
+    letter-spacing: 1px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.frontier-llm-box .subtext {
+    margin-bottom: 25px;
+    color: #d4d4d4;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    font-style: italic;
+}
+
+.frontier-llm-box label {
+    display: block;
+    margin-top: 20px;
+    font-weight: bold;
+    color: #ffd700; /* Marine Corps Gold */
+    text-transform: uppercase;
+    font-size: 0.85rem;
+}
+
+.frontier-llm-box input,
+.frontier-llm-box textarea {
+    width: 100%;
+    padding: 12px;
+    margin-top: 8px;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 8px;
+    color: #f2f2f2;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+.frontier-llm-box button {
+    margin-top: 25px;
+    width: 100%;
+    padding: 16px;
+    background: #b22222; /* Scarlet */
+    color: #0b0b0b;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.frontier-llm-box button:hover {
+    background: #8b1a1a;
+    transform: scale(1.02);
+}
+
+.frontier-output {
+    margin-top: 30px;
+    padding: 20px;
+    background: #111;
+    border-left: 4px solid #ffd700; /* Gold */
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #f2f2f2;
+    white-space: pre-wrap;
+    line-height: 1.6;
+    font-family: 'Courier New', monospace;
+}
