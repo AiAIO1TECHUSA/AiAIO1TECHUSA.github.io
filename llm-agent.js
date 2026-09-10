@@ -120,7 +120,6 @@ function runLLMAgent(productName, productDetails) {
 
     return (
     "IDENTITY READ — " + description + "\n\n" +
-
     "SITUATION — " + reasoning + "\n" +
     "FRONTIER SCAN — " + frontier + "\n" +
     "BEST ANGLE — " + bestPath + "\n" +
