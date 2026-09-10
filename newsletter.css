@@ -634,3 +634,84 @@ a:focus {
     padding: 0 20px;
     box-sizing: border-box;
 }
+.frontier-llm-box {
+    max-width: 700px;
+    margin: 50px auto;
+    padding: 30px;
+    background: #0d0d0d;
+    border: 2px solid #ff6600;
+    border-radius: 14px;
+    box-shadow: 0 0 25px rgba(255, 102, 0, 0.35);
+    font-family: 'Courier New', monospace;
+    color: #f2f2f2;
+}
+
+.frontier-llm-box h2 {
+    margin-top: 0;
+    color: #ff6600;
+    font-size: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.frontier-llm-box .subtext {
+    margin-bottom: 25px;
+    color: #cccccc;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+}
+
+.frontier-llm-box label {
+    display: block;
+    margin-top: 20px;
+    font-weight: bold;
+    color: #ff6600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+}
+
+.frontier-llm-box input,
+.frontier-llm-box textarea {
+    width: 100%;
+    padding: 12px;
+    margin-top: 8px;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 8px;
+    color: #f2f2f2;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+.frontier-llm-box button {
+    margin-top: 25px;
+    width: 100%;
+    padding: 16px;
+    background: #ff6600;
+    color: #0d0d0d;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.frontier-llm-box button:hover {
+    background: #e05500;
+    transform: scale(1.02);
+}
+
+.frontier-output {
+    margin-top: 30px;
+    padding: 20px;
+    background: #1a1a1a;
+    border-left: 4px solid #ff6600;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #f2f2f2;
+    white-space: pre-wrap;
+    line-height: 1.6;
+}
