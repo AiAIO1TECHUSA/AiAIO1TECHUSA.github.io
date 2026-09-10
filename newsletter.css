@@ -561,3 +561,70 @@ a:focus {
     color: #ff8800; /* keyboard navigation / accessibility */
   
   }
+.llm-agent-box {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 25px;
+    background: #ffffff;
+    border: 2px solid #ff6600;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    font-family: Arial, sans-serif;
+}
+
+.llm-agent-box h2 {
+    margin-top: 0;
+    color: #ff6600;
+    font-size: 1.8rem;
+}
+
+.llm-agent-box p {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.llm-agent-box label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+    color: #444;
+}
+
+.llm-agent-box input,
+.llm-agent-box textarea {
+    width: 100%;
+    padding: 12px;
+    margin-top: 6px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+.llm-agent-box button {
+    margin-top: 20px;
+    width: 100%;
+    padding: 14px;
+    background: #ff6600;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.llm-agent-box button:hover {
+    background: #e05500;
+}
+
+.llm-output {
+    margin-top: 20px;
+    padding: 15px;
+    background: #f9f9f9;
+    border-left: 4px solid #ff6600;
+    border-radius: 6px;
+    font-size: 1rem;
+    color: #333;
+    white-space: pre-wrap;
+}
