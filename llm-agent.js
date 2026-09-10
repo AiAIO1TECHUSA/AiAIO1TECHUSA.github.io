@@ -119,11 +119,12 @@ function runLLMAgent(productName, productDetails) {
         "Next step: Use these tags in your product listing and write 2–3 short sentences that match the “best angle” above.";
 
     return (
-        description + "\n\n" +
-        reasoning + "\n" +
-        frontier + "\n" +
-        bestPath + "\n" +
-        "Confidence (0–1): " + confidence + "\n" +
-        action
-    );
+    "IDENTITY READ — " + description + "\n\n" +
+
+    "SITUATION — " + reasoning + "\n" +
+    "FRONTIER SCAN — " + frontier + "\n" +
+    "BEST ANGLE — " + bestPath + "\n" +
+    "CONFIDENCE — " + confidence + "\n\n" +
+    "ACTION — Deliver a tight, mission‑ready product listing. Lead with identity, reinforce heritage, and close with a clear value statement."
+);
 }
