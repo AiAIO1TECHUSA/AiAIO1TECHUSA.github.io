@@ -894,10 +894,17 @@
 function runLLM() {
     const name = document.getElementById("productName").value;
     const details = document.getElementById("productDetails").value;
+
+    // Call your upgraded Recon‑tone agent
     const result = runLLMAgent(name, details);
+
+    // Display output
     document.getElementById("output").innerText = result;
 }
 </script>
+
+<script src="llm-agent.js"></script>
+
 
 <script src="llm-agent.js"></script>
 </body>
