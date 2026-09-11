@@ -1,4 +1,4 @@
-// ===============================
+ // ===============================
 // Military‑Aware LLM‑AGENT (Plain English, E‑commerce + USMC Apparel)
 // ===============================
 
@@ -82,7 +82,8 @@ function frontierAnalysis(details) {
 }
 
 function chooseBestPath(name, details) {
-    const d = (name + " " + details).toLowerCase();
+    const bestPath = chooseBestPath(productName, productDetails);
+
 
     // Military / USMC apparel path
     if (d.includes("usmc") || d.includes("marine") || d.includes("marines"))
