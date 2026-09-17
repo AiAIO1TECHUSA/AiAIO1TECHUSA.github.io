@@ -1,0 +1,1246 @@
+ <!DOCTYPE html>
+<html lang="en">
+ <div class="page-container">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>Cyber Security and RWD</title>
+
+    <link rel="stylesheet" href="newsletter-1.css">
+    <link rel="modulepreload" href="aes.js">
+
+    <style>
+    /* Responsive payment styles added inline so the payment section works without additional CSS edits */
+    .payment-methods, .payment-section {
+        padding: 1rem;
+        background: #f9f9f9;
+        border-radius: 8px;
+        margin: 1rem 0;
+    }
+    .payment-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 1rem;
+        align-items: center;
+    }
+    .pay-option {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.75rem;
+        background: #fff;
+        border-radius: 8px;
+        text-align: center;
+        text-decoration: none;
+        color: inherit;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        border: 1px solid rgba(0,0,0,0.05);
+        transition: transform 160ms ease, box-shadow 160ms ease;
+    }
+    .pay-option:hover { transform: translateY(-4px); box-shadow: 0 6px 18px rgba(0,0,0,0.12); }
+    .pay-icon { width: 48px; height: auto; display: block; }
+
+    .payment-title { margin: 0 0 0.5rem 0; font-size: 1.25rem; }
+    .payment-description { margin: 0 0 0.75rem 0; color: #333; }
+
+    /* Simple visible banner for the payment placeholders */
+    .payment-banner {
+        font-size: 1.25rem;
+        font-weight: 700;
+        text-align: center;
+        background: #fff3cd; /* soft yellow */
+        color: #856404; /* dark yellow/brown for contrast */
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        margin-bottom: 0.75rem;
+        border: 1px solid #ffeeba;
+    }
+
+    .chime-button {
+        display: inline-block;
+        padding: 0.65rem 1rem;
+        background: #00a86b;
+        color: #fff;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .qr-wrapper { display: flex; align-items: center; gap: 1rem; margin-top: 0.75rem; flex-wrap: wrap; }
+    .qr-image { max-width: 160px; height: auto; border: 1px solid #ddd; border-radius: 6px; }
+
+    /* Payment logos container - displayed at top */
+    .payment-logos {
+        display: flex;
+        justify-content: center;
+        gap: 25px;
+        margin: 15px 0 25px 0;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+    
+    .pay-logo {
+        height: 40px;
+        width: auto;
+        opacity: 0.95;
+        transition: opacity 0.3s ease, transform 0.2s ease;
+    }
+    
+    .pay-logo:hover {
+        opacity: 1;
+        transform: translateY(-3px);
+    }
+
+    /* larger mastercard in footer */
+    .mastercard-large { height: 56px; }
+
+    /* Visa white background option so the logo shows on any background */
+    .visa-white {
+        background: #ffffff; /* white background */
+        padding: 6px 10px;
+        border-radius: 6px;
+        display: inline-block;
+    }
+
+    /* Product card footer visual tweaks */
+    .product-card-footer {
+        background: #ffffff; /* ensure white background in footer */
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        margin-top: 0.75rem;
+    }
+
+    /* Make payment logos inside product footer match the main payment grid spacing/layout */
+    .product-card-footer .payment-logos {
+        gap: 20px;
+        justify-content: center;
+        margin: 10px 0 0 0;
+    }
+
+    /* Small screen tweaks */
+    @media (max-width: 480px) {
+        .hero-title { font-size: 1.25rem; }
+        .pay-icon { width: 40px; }
+        .qr-image { max-width: 120px; }
+        .payment-methods, .payment-section { padding: 0.75rem; }
+        .pay-logo { height: 32px; }
+        .mastercard-large { height: 44px; }
+    }
+    </style>
+</head>
+
+<body>
+
+<main>
+
+    <!-- ===========================
+         HEADER / HERO SECTION
+    ============================ -->
+    <section class="heading">
+        <header class="hero">
+
+            <figure>
+                <a href="https://about.me/the1techusa">
+                    <img src="images/logoBCP.png" alt="BCP Corner logo" loading="lazy">
+                    <figcaption>
+                        BCP Basic Computer Programming Solutions Corner — BCPcorner Motto: "it just works"
+                    </figcaption>
+                </a>
+            </figure>
+
+            <a href="https://about.me/the1techusa">
+                <h1 class="hero-title">
+                    IT Solutions BCPCORNER — Basic Computer Programming Corner
+                </h1>
+            </a>
+ <section class="social-container">
+    <h3 class="social-title">Connect & Explore</h3>
+    <div class="social-icons">
+    <a href="https://www.instagram.com/patlucero2026" class="social-icon" target="_blank" rel="noopener">
+    <img src="https://cdn.jsdelivr.net/gh/edent/SuperTinyIcons/images/svg/instagram.svg" alt="Instagram">
+</a>
+    <a href="https://tiktok.com/@aiaio1techusa1" 
+ class="social-icon" target="_blank" rel="noopener">
+    <img src="https://cdn.jsdelivr.net/gh/edent/SuperTinyIcons/images/svg/tiktok.svg" alt="TikTok">
+</a>
+    <a href="https://open.spotify.com/playlist/3c0vj39GZH9WJCKEpdGzSu" 
+   class="social-icon" target="_blank" rel="noopener">
+    <img src="https://cdn.jsdelivr.net/gh/edent/SuperTinyIcons/images/svg/spotify.svg" 
+         alt="Spotify">
+</a>
+    <a href="https://m.youtube.com/c/PatLucero" class="social-icon vegas-feed">
+    <img src="https://cdn.jsdelivr.net/gh/edent/SuperTinyIcons/images/svg/youtube.svg" alt="Vegas Concerts">
+</a>
+    </div>
+ </section>
+<div class="frontier-llm-box">
+
+    <h2>LLM-AGENT // Product Intelligence</h2>
+
+    <p class="subtext">
+        IMAGE ANALYSIS • PRODUCT IDENTITY • SEO • STRIPE • JSON-LD
+    </p>
+
+    <label for="productName">
+        Product Name
+    </label>
+
+    <input
+        id="productName"
+        type="text"
+        placeholder="Enter product name"
+        autocomplete="off"
+    >
+
+    <label for="productId">
+        Product ID / SKU
+    </label>
+
+    <input
+        id="productId"
+        type="text"
+        placeholder="Example: USMC-WORLD-PROTECTOR-XL"
+        autocomplete="off"
+    >
+
+    <label for="productDetails">
+        Product Details
+    </label>
+
+    <textarea
+        id="productDetails"
+        placeholder="Enter product details"
+        rows="6"
+    ></textarea>
+
+    <label for="stripeUrl">
+        Stripe Payment Link
+    </label>
+
+    <input
+        id="stripeUrl"
+        type="url"
+        placeholder="https://buy.stripe.com/..."
+        autocomplete="off"
+    >
+
+    <label for="productImage">
+        Product Image
+    </label>
+
+    <input
+        id="productImage"
+        type="file"
+        accept="image/*"
+    >
+
+    <div id="imagePreview" class="image-preview"></div>
+
+    <button
+        type="button"
+        onclick="runProductFrontierScan()"
+    >
+        Initiate Product Frontier Scan
+    </button>
+
+    <div
+        id="output"
+        class="frontier-output"
+        aria-live="polite"
+    ></div>
+
+</div>
+        </header>
+
+        <div class="author">
+            <p class="author-name">
+                By
+                <a href="https://about.me/the1techusa" target="_blank">
+                    #1techusa and AioParalegal
+                </a>
+            </p>
+            <p class="publish-date" id="publish-date">July 9, 2026</p>
+        </div>
+    </section>
+
+    <!-- ===========================
+         CONTACT FORM SECTION
+    ============================ -->
+    <section class="contact-section">
+        <h2 class="contact-title">Message Me</h2>
+
+        <form class="contact-form" action="https://formsubmit.co/patlucero2025@proton.me" method="POST">
+
+             <!-- Protect from spam -->
+            <input type="hidden" name="_captcha" value="false">
+            <input type="hidden" name="_subject" value="New message from your website">
+            <input type="hidden" name="_template" value="table">
+
+            <label for="name">Your Name</label>
+            <input type="text" id="name" name="name" required placeholder="Enter your name">
+
+            <label for="email">Your Email</label>
+            <input type="email" id="email" name="email" required placeholder="Enter your email">
+
+            <label for="message">Message</label>
+            <textarea id="message" name="message" required placeholder="Write your message here..."></textarea>
+
+            <button type="submit" class="contact-submit">Send Message</button>
+        </form>
+    </section>
+
+    <!-- ===========================
+         MULTI-COLUMN ARTICLE
+    ============================ -->
+    <section class="text">
+
+        <p class="first-paragraph">
+            Update Android 5.1.1 Fire HD 8 7th Generation runs Google Play Store version 4.0 above...
+            AppStore up to date with latest version.
+        </p>
+
+        <p class="quote">
+            Hint: Microsoft Windows 11 updated you can move on to enable virtualization...
+            — Android Authority
+        </p>
+
+        <p>
+            Highlight-select search web https://apps.microsoft.com/ to install ThunderVPN...
+        </p>
+
+        <p>
+            JavaScript programming knowledge is best applied in office workflow automation...
+        </p>
+
+        <p>
+            Sign-in to your Wi-Fi Network — use a Starbucks Wi-Fi connection...
+        </p>
+
+        <p>
+            Next, go to proxynova.com — choose an Elite connection...
+        </p>
+
+        <p>
+            Now test your speed. You will be completely anonymous...
+        </p>
+
+        <!-- ===========================
+             TECHUSA + AI SECTION
+        ============================ -->
+        <p>
+            <a href="http://atechi.thsite.top/replicateTechUp2023.html">
+                Overview of services provided specifically to law firms and small businesses...
+            </a>
+        </p>
+
+        <ul class="lists">
+            <li>
+                <a href="https://aiaio1techusa.github.io/IT2026.htm"><strong>#TechUSA</strong></a>
+                <p>
+                    AiTech – Chat GPT‑4 built‑in grid includes 16,000 specialized GPUs...
+                    <em>Source: The Economist, The World Ahead 2024</em>
+                </p>
+            </li>
+        </ul>
+
+        <p>
+            🚀 <strong>Ai_Talent Proposal Overview</strong><br>
+            #1TechUSA presents a strategic suite of services...
+        </p>
+
+        <p>
+            🔧 <strong>Core Services</strong>
+        </p>
+<section id="core-services">
+  <h2>Small Business Network & Server Package</h2>
+
+  <!-- Jump to the calculator on newsmagazinepayment.htm -->
+  <a href="newsmagazinepayment.htm#core-services-form" class="calendar-button">
+      Build Your Service Package
+  </a>
+
+  <table class="invoice-table">
+      <!-- existing rows... -->
+  </table>
+</section>
+
+        <ul class="lists">
+            <li>
+                <p>
+                    <span class="list-subtitle">Internet Network Speed Optimization</span><br>
+                    Tailored solutions for Windows 11 and Android...
+                </p>
+            </li>
+            <li>
+                <p>
+                    <span class="list-subtitle">Tech Insights &amp; Tips</span>
+                    Curated updates and expert guidance...
+                </p>
+            </li>
+        </ul>
+
+        <!-- ===========================
+             SEM / SEO / BUSINESS
+        ============================ -->
+        <ul class="lists">
+            <li>
+                <p>
+                    <span class="list-subtitle">SEM Campaigns &amp; SEO Customization</span><br>
+                    Launch targeted Search Engine Marketing campaigns...
+                </p>
+            </li>
+            <li>
+                <p>
+                    <span class="list-subtitle">Responsive Web Development (Coming Soon)</span><br>
+                    Future-proof your online presence...
+                </p>
+            </li>
+        </ul>
+
+        <p>
+            📈 <strong>Business-Centric Approach</strong><br>
+            Each proposal is customized...
+        </p>
+
+        <hr>
+
+        <p class="quote">
+            ⚠️ <strong>Disclaimer:</strong><br>
+            This document is a cost estimate only...
+        </p>
+
+        <p>
+            ALPHV has access to MGM's entire network...
+        </p>
+
+        <blockquote>
+            <strong>Quote on Twitter Post:</strong><br><br>
+            "All ALPHV ransomware group did to compromise MGM Resorts was hop on LinkedIn..."
+        </blockquote>
+
+        <!-- ===========================
+             INSPIRATIONAL SECTION
+        ============================ -->
+        <blockquote>
+            <hr>
+            <p class="quote">
+                "Every single day wake-up to learn more — it's amazing to make a change each day in your life."
+            </p>
+            <hr>
+        </blockquote>
+
+        <p>
+            <strong>#MindUp</strong> — Find a special place out in nature...
+        </p>
+
+        <p>The power to change is The Grace of God.</p>
+
+        <p>
+            Have fun, sit back — <strong>#WatchAFlick</strong>...
+        </p>
+
+    </section>
+
+    <!-- ===========================
+         IMAGE GRID + SERVICES + PAYMENTS
+    ============================ -->
+    <section class="text-with-images">
+
+        <article class="brief-history">
+            <h3 class="list-title">Services and Plans</h3>
+            <p>Descriptions and prices</p>
+
+            <ul class="lists">
+
+                <li>
+                    <h4 class="list-subtitle">Personal Injury Medical Chronology...</h4>
+                    <p>Issue: Microsoft Office integration...</p>
+                    <hr>
+                    <p>Costs = $30 per billable hour</p>
+                </li>
+
+                <li>
+                    <h4 class="list-subtitle">Web 3.0 Magazine Layout...</h4>
+                    <p>Issue: Lack of effective use of technology...</p>
+                    <hr>
+                    <p>Costs = $20 per billable hour</p>
+                </li>
+
+                <li>
+                    <h4 class="list-subtitle">JavaScript AI Workflow</h4>
+                    <p>Issue: Lack of client communications...</p>
+                    <hr>
+                    <p>Costs = $50 per hour […]</p>
+                </li>
+
+                <li>
+                    <h4 class="list-subtitle">Cyber Security &amp; Performance Updates</h4>
+                    <hr>
+                    <p>$100 — includes 2 devices</p>
+                    <p>#1 Security and Speed/Performance service...</p>
+                </li>
+
+                <li>
+                    <h4 class="list-subtitle">A+Tech Yelp Me 2</h4>
+                    <p>
+                        Updated August 20th, 2025 —
+                        <a href="https://youtu.be/hGY0icwlDGY?si=Fr3SKsmPFzciFXbH">Official trailer</a>
+                    </p>
+                </li>
+
+                <li>
+                    <h4 class="list-subtitle">Dark Harvest — 2023</h4>
+                    <p>
+                        October coming soon —
+                        <a href="https://youtu.be/Pge4NmBzdkE?si=bKR5j8HLSIFeNDQ5">Official trailer</a>
+                    </p>
+                </li>
+
+            </ul>
+        </article>
+
+        <section class="payment-methods">
+            <div class="payment-banner" aria-live="polite">VINTAGE COLLECTION-FREE SHIPPING</div>
+            <h2 class="payment-title">Payment Methods</h2>
+
+            
+              <img src="images/USMC_WorldProtector_BlackXL_800x800.png" alt="USMC World Protector Vintage Black Tee — XL, Skeleton Warrior Graphic (100% Cotton)" loading="lazy" width="auto" height="auto"</img>
+
+            <!-- Payment logos displayed at top -->
+
+            <div class="payment-grid">
+                <!-- PayPal -->
+                <a href="https://buy.stripe.com/4gMcN7a9e1Yn5uogxm8AE00" class="pay-option" target="_blank" rel="noopener">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" class="pay-icon">
+                    <span>PayPal</span>
+ </a>
+
+                <!-- Apple Pay (via Stripe or Square link) -->
+                <a href="https://buy.stripe.com/4gMcN7a9e1Yn5uogxm8AE00" class="pay-option" target="_blank" rel="noopener">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b0/Apple_Pay_logo.svg" alt="Apple Pay" class="pay-icon">
+                    <span>Apple Pay</span>
+                </a>
+
+                <!-- Visa -->
+                <a href="https://buy.stripe.com/4gMcN7a9e1Yn5uogxm8AE00" class="pay-option" target="_blank" rel="noopener">
+                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/visa.svg" alt="Visa" class="pay-icon">
+                    <span>Visa</span>
+                </a>
+
+                <!-- MasterCard (via Stripe or Square checkout) -->
+                <a href="https://buy.stripe.com/4gMcN7a9e1Yn5uogxm8AE00" class="pay-option" target="_blank" rel="noopener">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Mastercard-logo.png" alt="MasterCard" class="pay-icon">
+                    <span>MasterCard</span>
+                </a>
+            </div>
+<a href="shipping.html?product=USMC World Protector Vintage Black Tee — XL, Skeleton Warrior Graphic (100% Cotton)" class="shipping-button">
+  Delivery Details
+</a>
+        </section>
+
+        <section class="payment-section">
+            <h2 class="payment-title">Chime Payment</h2>
+
+            <p class="payment-description">
+                You can send secure payments directly through Chime using the button below.
+                Fast, safe, and convenient.
+            </p>
+
+            <!-- Chime Pay Button -->
+            <a href="https://app.chime.com/link/qr?u=Patrico-Lucero" class="chime-button" target="_blank" rel="noopener">
+                Pay with Chime
+            </a>
+
+            <!-- Optional QR Code -->
+            <div class="qr-wrapper">
+                <img src="images/chimeQR.png" alt="Chime Payment QR Code" class="qr-image">
+                <p class="qr-note">Scan with your Chime app</p>
+            </div>
+        </section>
+  <blockquote class="image-quote">
+                    <hr>
+                    <p class="quote">
+                        Skills. Will. Refill. Keys to Life and Success...
+                    </p>
+                    <hr>
+                </blockquote>
+    <section class="payment-methods">
+            <div class="payment-banner" aria-live="polite">VINTAGE COLLECTION-FREE SHIPPING</div>
+            <h2 class="payment-title">Payment Methods</h2>
+
+            
+             <img src="images/USMC_OvernightVintage_BlackLarge_800x800.png" alt="USMC Absolutely, Positively, Overnight Vintage Tee — Black Large (Gold Emblem)" loading="lazy" width="auto" height="auto"</img>
+
+            <!-- Payment logos displayed at top -->
+
+            <div class="payment-grid">
+                <!-- PayPal -->
+                <a href="https://buy.stripe.com/3cI9AVgxCcD11e880Q8AE03" class="pay-option" target="_blank" rel="noopener">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" class="pay-icon">
+                    <span>PayPal</span>
+                </a>
+
+                <!-- Apple Pay (via Stripe or Square link) -->
+                <a href="https://buy.stripe.com/3cI9AVgxCcD11e880Q8AE03" class="pay-option" target="_blank" rel="noopener">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b0/Apple_Pay_logo.svg" alt="Apple Pay" class="pay-icon">
+                    <span>Apple Pay</span>
+                </a>
+
+                <!-- Visa -->
+                <a href="https://buy.stripe.com/3cI9AVgxCcD11e880Q8AE03" class="pay-option" target="_blank" rel="noopener">
+                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/visa.svg" alt="Visa" class="pay-icon">
+                    <span>Visa</span>
+                </a>
+
+                <!-- MasterCard (via Stripe or Square checkout) -->
+                <a href="https://buy.stripe.com/3cI9AVgxCcD11e880Q8AE03" class="pay-option" target="_blank" rel="noopener">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Mastercard-logo.png" alt="MasterCard" class="pay-icon">
+                    <span>MasterCard</span>
+                </a>
+            </div>
+        <a href="shipping.html?product=USMC Absolutely, Positively, Overnight Vintage Tee — Black Large (Gold Emblem)" class="shipping-button">
+  Delivery Details
+        </a>
+        </section>
+          <section class="payment-methods">
+            <div class="payment-banner" aria-live="polite">VINTAGE COLLECTION-FREE SHIPPING</div>
+            <h2 class="payment-title">Payment Methods</h2>
+
+            
+             <img src="images/Marines_ForceRecon_800x800-1.png" alt="USMC Force Recon vintage red Marine Corps tee — military heritage apparel" loading="lazy" width="auto" height="auto"</img>
+
+            <!-- Payment logos displayed at top -->
+
+            <div class="payment-grid">
+                <!-- PayPal -->
+                <a href="https://buy.stripe.com/00w6oJ5SY8mL2icdla8AE01" class="pay-option" target="_blank" rel="noopener">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" class="pay-icon">
+                    <span>PayPal</span>
+                </a>
+
+                <!-- Apple Pay (via Stripe or Square link) -->
+                <a href="https://buy.stripe.com/00w6oJ5SY8mL2icdla8AE01" class="pay-option" target="_blank" rel="noopener">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b0/Apple_Pay_logo.svg" alt="Apple Pay" class="pay-icon">
+                    <span>Apple Pay</span>
+                </a>
+
+                <!-- Visa -->
+                <a href="https://buy.stripe.com/00w6oJ5SY8mL2icdla8AE01" class="pay-option" target="_blank" rel="noopener">
+                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/visa.svg" alt="Visa" class="pay-icon">
+                    <span>Visa</span>
+                </a>
+
+                <!-- MasterCard (via Stripe or Square checkout) -->
+                <a href="https://buy.stripe.com/00w6oJ5SY8mL2icdla8AE01" class="pay-option" target="_blank" rel="noopener">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Mastercard-logo.png" alt="MasterCard" class="pay-icon">
+                    <span>MasterCard</span>
+                </a>
+            </div>
+               <a href="shipping.html?product=Good-Morning-US-Marines-Force-Recon-Red-Vintage-Collection" class="shipping-button">
+  Delivery Details
+</a>
+    </section>
+  
+         <section class="payment-methods">
+            <div class="payment-banner" aria-live="polite">VINTAGE COLLECTION-FREE SHIPPING</div>
+            <h2 class="payment-title">Payment Methods</h2>
+
+            
+             <img src="images/SemperFi_RedCap_GoldMCEmblem_800x800.png" alt="USMC Semper Fi gold emblem vintage red cap — adjustable mesh back Made in USA" loading="lazy" width="auto" height="auto"</img>
+
+            <!-- Payment logos displayed at top -->
+
+            <div class="payment-grid">
+                <!-- PayPal -->
+                <a href="https://buy.stripe.com/eVqcN7bdi9qPbSM6WM8AE02" class="pay-option" target="_blank" rel="noopener">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" class="pay-icon">
+                    <span>PayPal</span>
+                </a>
+
+                <!-- Apple Pay (via Stripe or Square link) -->
+                <a href="https://buy.stripe.com/eVqcN7bdi9qPbSM6WM8AE02" class="pay-option" target="_blank" rel="noopener">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b0/Apple_Pay_logo.svg" alt="Apple Pay" class="pay-icon">
+                    <span>Apple Pay</span>
+                </a>
+
+                <!-- Visa -->
+                <a href="https://buy.stripe.com/eVqcN7bdi9qPbSM6WM8AE02" class="pay-option" target="_blank" rel="noopener">
+                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/visa.svg" alt="Visa" class="pay-icon">
+                    <span>Visa</span>
+                </a>
+
+                <!-- MasterCard (via Stripe or Square checkout) -->
+                <a href="https://buy.stripe.com/eVqcN7bdi9qPbSM6WM8AE02" class="pay-option" target="_blank" rel="noopener">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Mastercard-logo.png" alt="MasterCard" class="pay-icon">
+                    <span>MasterCard</span>
+                </a>
+            </div>
+             <a href="shipping.html?product=USMC Semper Fi gold emblem vintage red cap — adjustable mesh back Made in USA" class="shipping-button">
+  Delivery Details
+             </a>
+    </section>
+          <section class="payment-methods">
+            <div class="payment-banner" aria-live="polite">VINTAGE COLLECTION-FREE SHIPPING</div>
+            <h2 class="payment-title">Payment Methods</h2>
+
+            
+             <img src="images/SEALTeam_Vintage_BlueGold_800x800.png" alt="SEAL Team Vintage Navy Blue Cap — Naval Special Warfare, Gold Lettering, Mesh Vented Sides (USA Made)" loading="lazy" width="auto" height="auto"</img>
+
+            <!-- Payment logos displayed at top -->
+
+            <div class="payment-grid">
+                <!-- PayPal -->
+                <a href="https://buy.stripe.com/cNieVfdlqauT1e894U8AE04" class="pay-option" target="_blank" rel="noopener">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" class="pay-icon">
+                    <span>PayPal</span>
+                </a>
+
+                <!-- Apple Pay (via Stripe or Square link) -->
+                <a href="https://buy.stripe.com/cNieVfdlqauT1e894U8AE04" class="pay-option" target="_blank" rel="noopener">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b0/Apple_Pay_logo.svg" alt="Apple Pay" class="pay-icon">
+                    <span>Apple Pay</span>
+                </a>
+
+                <!-- Visa -->
+                <a href="https://buy.stripe.com/cNieVfdlqauT1e894U8AE04" class="pay-option" target="_blank" rel="noopener">
+                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/visa.svg" alt="Visa" class="pay-icon">
+                    <span>Visa</span>
+                </a>
+
+                <!-- MasterCard (via Stripe or Square checkout) -->
+                <a href="https://buy.stripe.com/cNieVfdlqauT1e894U8AE04" class="pay-option" target="_blank" rel="noopener">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Mastercard-logo.png" alt="MasterCard" class="pay-icon">
+                    <span>MasterCard</span>
+                </a>
+            </div>
+             <a href="shipping.html?product=SEAL Team Vintage Navy Blue Cap — Naval Special Warfare, Gold Lettering, Mesh Vented Sides (USA Made)" class="shipping-button">
+  Delivery Details
+             </a>
+    </section>  
+ <section class="payment-methods">
+            <div class="payment-banner" aria-live="polite">VINTAGE COLLECTION-FREE SHIPPING</div>
+            <h2 class="payment-title">Payment Methods</h2>
+       
+             <img src="images/USSTennessee_SSBN734_800x800.png" alt="USS Tennessee SSBN‑734 vintage navy blue cap with gold lettering, raised stitching, and mesh vented sides — USA made" loading="lazy" width="auto" height="auto"</img>
+
+            <!-- Payment logos displayed at top -->
+
+            <div class="payment-grid">
+                <!-- PayPal -->
+                <a href="https://buy.stripe.com/8x2dRb6X246vbSMgxm8AE05" class="pay-option" target="_blank" rel="noopener">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" class="pay-icon">
+                    <span>PayPal</span>
+                </a>
+
+                <!-- Apple Pay (via Stripe or Square link) -->
+                <a href="https://buy.stripe.com/8x2dRb6X246vbSMgxm8AE05" class="pay-option" target="_blank" rel="noopener">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b0/Apple_Pay_logo.svg" alt="Apple Pay" class="pay-icon">
+                    <span>Apple Pay</span>
+                </a>
+
+                <!-- Visa -->
+                <a href="https://buy.stripe.com/8x2dRb6X246vbSMgxm8AE05" class="pay-option" target="_blank" rel="noopener">
+                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/visa.svg" alt="Visa" class="pay-icon">
+                    <span>Visa</span>
+                </a>
+
+                <!-- MasterCard (via Stripe or Square checkout) -->
+                <a href="https://buy.stripe.com/8x2dRb6X246vbSMgxm8AE05" class="pay-option" target="_blank" rel="noopener">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Mastercard-logo.png" alt="MasterCard" class="pay-icon">
+                    <span>MasterCard</span>
+                </a>
+            </div>
+             <a href="shipping.html?product=USS Tennessee SSBN‑734 Vintage Blue Cap — Gold Lettering, Raised Stitching, Mesh Vented Sides (USA Made)" class="shipping-button">
+  Delivery Details
+             </a>
+    </section>      
+         <section class="payment-methods">
+            <div class="payment-banner" aria-live="polite">VINTAGE COLLECTION-FREE SHIPPING</div>
+            <h2 class="payment-title">Payment Methods</h2>
+       
+             <img src="images/VietnamVeteran_JungleDragon_Navy_800x800.png" alt="Vietnam Veteran vintage navy cap with raised jungle dragon stitching — USA made" loading="lazy" width="auto" height="auto"</img>
+
+            <!-- Payment logos displayed at top -->
+
+            <div class="payment-grid">
+                <!-- PayPal -->
+                <a href="https://buy.stripe.com/00w4gBa9e8mL1e81Cs8AE06" class="pay-option" target="_blank" rel="noopener">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" class="pay-icon">
+                    <span>PayPal</span>
+                </a>
+
+                <!-- Apple Pay (via Stripe or Square link) -->
+                <a href="https://buy.stripe.com/00w4gBa9e8mL1e81Cs8AE06" class="pay-option" target="_blank" rel="noopener">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b0/Apple_Pay_logo.svg" alt="Apple Pay" class="pay-icon">
+                    <span>Apple Pay</span>
+                </a>
+
+                <!-- Visa -->
+                <a href="https://buy.stripe.com/00w4gBa9e8mL1e81Cs8AE06" class="pay-option" target="_blank" rel="noopener">
+                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/visa.svg" alt="Visa" class="pay-icon">
+                    <span>Visa</span>
+                </a>
+
+                <!-- MasterCard (via Stripe or Square checkout) -->
+                <a href="https://buy.stripe.com/00w4gBa9e8mL1e81Cs8AE06" class="pay-option" target="_blank" rel="noopener">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Mastercard-logo.png" alt="MasterCard" class="pay-icon">
+                    <span>MasterCard</span>
+                </a>
+            </div>
+             <a href="shipping.html?product=Vietnam Veteran vintage navy cap with raised jungle dragon stitching — USA made" class="shipping-button">
+  Delivery Details
+             </a>
+    </section>
+         <section class="payment-methods">
+            <div class="payment-banner" aria-live="polite">VINTAGE COLLECTION-FREE SHIPPING</div>
+            <h2 class="payment-title">Payment Methods</h2>
+       
+             <img src="images/AirForce_Vintage_BlueGold_800x800.png" alt="Air Force vintage blue cap with soaring eagle emblem, arched white stars, gold lettering, and mesh vented sides — USA made" loading="lazy" width="auto" height="auto"</img>
+
+            <!-- Payment logos displayed at top -->
+
+            <div class="payment-grid">
+                <!-- PayPal -->
+                <a href="https://buy.stripe.com/14AaEZdlq46v3mgfti8AE07" class="pay-option" target="_blank" rel="noopener">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" class="pay-icon">
+                    <span>PayPal</span>
+                </a>
+
+                <!-- Apple Pay (via Stripe or Square link) -->
+                <a href="https://buy.stripe.com/14AaEZdlq46v3mgfti8AE07" class="pay-option" target="_blank" rel="noopener">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b0/Apple_Pay_logo.svg" alt="Apple Pay" class="pay-icon">
+                    <span>Apple Pay</span>
+                </a>
+
+                <!-- Visa -->
+                <a href="https://buy.stripe.com/14AaEZdlq46v3mgfti8AE07" class="pay-option" target="_blank" rel="noopener">
+                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/visa.svg" alt="Visa" class="pay-icon">
+                    <span>Visa</span>
+                </a>
+
+                <!-- MasterCard (via Stripe or Square checkout) -->
+                <a href="https://buy.stripe.com/14AaEZdlq46v3mgfti8AE07" class="pay-option" target="_blank" rel="noopener">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Mastercard-logo.png" alt="MasterCard" class="pay-icon">
+                    <span>MasterCard</span>
+                </a>
+            </div>
+             <a href="shipping.html?product=Air Force Vintage Blue Cap — Gold Emblem, Raised Stitching, Mesh Vented Sides (USA Made)" class="shipping-button">
+  Delivery Details
+             </a>
+         </section>
+  <section class="payment-methods">
+            <div class="payment-banner" aria-live="polite">VINTAGE COLLECTION-FREE SHIPPING</div>
+            <h2 class="payment-title">Payment Methods</h2>
+       
+             <img src="images/USCG_Vintage_BlueGold_800x800.png" alt="US Coast Guard vintage blue cap with gold lettering, Coast Guard emblem, raised stitching, and mesh vented sides — USA made" loading="lazy" width="auto" height="auto"</img>
+
+            <!-- Payment logos displayed at top -->
+
+            <div class="payment-grid">
+                <!-- PayPal -->
+                <a href="https://buy.stripe.com/6oU4gB8161Yn5uobd28AE08" class="pay-option" target="_blank" rel="noopener">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" class="pay-icon">
+                    <span>PayPal</span>
+                </a>
+
+                <!-- Apple Pay (via Stripe or Square link) -->
+                <a href="https://buy.stripe.com/6oU4gB8161Yn5uobd28AE08" class="pay-option" target="_blank" rel="noopener">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b0/Apple_Pay_logo.svg" alt="Apple Pay" class="pay-icon">
+                    <span>Apple Pay</span>
+                </a>
+
+                <!-- Visa -->
+                <a href="https://buy.stripe.com/6oU4gB8161Yn5uobd28AE08" class="pay-option" target="_blank" rel="noopener">
+                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/visa.svg" alt="Visa" class="pay-icon">
+                    <span>Visa</span>
+                </a>
+
+                <!-- MasterCard (via Stripe or Square checkout) -->
+                <a href="https://buy.stripe.com/6oU4gB8161Yn5uobd28AE08" class="pay-option" target="_blank" rel="noopener">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Mastercard-logo.png" alt="MasterCard" class="pay-icon">
+                    <span>MasterCard</span>
+                </a>
+            </div>
+   <a href="shipping.html?product=US-Coast-Guard-Vintage-Blue-Cap-Gold-Lettering-and-Emblem-Mesh-Vented-Sides-USA-Made" class="shipping-button">
+  Delivery Details
+</a>
+    </section>  
+     <section class="payment-methods">
+            <div class="payment-banner" aria-live="polite">VINTAGE COLLECTION-FREE SHIPPING</div>
+            <h2 class="payment-title">Payment Methods</h2>
+       
+             <img src="images/San Diego Mission Beach and La Jolla Souvenir Sleeveless Tee 800 x 800.png" alt="US Coast Guard Cap" loading="lazy" width="auto" height="auto"</img>
+
+            <!-- Payment logos displayed at top -->
+
+            <div class="payment-grid">
+                <!-- PayPal -->
+                <a href="https://buy.stripe.com/4gMeVf81632r2ic94U8AE09" class="pay-option" target="_blank" rel="noopener">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" class="pay-icon">
+                    <span>PayPal</span>
+                </a>
+
+                <!-- Apple Pay (via Stripe or Square link) -->
+                <a href="https://buy.stripe.com/4gMeVf81632r2ic94U8AE09" class="pay-option" target="_blank" rel="noopener">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b0/Apple_Pay_logo.svg" alt="Apple Pay" class="pay-icon">
+                    <span>Apple Pay</span>
+                </a>
+
+                <!-- Visa -->
+                <a href="https://buy.stripe.com/4gMeVf81632r2ic94U8AE09" class="pay-option" target="_blank" rel="noopener">
+                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/visa.svg" alt="Visa" class="pay-icon">
+                    <span>Visa</span>
+                </a>
+
+                <!-- MasterCard (via Stripe or Square checkout) -->
+                <a href="https://buy.stripe.com/4gMeVf81632r2ic94U8AE09" class="pay-option" target="_blank" rel="noopener">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Mastercard-logo.png" alt="MasterCard" class="pay-icon">
+                    <span>MasterCard</span>
+                </a>
+            </div>
+             <a href="shipping.html?product=San Diego Mission Beach and La Jolla Souvenir Tee" class="shipping-button">
+  Delivery Details
+             </a>
+    </section>  
+ <section class="payment-methods">
+            <div class="payment-banner" aria-live="polite">VINTAGE COLLECTION-FREE SHIPPING</div>
+            <h2 class="payment-title">Payment Methods</h2>
+       
+             <img src="images/San Diego Golden State Sleeveless Tee 800 x 550.png" alt="San Diego Golden State Sleeveless Tee Souvenir" loading="lazy" width="auto" height="auto"</img>
+
+            <!-- Payment logos displayed at top -->
+
+            <div class="payment-grid">
+                <!-- PayPal -->
+                <a href="https://buy.stripe.com/3cI28t1CIauTg926WM8AE0a" class="pay-option" target="_blank" rel="noopener">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" class="pay-icon">
+                    <span>PayPal</span>
+                </a>
+
+                <!-- Apple Pay (via Stripe or Square link) -->
+                <a href="https://buy.stripe.com/3cI28t1CIauTg926WM8AE0a" class="pay-option" target="_blank" rel="noopener">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b0/Apple_Pay_logo.svg" alt="Apple Pay" class="pay-icon">
+                    <span>Apple Pay</span>
+                </a>
+
+                <!-- Visa -->
+                <a href="https://buy.stripe.com/3cI28t1CIauTg926WM8AE0a" class="pay-option" target="_blank" rel="noopener">
+                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/visa.svg" alt="Visa" class="pay-icon">
+                    <span>Visa</span>
+                </a>
+
+                <!-- MasterCard (via Stripe or Square checkout) -->
+                <a href="https://buy.stripe.com/3cI28t1CIauTg926WM8AE0a" class="pay-option" target="_blank" rel="noopener">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Mastercard-logo.png" alt="MasterCard" class="pay-icon">
+                    <span>MasterCard</span>
+                </a>
+            </div>
+             <a href="shipping.html?product=San Diego Golden State Sleeveless Tee Souvenir Tee" class="shipping-button">
+  Delivery Details
+             </a>
+    </section>    
+     
+</main>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "Good morning US Marines Force Recon — Red Vintage Collection",
+  "description": "Vintage USMC Force Recon tee built for Marines, veterans, and supporters. Heritage-driven design with mission-ready identity.",
+  "image": "https://aiaio1techusa.github.io/images/Marines_ForceRecon_800x800-1.png",
+  "offers": {
+    "@type": "Offer",
+    "price": "45.00",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock"
+  }
+}
+</script>
+ <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "USMC Semper Fi Gold Emblem Vintage Red Cap — Adjustable Mesh Back (Made in USA)",
+  "description": "Vintage USMC Semper Fi cap featuring a gold emblem on a red base. Made in the USA with adjustable back and mesh vented sides.",
+  "image": "https://aiaio1techusa.github.io/images/SemperFi_RedCap_GoldMCEmblem_800x800.png",
+  "offers": {
+    "@type": "Offer",
+    "price": "45.00",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock"
+  }
+}
+  </script>
+ <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "USMC World Protector Vintage Black Tee — XL, Skeleton Warrior Graphic (100% Cotton)",
+  "description": "Vintage USMC World Protector tee featuring a skeleton warrior graphic symbolizing vigilance and global readiness. Made in the USA from 100% Fruit of the Loom cotton.",
+  "image": "https://aiaio1techusa.github.io/images/USMC_WorldProtector_BlackXL_800x800.png",
+  "offers": {
+    "@type": "Offer",
+    "price": "45.00",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock"
+  }
+}
+ </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "USMC “Absolutely, Positively, Overnight” Vintage Tee — Black Large (Gold Emblem)",
+  "description": "Vintage USMC tee featuring a humorous overnight slogan with gold Marine Corps emblem. Made in the USA from 100% Fruit of the Loom cotton.",
+  "image": "https://aiaio1techusa.github.io/images/USMC_OvernightVintage_BlackLarge_800x800.png",
+  "offers": {
+    "@type": "Offer",
+    "price": "45.00",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock"
+  }
+}
+</script>
+ <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "Vietnam Veteran Vintage Jungle Dragon Cap — Navy Blue, Raised Stitching (USA Made)",
+  "description": "Vintage Vietnam Veteran cap featuring raised stitching, red jungle dragon embroidery, mesh sides, and USA-made craftsmanship by North Star.",
+  "image": "https://aiaio1techusa.github.io/images/VietnamVeteran_JungleDragon_Navy_800x800.png",
+  "offers": {
+    "@type": "Offer",
+    "price": "55.00",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "Air Force Vintage Blue Cap — Soaring Eagle Emblem, White Stars, Mesh Vented Sides (USA Made)",
+  "description": "Vintage Air Force cap featuring the soaring eagle emblem, arched white stars, gold lettering, raised stitching, mesh vented sides, adjustable fit, and USA-made craftsmanship.",
+  "image": "https://aiaio1techusa.github.io/images/AirForce_Vintage_SoaringEagle_800x800.png",
+  "offers": {
+    "@type": "Offer",
+    "price": "45.00",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "SEAL Team Vintage Blue Cap — Naval Special Warfare, Blue & Gold Lettering, Mesh Vented Sides (USA Made)",
+  "description": "Vintage SEAL Team Navy Blue cap featuring gold lettering, raised stitching, mesh vented sides, adjustable fit, and USA-made craftsmanship by Northstar.",
+  "image": "https://aiaio1techusa.github.io/images/SEALTeam_Vintage_BlueGold_800x800.png",
+  "offers": {
+    "@type": "Offer",
+    "price": "45.00",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock"
+  }
+}
+</script>
+ <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "USS Tennessee SSBN-734 Vintage Blue Cap — Gold Lettering, Raised Stitching, Mesh Vented Sides (USA Made)",
+  "description": "Vintage USS Tennessee SSBN-734 cap featuring gold lettering, raised stitching, mesh vented sides, adjustable fit, and USA-made craftsmanship by Northstar.",
+  "image": "https://aiaio1techusa.github.io/images/USSTennessee_SSBN734_800x800.png",
+  "offers": {
+    "@type": "Offer",
+    "price": "45.00",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "US Coast Guard Vintage Blue Cap — Gold Lettering & Emblem, Mesh Vented Sides (USA Made)",
+  "description": "Vintage Coast Guard cap featuring gold lettering, Coast Guard emblem, raised stitching, mesh vented sides, adjustable fit, and USA-made craftsmanship by Northstar.",
+  "image": "https://aiaio1techusa.github.io/images/USCG_Vintage_BlueGold_800x800.png",
+  "offers": {
+    "@type": "Offer",
+    "price": "45.00",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock"
+  }
+}
+</script>
+<script>
+
+async function runProductFrontierScan() {
+
+    const output =
+        document.getElementById("output");
+
+    const name =
+        document.getElementById("productName").value.trim();
+
+    const details =
+        document.getElementById("productDetails").value.trim();
+
+    const productId =
+        document.getElementById("productId").value.trim();
+
+    const stripeUrl =
+        document.getElementById("stripeUrl").value.trim();
+
+    const imageInput =
+        document.getElementById("productImage");
+
+    const imageFile =
+        imageInput.files[0] || null;
+
+    if (!name) {
+        output.textContent =
+            "ERROR — Product Name is required.";
+        return;
+    }
+
+    output.textContent =
+        "FRONTIER SCAN ACTIVE...\n\n" +
+        "Reading product identity...\n" +
+        "Inspecting image...\n" +
+        "Checking Stripe metadata...\n" +
+        "Building SEO metadata...\n" +
+        "Building Product JSON-LD...";
+
+    try {
+
+        const result =
+            await runLLMAgent({
+                productName: name,
+                productDetails: details,
+                productId,
+                stripeUrl,
+                imageFile
+            });
+
+        output.textContent =
+            formatFrontierResult(result);
+
+    } catch (error) {
+
+        console.error(error);
+
+        output.textContent =
+            "FRONTIER SCAN ERROR\n\n" +
+            error.message;
+    }
+}
+
+
+function formatFrontierResult(result) {
+
+    return [
+        "PRODUCT FRONTIER REPORT",
+        "========================",
+        "",
+        "IDENTITY",
+        `Product ID: ${result.identity.productId}`,
+        `Name: ${result.identity.name}`,
+        `Category: ${result.identity.category}`,
+        `Tags: ${result.identity.tags.join(", ") || "none"}`,
+        "",
+        "DESCRIPTION",
+        result.description,
+        "",
+        "IMAGE INTELLIGENCE",
+        `Image: ${result.image.metadata.filename || "none"}`,
+        `Dimensions: ${
+            result.image.metadata.width || "?"
+        } × ${
+            result.image.metadata.height || "?"
+        }`,
+        `Visual Description: ${
+            result.image.description
+        }`,
+        `Detected Text: ${
+            result.image.detectedText.join(", ") || "none"
+        }`,
+        `Visual Tags: ${
+            result.image.visualTags.join(", ") || "none"
+        }`,
+        "",
+        "STRIPE",
+        `Payment Link: ${
+            result.stripe.paymentLink || "none"
+        }`,
+        `Status: ${result.stripe.status}`,
+        "",
+        "SEO",
+        `Title: ${result.seo.title}`,
+        `Description: ${result.seo.description}`,
+        `OG Image: ${result.seo.image || "none"}`,
+        "",
+        "FRONTIER SIGNALS",
+        ...result.frontier.map(
+            signal => `• ${signal}`
+        ),
+        "",
+        `CONFIDENCE: ${result.confidence}`,
+        "",
+        "LISTING COPY",
+        result.salesCopy,
+        "",
+        "JSON-LD",
+        JSON.stringify(result.schema, null, 2)
+    ].join("\n");
+}
+
+
+/* ---------- Image preview ---------- */
+
+document
+    .getElementById("productImage")
+    .addEventListener("change", function () {
+
+        const preview =
+            document.getElementById("imagePreview");
+
+        preview.innerHTML = "";
+
+        const file =
+            this.files[0];
+
+        if (!file) return;
+
+        const image =
+            document.createElement("img");
+
+        image.src =
+            URL.createObjectURL(file);
+
+        image.alt =
+            "Product image preview";
+
+        image.style.maxWidth = "100%";
+        image.style.maxHeight = "350px";
+        image.style.borderRadius = "10px";
+
+        preview.appendChild(image);
+    });
+
+</script>
+
+<script src="llm-agent-1.js"></script>
+
+</body>
+ </div>
+</html>
