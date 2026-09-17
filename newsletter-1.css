@@ -1,0 +1,839 @@
+/* Reset / base */
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+
+/* Page background and default text */
+body {
+  background: #1a1a1a;
+  color: #ffffff;
+  font-family: Georgia, 'Times New Roman', serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  padding: 20px;
+}
+
+main {
+  margin: 0;
+  padding: 0;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Header Section */
+.heading {
+  text-align: center;
+  margin-bottom: 40px;
+  grid-column: 1 / -1;
+}
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+figure {
+  margin: 0;
+  padding: 0;
+}
+
+figure img {
+  max-width: 200px;
+  height: auto;
+}
+
+figcaption {
+  font-size: 12px;
+  color: #999;
+  margin-top: 8px;
+}
+
+.hero-title {
+  font-size: 28px;
+  font-weight: bold;
+  color: #ff6600;
+  margin: 10px 0;
+  font-family: Arial, sans-serif;
+}
+
+.hero-subtitle {
+  font-size: 16px;
+  color: #ccc;
+  margin: 10px 0;
+}
+
+.hero-subtitle a {
+  color: #00ccff;
+  text-decoration: none;
+}
+
+.hero-subtitle a:hover {
+  text-decoration: underline;
+}
+
+.author {
+  font-size: 12px;
+  color: #999;
+  margin: 10px 0;
+}
+
+.author-name a {
+  color: #00ccff;
+  text-decoration: none;
+}
+
+.author-name a:hover {
+  text-decoration: underline;
+}
+
+.publish-date {
+  font-size: 12px;
+  color: #666;
+  margin: 5px 0;
+}
+
+.social-icons {
+  margin: 15px 0;
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.social-icons a {
+  color: #00ccff;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.social-icons a:hover {
+  color: #ff6600;
+}
+
+/* Magazine-style multi-column layout for the main article text */
+.text {
+  /* Use CSS multi-column flow instead of CSS grid to create a magazine/newspaper feel */
+  column-count: 3;
+  column-gap: 2rem;
+  column-fill: balance; /* try to balance column heights */
+  -webkit-column-count: 3;
+  -webkit-column-gap: 2rem;
+  -webkit-column-fill: balance;
+  margin-bottom: 40px;
+  margin-top: 30px;
+  hyphens: auto;
+}
+
+/* Paragraphs flow naturally into columns */
+.text p,
+.text li,
+.text blockquote,
+.text .quote {
+  display: block;
+  margin: 0 0 1rem 0;
+  text-align: justify;
+  line-height: 1.6;
+  font-size: 15px;
+  color: #ffffff;
+  widows: 2;
+  orphans: 2;
+}
+
+/* First paragraph drop-cap */
+.first-paragraph:first-letter {
+  float: left;
+  font-size: 4.2rem;
+  line-height: 0.75;
+  margin: 0 0.15em 0 0;
+  color: #ff6600; /* orange drop-cap */
+  font-weight: 700;
+  font-family: Georgia, serif;
+}
+
+/* Hint / quote box styling — make it visually distinct and optionally span columns */
+.text .quote {
+  background: #072b2c; /* dark teal */
+  color: #a8eaf0;      /* light cyan text */
+  border-left: 4px solid #1abc9c;
+  padding: 0.8rem 1rem;
+  margin: 0 0 1rem 0;
+  box-sizing: border-box;
+  /* Try to span across all columns on supporting browsers */
+  -webkit-column-span: all;
+  column-span: all;
+}
+
+/* Keep blockquote styling readable (spans columns) */
+.text blockquote {
+  -webkit-column-span: all;
+  column-span: all;
+  border-left: 3px solid #ff6600;
+  padding-left: 15px;
+  margin: 1.25rem 0;
+  color: #ccc;
+  font-style: italic;
+  background: transparent;
+}
+
+/* Lists: let them break naturally but keep padding */
+.text .lists {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem 0;
+}
+
+.text .lists li {
+  margin: 0 0 0.75rem 0;
+  padding: 0;
+}
+
+/* Images and image section remain grid-based to avoid breaking column flow */
+/* Use two columns for product images/cards so each product occupies its own column */
+.text-with-images {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 25px;
+  margin-top: 40px;
+}
+
+/* Brief / list layout remains full width */
+.brief-history {
+  grid-column: 1 / -1;
+}
+
+.list-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #ff6600;
+  margin-bottom: 15px;
+  grid-column: 1 / -1;
+}
+
+.brief-history > p {
+  grid-column: 1 / -1;
+}
+
+.lists {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+  grid-column: 1 / -1;
+}
+
+.lists li {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+  text-align: justify;
+}
+
+.list-subtitle {
+  font-size: 14px;
+  font-weight: bold;
+  color: #ffffff;
+  margin: 0 0 10px 0;
+}
+
+.lists li p {
+  font-size: 13px;
+  margin: 8px 0;
+}
+.payment-methods {
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Product grid (used for product cards/images) */
+.image-wrapper {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* two columns for products */
+  gap: 25px;
+  margin-top: 30px;
+  align-items: start;
+}
+
+/* Each product card sits inside the grid cell */
+.product-card {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch; /* stretch so image and footer fill card width */
+  padding: 16px;
+  margin: 0;
+  background: #ffffff;
+  color: #111;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  width: 100%;
+  max-width: 100%; /* let grid control column width */
+  box-sizing: border-box;
+}
+
+/* Image in product card fills available width, footer sits directly below */
+.product-card img,
+.image-wrapper img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  display: block;
+  object-fit: contain;
+  justify-self: center;
+}
+
+/* Footer directly below the image for each product */
+.product-card-footer {
+  text-align: center;
+  margin-top: 12px;
+  padding-top: 8px;
+  color: #333;
+  font-size: 14px;
+  line-height: 1.3;
+  /* visually separate footer from image (optional subtle divider) */
+}
+
+/* Product card footer details (price, divider, actions/button) */
+.product-card-divider {
+  height: 1px;
+  background: #e6e6e6;
+  opacity: 0.6;
+  margin: 12px 0;
+}
+
+.product-card-price {
+  font-size: 16px;
+  font-weight: 700;
+  color: #ff6600;
+  margin-bottom: 8px;
+}
+
+.product-card-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+}
+
+.product-card-button {
+  background: #ff6600;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  font-weight: 600;
+}
+
+.product-card-button:hover {
+  background: #e05500;
+  transform: translateY(-1px);
+}
+
+/* image-quote (if used) remains centered */
+.image-quote {
+  text-align: center;
+  color: #ccc;
+  margin-top: 15px;
+}
+
+.image-quote p {
+  text-align: center;
+  font-size: 14px;
+  margin: 10px 0;
+}
+
+.image-quote hr {
+  grid-column: auto;
+}
+
+/* Payment logos: consolidate rules and keep consistent sizing (MasterCard/Visa) */
+.payment-logos {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 20px 0;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.pay-logo {
+  height: 28px; /* consistent size for MasterCard / Visa and other logos */
+  width: auto;
+  opacity: 0.95;
+  transition: opacity 0.3s ease, transform 0.15s ease;
+  display: inline-block;
+  vertical-align: middle;
+  object-fit: contain;
+}
+
+.pay-logo:hover {
+  opacity: 1;
+  transform: translateY(-2px);
+}
+.payment-methods {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  margin: 20px 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+.payment-methods img {
+  margin: 15px auto;
+  max-width: 300px;
+  display: block;
+ .payment-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 18px;
+  margin-top: 20px;
+ }
+  }
+/* Responsive adjustments: reduce column-count on smaller screens */
+@media (max-width: 1024px) {
+  .text {
+    column-count: 2;
+    -webkit-column-count: 2;
+  }
+
+  .text-with-images,
+  .lists {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .image-wrapper {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .text {
+    column-count: 1;
+    -webkit-column-count: 1;
+  }
+
+  .text-with-images,
+  .lists {
+    grid-template-columns: 1fr;
+  }
+
+  .image-wrapper {
+    grid-template-columns: 1fr; /* single column on narrower screens */
+  }
+
+  .hero-title {
+    font-size: 24px;
+  }
+
+  body {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding: 10px;
+  }
+
+  .hero-title {
+    font-size: 20px;
+  }
+
+  .text p,
+  .lists li p {
+    font-size: 13px;
+  }
+}
+.shipping-section {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+.shipping-button {
+  background: #ff6600;
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 8px;
+  display: block;
+  text-align: center;
+  margin-top: 15px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.shipping-button:hover {
+  background: #e05500;
+}
+
+.form-row {
+  margin-bottom: 12px;
+}
+
+.form-row label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.form-row input,
+.form-row select {
+  width: 100%;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+.receipt {
+  margin-top: 20px;
+  padding-top: 10px;
+  border-top: 1px solid #ddd;
+}
+.shipping-button {
+  position: relative;
+  z-index: 9999;
+}
+.social-container {
+    margin-top: 40px;
+    padding: 20px;
+    background: #111;
+    color: #fff;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+
+.social-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #ff6600;
+}
+
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
+
+.social-icon img {
+    height: 36px;
+    width: auto;
+    opacity: 0.9;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.social-icon:hover img {
+    opacity: 1;
+    transform: translateY(-4px) scale(1.1);
+}
+
+.social-note {
+    font-size: 14px;
+    opacity: 0
+      .8;
+}
+#core-services a {
+    color: #ff6600;
+}
+a:hover {
+    color: #e05500; /* darker orange on hover */
+}
+
+a:active {
+    color: #cc4400; /* pressed / selected color */
+}
+
+a:focus {
+    color: #ff8800; /* keyboard navigation / accessibility */
+  
+  }
+.llm-agent-box {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 25px;
+    background: #ffffff;
+    border: 2px solid #ff6600;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    font-family: Arial, sans-serif;
+}
+
+.llm-agent-box h2 {
+    margin-top: 0;
+    color: #ff6600;
+    font-size: 1.8rem;
+}
+
+.llm-agent-box p {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.llm-agent-box label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+    color: #444;
+}
+
+.llm-agent-box input,
+.llm-agent-box textarea {
+    width: 100%;
+    padding: 12px;
+    margin-top: 6px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+.llm-agent-box button {
+    margin-top: 20px;
+    width: 100%;
+    padding: 14px;
+    background: #ff6600;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.llm-agent-box button:hover {
+    background: #e05500;
+}
+
+.llm-output {
+    margin-top: 20px;
+    padding: 15px;
+    background: #f9f9f9;
+    border-left: 4px solid #ff6600;
+    border-radius: 6px;
+    font-size: 1rem;
+    color: #333;
+    white-space: pre-wrap;
+}
+.page-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+.frontier-llm-box {
+    max-width: 700px;
+    margin: 50px auto;
+    padding: 30px;
+    background: #0d0d0d;
+    border: 2px solid #ff6600;
+    border-radius: 14px;
+    box-shadow: 0 0 25px rgba(255, 102, 0, 0.35);
+    font-family: 'Courier New', monospace;
+    color: #f2f2f2;
+}
+
+.frontier-llm-box h2 {
+    margin-top: 0;
+    color: #ff6600;
+    font-size: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.frontier-llm-box .subtext {
+    margin-bottom: 25px;
+    color: #cccccc;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+}
+
+.frontier-llm-box label {
+    display: block;
+    margin-top: 20px;
+    font-weight: bold;
+    color: #ff6600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+}
+
+.frontier-llm-box input,
+.frontier-llm-box textarea {
+    width: 100%;
+    padding: 12px;
+    margin-top: 8px;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 8px;
+    color: #f2f2f2;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+.frontier-llm-box button {
+    margin-top: 25px;
+    width: 100%;
+    padding: 16px;
+    background: #ff6600;
+    color: #0d0d0d;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.frontier-llm-box button:hover {
+    background: #e05500;
+    transform: scale(1.02);
+}
+
+.frontier-output {
+    margin-top: 30px;
+    padding: 20px;
+    background: #1a1a1a;
+    border-left: 4px solid #ff6600;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #f2f2f2;
+    white-space: pre-wrap;
+    line-height: 1.6;
+}
+/* ===============================
+   Military Intelligence Frontier UI
+   =============================== */
+
+.frontier-llm-box {
+    max-width: 700px;
+    margin: 50px auto;
+    padding: 30px;
+    background: #0b0b0b;
+    border: 2px solid #b22222; /* Marine Corps Scarlet */
+    border-radius: 12px;
+    box-shadow: 0 0 25px rgba(178, 34, 34, 0.35);
+    font-family: 'Courier New', monospace;
+    color: #f2f2f2;
+    text-transform: none;
+}
+
+.frontier-llm-box h2 {
+    margin-top: 0;
+    color: #b22222; /* Scarlet */
+    font-size: 1.9rem;
+    letter-spacing: 1px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.frontier-llm-box .subtext {
+    margin-bottom: 25px;
+    color: #d4d4d4;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    font-style: italic;
+}
+
+.frontier-llm-box label {
+    display: block;
+    margin-top: 20px;
+    font-weight: bold;
+    color: #ffd700; /* Marine Corps Gold */
+    text-transform: uppercase;
+    font-size: 0.85rem;
+}
+
+.frontier-llm-box input,
+.frontier-llm-box textarea {
+    width: 100%;
+    padding: 12px;
+    margin-top: 8px;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 8px;
+    color: #f2f2f2;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+.frontier-llm-box button {
+    margin-top: 25px;
+    width: 100%;
+    padding: 16px;
+    background: #b22222; /* Scarlet */
+    color: #0b0b0b;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.frontier-llm-box button:hover {
+    background: #8b1a1a;
+    transform: scale(1.02);
+}
+
+.frontier-output {
+    margin-top: 30px;
+    padding: 20px;
+    background: #111;
+    border-left: 4px solid #ffd700; /* Gold */
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #f2f2f2;
+    white-space: pre-wrap;
+    line-height: 1.6;
+    font-family: 'Courier New', monospace;
+}
+/* ============================================================
+   Product Intelligence Image Controls
+   ============================================================ */
+
+.frontier-llm-box input[type="file"] {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.image-preview {
+    margin-top: 15px;
+    padding: 12px;
+    min-height: 20px;
+    border: 1px dashed #555;
+    border-radius: 10px;
+    text-align: center;
+    background: #111;
+}
+
+.image-preview img {
+    display: block;
+    margin: 0 auto;
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+.frontier-output {
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
