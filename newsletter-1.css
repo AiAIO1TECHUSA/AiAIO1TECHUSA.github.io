@@ -832,8 +832,109 @@ a:focus {
     object-fit: contain;
 }
 
+
 .frontier-output {
     overflow-x: auto;
     white-space: pre-wrap;
     word-break: break-word;
+}
+/* Legal memorandum page */
+.memo-app {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.memo-layout {
+  width: 100%;
+}
+
+.memo-document {
+  overflow-wrap: anywhere;
+}
+
+.memo-document img,
+.memo-document video,
+.memo-document iframe {
+  max-width: 100%;
+  height: auto;
+}
+
+.memo-paragraph,
+.memo-list {
+  max-width: 78ch;
+}
+
+.memo-btn {
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.memo-btn:hover {
+  transform: translateY(-1px);
+  border-color: #2457a6;
+}
+
+.memo-btn.primary:hover {
+  background: #173f7d;
+}
+
+@media (max-width: 800px) {
+  .memo-app {
+    padding: 0.5rem;
+  }
+
+  .memo-topbar {
+    align-items: stretch;
+  }
+
+  .memo-topbar .actions,
+  .memo-topbar .actions .memo-btn {
+    width: 100%;
+  }
+
+  .memo-topbar .actions .memo-btn {
+    box-sizing: border-box;
+  }
+
+  .memo-document {
+    padding: 1rem;
+    border-radius: 8px;
+  }
+
+  .memo-title {
+    font-size: clamp(1.6rem, 8vw, 2.3rem);
+  }
+
+  .memo-meta {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .memo-topbar {
+    padding: 0.75rem;
+  }
+
+  .memo-document {
+    padding: 0.75rem;
+  }
+
+  .section-label {
+    font-size: 1.15rem;
+  }
+
+  .memo-paragraph {
+    font-size: 0.98rem;
+    line-height: 1.6;
+  }
+
+  #memoSearch {
+    font-size: 16px;
+  }
 }
