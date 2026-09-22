@@ -334,3 +334,90 @@ document.addEventListener("DOMContentLoaded", () => {
   render();
   initializeFocusMode();
 });
+// Document-wide search functionality
+function initializeDocumentSearch() {
+  const searchBox = document.querySelector('input[placeholder*="Search this memo"]');
+  const resultsDiv = document.getElementById('search-results') || createResultsDiv();
+  
+  if (!searchBox) return;
+
+  searchBox.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      performDocumentSearch(searchBox.value, resultsDiv);
+    }
+  });
+
+  // Optional: search on input (real-time)
+  searchBox.addEventListener('input', function() {
+    if (this.value.length > 2) {
+      performDocumentSearch(this.value, resultsDiv);
+    }
+  });
+}
+
+function createResultsDiv() {
+  const div = document.createElement('div');
+  div.id = 'search-results';
+  div.style.cssText = 'margin: 20px 0; padding: 15px; background: #f0f0f0; border-radius: 4px; display: none;';
+  document.body.insertBefore(div, document.body.firstChild);
+  return div;
+}
+
+function performDocumentSearch(query, resultsDiv) {
+  // Clear previous highlights
+  document.querySelectorAll('.search-highlight').forEach(mark => {
+    const parent = mark.parentNode;
+    while (mark.firstChild) {
+      parent.insertBefore(mark.firstChild, mark);
+    }
+    parent.removeChild(mark);
+    parent.normalize();
+  });
+
+  if (!query.trim()) {
+    resultsDiv.style.display = 'none';
+    return;
+  }
+
+  const searchTerm = query.toLowerCase();
+  let matchCount = 0;
+  const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+
+  // Search through text nodes
+  const walker = document.createTreeWalker(
+    document.body,
+    NodeFilter.SHOW_TEXT,
+    null
+  );
+
+  const nodesToHighlight = [];
+  let node;
+
+  while (node = walker.nextNode()) {
+    if (node.textContent.toLowerCase().includes(searchTerm) && 
+        !node.parentElement.closest('#standards-2027, #search-results')) {
+      nodesToHighlight.push(node);
+      matchCount += (node.textContent.match(regex) || []).length;
+    }
+  }
+
+  // Highlight matches
+  nodesToHighlight.forEach(node => {
+    const span = document.createElement('span');
+    span.innerHTML = node.textContent.replace(regex, '<mark class="search-highlight" style="background-color: yellow; font-weight: bold;">$1</mark>');
+    node.parentNode.replaceChild(span, node);
+  });
+
+  // Show results
+  resultsDiv.innerHTML = `<strong>${matchCount} match${matchCount !== 1 ? 'es' : ''} found for "${query}"</strong>`;
+  resultsDiv.style.display = 'block';
+
+  // Scroll to first result
+  const firstHighlight = document.querySelector('.search-highlight');
+  if (firstHighlight) {
+    firstHighlight.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', initializeDocumentSearch);
