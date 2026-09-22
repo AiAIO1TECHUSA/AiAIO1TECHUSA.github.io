@@ -315,3 +315,22 @@ function attachEvents(root) {
 }
 
 document.addEventListener("DOMContentLoaded", render);
+function initializeFocusMode() {
+  const focusButton = document.querySelector("#focusModeButton");
+
+  if (!focusButton) return;
+
+  focusButton.addEventListener("click", () => {
+    const enabled = document.body.classList.toggle("focus-mode");
+
+    focusButton.setAttribute("aria-pressed", String(enabled));
+    focusButton.textContent = enabled
+      ? "Exit focus mode"
+      : "Focus mode";
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  render();
+  initializeFocusMode();
+});
