@@ -259,60 +259,69 @@ mark.memo-hit { background:#ffe08a; padding:0 .08em; border-radius:2px; }
   </div>
 </main>
 <script src="standards-2027.js" defer></script>
-  <!-- Document search functionality -->
-<script>
-function initDocumentSearch() {
-  const searchBox = document.getElementById('memo-search');
-  if (!searchBox) return;
+  <script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Find the search input field
+    const searchInput = document.querySelector('input[type="text"]'); 
+    const statusIndicator = document.querySelector('.status-indicator'); // Assuming your "Ready" text has this class
 
-  searchBox.addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-      performSearch(this.value);
-    }
-  });
+    if (!searchInput) return;
 
-  searchBox.addEventListener('input', function() {
-    if (this.value.length > 2) {
-      performSearch(this.value);
-    }
-  });
+    searchInput.addEventListener('input', function() {
+        const searchTerm = this.value.trim().toLowerCase();
+        
+        // Remove previous highlights
+        const existingHighlights = document.querySelectorAll('.highlight');
+        existingHighlights.forEach(el => {
+            el.outerHTML = el.innerHTML;
+        });
+
+        if (searchTerm.length < 3) {
+            if (statusIndicator) statusIndicator.textContent = "Ready";
+            return;
+        }
+
+        // Select the main content area to search within
+        const contentArea = document.body;
+        const walk = document.createTreeWalker(contentArea, NodeFilter.SHOW_TEXT, null, false);
+        const nodes = [];
+        let node;
+
+        while (node = walk.nextNode()) {
+            if (node.parentElement !== searchInput && !node.parentElement.classList.contains('highlight')) {
+                nodes.push(node);
+            }
+        }
+
+        let matchCount = 0;
+        nodes.forEach(textNode => {
+            const text = textNode.nodeValue;
+            const lowerText = text.toLowerCase();
+            
+            if (lowerText.includes(searchTerm)) {
+                const span = document.createElement('span');
+                const regex = new RegExp(`(${searchTerm})`, 'gi');
+                span.innerHTML = text.replace(regex, '<mark class="highlight">$1</mark>');
+                textNode.parentNode.replaceChild(span, textNode);
+                matchCount++;
+            }
+        });
+
+        if (statusIndicator) {
+            statusIndicator.textContent = matchCount > 0 ? `${matchCount} matches found` : "No matches";
+        }
+    });
+});
+</script>
+
+<style>
+.highlight {
+    background-color: yellow;
+    color: black;
+    font-weight: bold;
 }
+</style>
 
-function performSearch(query) {
-  // Clear previous highlights
-  document.querySelectorAll('.search-highlight').forEach(el => {
-    const parent = el.parentNode;
-    while (el.firstChild) parent.insertBefore(el.firstChild, el);
-    parent.removeChild(el);
-    parent.normalize();
-  });
-
-  if (!query.trim()) return;
-
-  const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
-  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null);
-  
-  let count = 0;
-  let node;
-
-  while (node = walker.nextNode()) {
-    if (node.parentElement?.closest('#standards-2027, script')) continue;
-    
-    if (node.textContent.toLowerCase().includes(query.toLowerCase())) {
-      const span = document.createElement('span');
-      span.innerHTML = node.textContent.replace(regex, '<mark class="search-highlight" style="background: yellow; padding: 2px; font-weight: bold;">$1</mark>');
-      node.parentNode.replaceChild(span, node);
-      count += (node.textContent.match(regex) || []).length;
-    }
-  }
-
-  if (count > 0) {
-    document.querySelector('.search-highlight')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  }
-}
-
-document.addEventListener('DOMContentLoaded', initDocumentSearch);
-    </script>
 </body>
 </html>
 
