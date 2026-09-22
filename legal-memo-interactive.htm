@@ -58,7 +58,8 @@ mark.memo-hit { background:#ffe08a; padding:0 .08em; border-radius:2px; }
       <button class="memo-btn" type="button" id="printMemo">Print</button>
     </div>
     <div class="search-wrap">
-      <label for="memoSearch"><strong>Search this memo</strong></label>
+      <input id="memo-search" type="search" placeholder="Search this memo..." style="width: 100%; padding: 8px; margin: 10px 0; font-size: 16px;"/>
+
       <input id="memoSearch" type="search" placeholder="Search facts, cases, sections, or terms…" autocomplete="off">
       <div class="search-status" id="searchStatus" aria-live="polite">Ready</div>
     </div>
@@ -255,5 +256,60 @@ mark.memo-hit { background:#ffe08a; padding:0 .08em; border-radius:2px; }
   </div>
 </main>
 <script src="standards-2027.js" defer></script>
+  <!-- Document search functionality -->
+<script>
+function initDocumentSearch() {
+  const searchBox = document.getElementById('memo-search');
+  if (!searchBox) return;
+
+  searchBox.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      performSearch(this.value);
+    }
+  });
+
+  searchBox.addEventListener('input', function() {
+    if (this.value.length > 2) {
+      performSearch(this.value);
+    }
+  });
+}
+
+function performSearch(query) {
+  // Clear previous highlights
+  document.querySelectorAll('.search-highlight').forEach(el => {
+    const parent = el.parentNode;
+    while (el.firstChild) parent.insertBefore(el.firstChild, el);
+    parent.removeChild(el);
+    parent.normalize();
+  });
+
+  if (!query.trim()) return;
+
+  const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null);
+  
+  let count = 0;
+  let node;
+
+  while (node = walker.nextNode()) {
+    if (node.parentElement?.closest('#standards-2027, script')) continue;
+    
+    if (node.textContent.toLowerCase().includes(query.toLowerCase())) {
+      const span = document.createElement('span');
+      span.innerHTML = node.textContent.replace(regex, '<mark class="search-highlight" style="background: yellow; padding: 2px; font-weight: bold;">$1</mark>');
+      node.parentNode.replaceChild(span, node);
+      count += (node.textContent.match(regex) || []).length;
+    }
+  }
+
+  if (count > 0) {
+    document.querySelector('.search-highlight')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+}
+
+document.addEventListener('DOMContentLoaded', initDocumentSearch);
+    </script>
 </body>
 </html>
+
