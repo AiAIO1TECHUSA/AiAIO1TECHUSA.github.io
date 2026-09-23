@@ -939,18 +939,10 @@ a:focus {
   }
 }
 
-/* This makes the search results visible */
-.search-highlight {
-  background-color: yellow !important;
-  color: black !important;
-  font-weight: bold !important;
-  padding: 2px 0;
-  border-radius: 2px;
-}
-
-/* This prevents the top header from covering the search result when it jumps */
 mark.search-highlight {
-  scroll-margin-top: 120px; 
+  background: #fff176;
+  color: inherit;
+  padding: 0.05em 0.15em;
+  border-radius: 0.15em;
 }
-
 
