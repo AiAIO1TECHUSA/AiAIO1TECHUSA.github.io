@@ -149,7 +149,7 @@ function render() {
           <h2 id="standards-2027-title">2027 Standards Review</h2>
           <p>Use this tool to identify issues requiring legal, factual, medical, or procedural verification.</p>
         </div>
-        <span class="standards-date">Updated ${new Intl.DateTimeFormat("en-US", {dateStyle: "medium"}).format(new Date())}</span>
+        <span class="standards-date">Updated ${new Intl.DateTimeFormat("en-US", { dateStyle: "medium" }).format(new Date())}</span>
       </div>
       <div class="standards-controls">
         <label for="standards-search">Search standards</label>
@@ -194,7 +194,15 @@ function attachEvents(root) {
     button.addEventListener("click", async () => {
       const item = standards2027.find(s => s.id === button.dataset.id);
       if (!item) return;
-      const text = [item.title, `Category: ${item.category}`, `Status: ${item.status}`, `Authority: ${item.authority}`, item.summary, "Review questions:", ...item.questions.map(q => `- ${q}`)].join("\n");
+      const text = [
+        item.title,
+        `Category: ${item.category}`,
+        `Status: ${item.status}`,
+        `Authority: ${item.authority}`,
+        item.summary,
+        "Review questions:",
+        ...item.questions.map(q => `- ${q}`)
+      ].join("\n");
       try {
         await navigator.clipboard.writeText(text);
         button.textContent = "Copied";
@@ -219,90 +227,71 @@ function initializeFocusMode() {
 
 function initializeDocumentSearch() {
   const searchBox = document.querySelector("#memoSearch");
+  const searchButton = document.querySelector("#searchButton");
+  const searchStatus = document.querySelector("#searchStatus");
+  const documentRoot = document.querySelector("#memoDocument") || document.body;
 
   if (!searchBox) {
     console.warn("Document search input #memoSearch was not found.");
     return;
   }
 
+  function setStatus(message) {
+    if (searchStatus) searchStatus.textContent = message;
+  }
+
   function clearHighlights() {
-    document.querySelectorAll("mark.search-highlight").forEach(mark => {
-      mark.replaceWith(document.createTextNode(mark.textContent));
+    documentRoot.querySelectorAll("mark.search-highlight").forEach(mark => {
+      mark.replaceWith(document.createTextNode(mark.textContent || ""));
     });
   }
 
   function isExcluded(node) {
     const parent = node.parentElement;
-    if (!parent) return true;
-
-    return Boolean(
-      parent.closest(
-        "script, style, noscript, textarea, input, select, option, mark.search-highlight"
-      )
-    );
+    return !parent || Boolean(parent.closest("script, style, noscript, textarea, input, select, option, mark.search-highlight"));
   }
 
-  searchBox.addEventListener("input", () => {
+  function runSearch() {
     const query = searchBox.value.trim();
-
     clearHighlights();
 
-    if (query.length < 3) return;
+    if (query.length < 3) {
+      setStatus(query ? "Enter at least 3 characters." : "Ready");
+      return;
+    }
 
-    const walker = document.createTreeWalker(
-      document.body,
-      NodeFilter.SHOW_TEXT,
-      {
-        acceptNode(node) {
-          if (isExcluded(node)) {
-            return NodeFilter.FILTER_REJECT;
-          }
-
-          return node.nodeValue
-            .toLowerCase()
-            .includes(query.toLowerCase())
-            ? NodeFilter.FILTER_ACCEPT
-            : NodeFilter.FILTER_REJECT;
-        }
+    const normalizedQuery = query.toLocaleLowerCase();
+    const walker = document.createTreeWalker(documentRoot, NodeFilter.SHOW_TEXT, {
+      acceptNode(node) {
+        if (isExcluded(node)) return NodeFilter.FILTER_REJECT;
+        return node.nodeValue.toLocaleLowerCase().includes(normalizedQuery)
+          ? NodeFilter.FILTER_ACCEPT
+          : NodeFilter.FILTER_REJECT;
       }
-    );
+    });
 
     const matchingNodes = [];
     let node;
-
-    while ((node = walker.nextNode())) {
-      matchingNodes.push(node);
-    }
+    while ((node = walker.nextNode())) matchingNodes.push(node);
 
     let firstHighlight = null;
-    const normalizedQuery = query.toLowerCase();
+    let matchCount = 0;
 
     matchingNodes.forEach(textNode => {
       const text = textNode.nodeValue;
-      const lowerText = text.toLowerCase();
+      const lowerText = text.toLocaleLowerCase();
       const fragment = document.createDocumentFragment();
-
       let position = 0;
       let matchIndex;
 
       while ((matchIndex = lowerText.indexOf(normalizedQuery, position)) !== -1) {
-        fragment.appendChild(
-          document.createTextNode(text.slice(position, matchIndex))
-        );
-
+        fragment.appendChild(document.createTextNode(text.slice(position, matchIndex)));
         const mark = document.createElement("mark");
         mark.className = "search-highlight";
-        mark.textContent = text.slice(
-          matchIndex,
-          matchIndex + query.length
-        );
-
+        mark.textContent = text.slice(matchIndex, matchIndex + query.length);
         fragment.appendChild(mark);
-
-        if (!firstHighlight) {
-          firstHighlight = mark;
-        }
-
+        if (!firstHighlight) firstHighlight = mark;
+        matchCount += 1;
         position = matchIndex + query.length;
       }
 
@@ -310,13 +299,13 @@ function initializeDocumentSearch() {
       textNode.parentNode.replaceChild(fragment, textNode);
     });
 
-    if (firstHighlight) {
-      firstHighlight.scrollIntoView({
-        behavior: "smooth",
-        block: "center"
-      });
-    }
-  });
+    setStatus(`${matchCount} ${matchCount === 1 ? "match" : "matches"} found.`);
+    if (firstHighlight) firstHighlight.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+
+  searchBox.addEventListener("input", runSearch);
+  searchBox.addEventListener("search", runSearch);
+  searchButton?.addEventListener("click", runSearch);
 }
 
 // --- START APP ---
