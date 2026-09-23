@@ -10,7 +10,7 @@
 :root { --memo-ink:#17202a; --memo-muted:#5d6875; --memo-line:#d8dee6; --memo-panel:#f6f8fa; --memo-accent:#2457a6; --memo-accent-soft:#eaf1fb; }
 body { color:var(--memo-ink); }
 .memo-app { max-width:1180px; margin:0 auto; padding:1rem; }
-.memo-topbar { display:flex; gap:.75rem; align-items:center; justify-content:space-between; flex-wrap:wrap; margin:1rem 0; padding:1rem; border:1px solid var(--memo-line); border-radius:12px; background:var(--memo-panel); }
+.memo-topbar { display:flex; gap:.75rem; align-items:center; justify-content:space-between; flex-wrap:wrap; margin:1rem 0; padding:1rem; border:1px solid var(--memo-line); border-radius:12px; background:#fff; }
 .memo-topbar .actions { display:flex; gap:.5rem; flex-wrap:wrap; }
 .memo-btn, .section-link, .authority-item { font:inherit; }
 .memo-btn { border:1px solid var(--memo-line); background:#fff; color:var(--memo-ink); padding:.7rem .9rem; min-height:44px; border-radius:8px; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; }
@@ -42,17 +42,17 @@ body { color:var(--memo-ink); }
 mark.memo-hit { background:#ffe08a; padding:0 .08em; border-radius:2px; }
 .focus-mode .memo-nav, .focus-mode .memo-topbar .search-wrap { display:none; }
 .focus-mode .memo-layout { display:block; max-width:850px; margin:auto; }
-@media (max-width:800px) { .memo-layout { grid-template-columns:1fr; } .memo-nav { position:static; max-height:none; } .memo-nav-links { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:.25rem; } }
-@media print { body * { visibility:hidden !important; } .memo-document, .memo-document * { visibility:visible !important; } .memo-document { position:absolute; left:0; top:0; width:auto; border:0; } .memo-topbar, .memo-nav { display:none !important; } .memo-section { break-inside:auto; } a { color:inherit; text-decoration:none; } }
+@media (max-width:800px) { .memo-layout { grid-template-columns:1fr; } .memo-nav { position:static; max-height:none; } .memo-nav-links { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); } }
+@media print { body * { visibility:hidden !important; } .memo-document, .memo-document * { visibility:visible !important; } .memo-document { position:absolute; left:0; top:0; width:auto; border:0; padding:0; } }
 </style>
-  <style>
-    mark.search-highlight {
-  background: #fff176;
-  color: inherit;
-  padding: 0.05em 0.15em;
-  border-radius: 0.15em;
-    }
-  </style>
+<style>
+  mark.search-highlight {
+    background: #fff176;
+    color: inherit;
+    padding: 0.05em 0.15em;
+    border-radius: 0.15em;
+  }
+</style>
 </head>
 <body>
 <main class="memo-app" id="memoApp">
@@ -62,18 +62,16 @@ mark.memo-hit { background:#ffe08a; padding:0 .08em; border-radius:2px; }
       <button id="focusModeButton" type="button" aria-pressed="false">Focus mode</button>
       <button class="memo-btn" type="button" id="printMemo">Print</button>
     </div>
-    <!-- REMOVED search-wrap from here -->
   </header>
 
-  <!-- PLACE OPTION ONE HERE: Just before the main layout -->
   <div class="search-wrap" style="padding: 10px 20px; background: #f9f9f9; border-bottom: 1px solid #ddd;">
     <label for="memoSearch" style="font-weight: bold;">Search this memo</label>
     <div style="display: flex; gap: 10px; align-items: center;">
       <input
-  id="memoSearch"
-  type="search"
-  placeholder="Search this memo"
-  aria-label="Search this memo">
+        id="memoSearch"
+        type="search"
+        placeholder="Search this memo"
+        aria-label="Search this memo">
       <button id="searchButton" type="button" class="memo-btn" style="padding: 8px 16px; cursor: pointer;">Search</button>
     </div>
     <div class="search-status" id="searchStatus" aria-live="polite" style="margin-top: 5px; font-size: 14px;">Ready</div>
@@ -82,7 +80,7 @@ mark.memo-hit { background:#ffe08a; padding:0 .08em; border-radius:2px; }
   <div class="memo-layout">
     <aside class="memo-nav" aria-label="Memo sections">
       <h2>Memo Navigator</h2>
-      <div class="memo-nav-links"><a href="#statement-of-facts" class="section-link">Statement of Facts</a><a href="#introduction" class="section-link">Introduction</a><a href="#issue" class="section-link">Issue</a><a href="#i-general-constitutionality-of-capital-punishment" class="section-link">I. General Constitutionality of Capital Punishment</a><a href="#ii-severe-mental-illness-reduces-culpability" class="section-link">II. Severe Mental Illness Reduces Culpability</a><a href="#iii-disputed-intent-matters" class="section-link">III. Disputed Intent Matters</a><a href="#iv-racial-disparity-and-arbitrariness" class="section-link">IV. Racial Disparity and Arbitrariness</a><a href="#v-method-of-execution" class="section-link">V. Method of Execution</a><a href="#vi-historical-and-moral-background-supports-restraint" class="section-link">VI. Historical and Moral Background Supports Restraint</a><a href="#vii-atkins-v-virginia-as-a-case-study-in-prosecutorial-misconduct" class="section-link">VII. Atkins v. Virginia as a Case Study in Prosecutorial Misconduct</a><a href="#viii-arbitrariness-in-lethal-injection-a-constitutional-contradiction" class="section-link">VIII. Arbitrariness in Lethal Injection: A Constitutional Contradiction</a><a href="#ix-justice-brennan-s-furman-principles-reinforce-the-constitutional-case-against-execution" class="section-link">IX. Justice Brennan’s Furman Principles Reinforce the Constitutional Case Against Execution</a><a href="#conclusion" class="section-link">Conclusion</a><a href="#authorities" class="section-link">TABLE OF AUTHORITIES</a></div>
+      <div class="memo-nav-links"><a href="#statement-of-facts" class="section-link">Statement of Facts</a><a href="#introduction" class="section-link">Introduction</a><a href="#issue" class="section-link">Issue</a><a href="#i-general-constitutionality-of-capital-punishment" class="section-link">I. General Constitutionality of Capital Punishment</a><a href="#ii-severe-mental-illness-reduces-culpability" class="section-link">II. Severe Mental Illness Reduces Culpability</a><a href="#iii-disputed-intent-matters" class="section-link">III. Disputed Intent Matters</a><a href="#iv-racial-disparity-and-arbitrariness" class="section-link">IV. Racial Disparity and Arbitrariness</a><a href="#v-method-of-execution" class="section-link">V. Method of Execution</a><a href="#vi-historical-and-moral-background-supports-restraint" class="section-link">VI. Historical and Moral Background Supports Restraint</a><a href="#conclusion" class="section-link">Conclusion</a></div>
     </aside>
     <article class="memo-document" id="memoDocument">
       <header class="memo-cover">
@@ -94,48 +92,177 @@ mark.memo-hit { background:#ffe08a; padding:0 .08em; border-radius:2px; }
           <div class="meta-card"><strong>Date</strong>August 7, 2026</div>
           <div class="meta-card"><strong>Subject</strong>Eighth Amendment Issues of Law Concerning Mental Illness and Capital Sentencing</div>
         </div>
-    
+      </header>
+
       <section class="memo-section" id="statement-of-facts" data-title="Statement of Facts">
-<div class="section-label">Statement of Facts</div>
-<p class="memo-paragraph ">The defendant is a young mother who, in the months preceding the offense, experienced severe postpartum depression and symptoms consistent with postpartum psychosis. During this period, she repeatedly told neighbors, friends, and acquaintances that she was schizophrenic, that she heard voices, and that she feared she was losing control of her thoughts. Witnesses reported that she openly sought help, expressed confusion about her mental state, and stated that she did not feel safe being alone with her children.</p>
-<p class="memo-paragraph ">Her mental deterioration escalated into multiple suicide attempts. During these episodes, she caused physical harm to her children while attempting to harm herself. These incidents were not motivated by anger or malice but occurred during acute psychological crises. Neighbors later described her as “begging for help,” “terrified of her own mind,” and “desperate for someone to intervene.”</p>
-<p class="memo-paragraph ">Despite these warning signs, she did not receive adequate mental‑health treatment. No comprehensive psychiatric evaluation was conducted, and no emergency intervention occurred. At the time of the offense, her mental condition had deteriorated to the point that she was experiencing auditory hallucinations, disorganized thinking, and impaired judgment consistent with severe postpartum psychosis.</p>
-<p class="memo-paragraph ">These facts demonstrate that the defendant’s actions occurred during a period of profound mental instability, that she repeatedly sought assistance, and that her conduct was driven by untreated psychiatric illness rather than deliberate or calculated intent.</p>
-</section><section class="memo-section" id="introduction" data-title="Introduction">
-<div class="section-label">Introduction</div>
-<p class="memo-paragraph ">This memorandum examines whether the Eighth Amendment permits the imposition of the death penalty when the defendant was experiencing severe postpartum psychosis, repeatedly sought help, reported hearing voices, attempted suicide, and exhibited profound mental instability. These circumstances raise substantial concerns about diminished culpability, the reliability of intent findings, and the constitutional administration of capital punishment.</p>
-</section><section class="memo-section" id="issue" data-title="Issue">
-<div class="section-label">Issue</div>
-<p class="memo-paragraph issue-text">Issue: Whether the Eighth Amendment permits the imposition of the death penalty when the defendant was experiencing severe postpartum psychosis, repeatedly sought help, reported hearing voices, attempted suicide, and exhibited profound mental instability that undermines intent, reduces moral culpability, and raises substantial concerns about arbitrariness, reliability, and the constitutional administration of capital punishment.</p>
-</section><section class="memo-section" id="i-general-constitutionality-of-capital-punishment" data-title="I. General Constitutionality of Capital Punishment">
-<div class="section-label">I. General Constitutionality of Capital Punishment</div>
-<p class="memo-paragraph ">The Eighth Amendment limits the state’s power to impose capital punishment even though the death penalty is not per se unconstitutional. The Supreme Court has made clear that capital punishment must be administered in a manner that is not cruel, unusual, or arbitrary. The core inquiry is not merely whether the defendant committed a serious crime, but whether the state may impose the most severe penalty under the specific circumstances of the case.</p>
-<p class="memo-paragraph ">In  Furman v. Georgia, 408 U.S. 238 (1972), the Court held that the death penalty as then administered was unconstitutional because it was imposed in an arbitrary and capricious manner. The decision emphasized that uncontrolled discretion produced inconsistent and unpredictable outcome.</p>
-<p class="memo-paragraph ">Four years later,  Gregg v. Georgia, 428 U.S. 153 (1976), upheld revised capital statutes that provided guided discretion, bifurcated proceedings, and appellate review. Gregg stressed that capital sentencing must meaningfully channel discretion and ensure individualized consideration of mitigating evidence.</p>
-<p class="memo-paragraph ">Applied here, the sentencer’s failure to meaningfully consider the defendant’s severe postpartum depression, psychosis, repeated suicide attempts, and documented pleas for help renders the death sentence unreliable under Gregg. These circumstances demonstrate profound mental instability that required individualized consideration.</p>
-</section><section class="memo-section" id="ii-severe-mental-illness-reduces-culpability" data-title="II. Severe Mental Illness Reduces Culpability">
-<div class="section-label">II. Severe Mental Illness Reduces Culpability</div>
-<p class="memo-paragraph ">A defendant’s severe mental illness may significantly weaken the justification for execution because it affects moral blameworthiness, comprehension, and the reliability of the sentencing process. When a defendant’s mental state is seriously impaired, the rationale for the death penalty becomes less persuasive because the sentence no longer reflects the same degree of conscious and deliberate wrongdoing.</p>
-<p class="memo-paragraph ">In Atkins v. Virginia, 536 U.S. 304 (2002), the Court held that executing individuals with intellectual disability violates the Eighth Amendment because their impairments jeopardize the reliability and fairness of capital proceedings. Although Atkins addressed intellectual disability specifically, its reasoning regarding reduced moral culpability extends by analogy to severe mental illness.</p>
-<p class="memo-paragraph ">In Ford v. Wainwright, 477 U.S. 399 (1986), the Court held that the Eighth Amendment prohibits executing a prisoner who is insane because such execution serves no legitimate penological purpose. Panetti v. Quarterman, 551 U.S. 930 (2007), refined this standard, holding that a prisoner must have a rational understanding of the State’s rationale for execution. In Madison v. Alabama, 139 S. Ct. 718 (2019), extended Panetti by holding that dementia and other disorders—not just psychosis—can render a prisoner incompetent for execution.</p>
-<p class="memo-paragraph ">Beyond competency at the time of execution, the Court has required that mental illness be considered as a mitigating factor during sentencing. In Eddings v. Oklahoma, 455 U.S. 104 (1982), the Court held that the sentencer must consider “any relevant mitigating evidence,” including emotional disturbance and mental development. Lockett v. Ohio, 438 U.S. 586 (1978), similarly held that the sentencer must be permitted to consider any aspect of the defendant’s character or record as a basis for a sentence less than death.</p>
-<p class="memo-paragraph ">Applied here, evidence of postpartum depression or psychosis that substantially impaired the defendant’s ability to appreciate the nature or wrongfulness of her conduct reduces her moral culpability under Atkins and requires full mitigating consideration under Eddings and Lockett.</p>
-</section><section class="memo-section" id="iii-disputed-intent-matters" data-title="III. Disputed Intent Matters">
-<div class="section-label">III. Disputed Intent Matters</div>
-<p class="memo-paragraph ">Capital punishment depends on a reliable finding of the mental state required by law. If evidence of premeditation or specific intent is weak, contested, or inconsistent with the defendant’s mental condition, the constitutional case for execution becomes substantially weaker.</p>
-<p class="memo-paragraph ">In Eddings, the Court held that the sentencer must give full effect to mitigating evidence, including emotional disturbance. The diminished-capacity doctrine likewise allows defendants to offer evidence of mental abnormality to negate specific intent. Burt Lancaster v. Metrish, 683 F.3d 740 (6th Cir. 2012), explains that mental disease or defect may prevent formation of the specific mental state required for the most serious offenses.</p>
-<p class="memo-paragraph ">State courts have echoed this principle. In State v. Evans, 203 Conn. 212 (1987), the Connecticut Supreme Court recognized that mental illness may affect criminal liability by diminishing culpability or eliminating responsibility entirely.</p>
-<p class="memo-paragraph ">Under Lockett, the sentencer must consider any aspect of the defendant’s character or record as a basis for a sentence less than death. Evidence that the defendant was experiencing auditory hallucinations, disorganized thinking, and suicidal impulses undermines the reliability of any finding of premeditation or specific intent. Her repeated pleas for help and disclosures of schizophrenia further weaken the prosecution’s theory of deliberate action.</p>
-</section><section class="memo-section" id="iv-racial-disparity-and-arbitrariness" data-title="IV. Racial Disparity and Arbitrariness">
-<div class="section-label">IV. Racial Disparity and Arbitrariness</div>
-<p class="memo-paragraph ">Racial disparity in capital sentencing supports the broader argument that the death penalty is vulnerable to arbitrary application. Historical and modern studies have repeatedly shown disparities based on the race of the defendant and the race of the victim.</p>
-<p class="memo-paragraph ">In McCleskey v. Kemp, 481 U.S. 279 (1987), the Court considered statistical evidence showing significant racial disparities in capital sentencing. Although the Court held that statistical evidence alone was insufficient to prove purposeful discrimination, it acknowledged that the disparities were “deeply troubling” and raised serious concerns about arbitrariness.</p>
-<p class="memo-paragraph ">When combined with substantial mitigating evidence—such as severe mental illness—the risk of arbitrary imposition strengthens the argument against execution. The defendant’s postpartum psychosis and history of suicide attempts may increase the risk of unpredictable reactions to sedatives used in lethal injection, reinforcing the constitutional concerns identified in Baze, Glossip, and Bucklew.</p>
-</section><section class="memo-section" id="v-method-of-execution" data-title="V. Method of Execution">
-<div class="section-label">V. Method of Execution</div>
-<p class="memo-paragraph ">Even when the death penalty is lawful in principle, the method used to carry it out may violate the Constitution if it creates an unacceptable risk of severe pain.</p>
-<p class="memo-paragraph ">In Baze v. Rees, 553 U.S. 35 (2008), the Court held that a prisoner must show that the method creates a demonstrated risk of severe pain and that a feasible, readily implemented alternative exists that would significantly reduce that risk. In Glossip v. Gross, 576 U.S. 863 (2015), reaffirmed this standard. In Bucklew v. Precythe, 139 S. Ct. 1112 (2019), confirmed that the Baze/Glossip framework governs all method-of-execution claims, including individualized challenges based on unique medical conditions.</p>
-<p class="memo-paragraph ">Applied here, the defendant’s postpartum psychosis and history of suicide attempts may increase the risk of unpredictable reactions to sedatives used in lethal injection, reinforcing the constitutional concerns identified in Baze, Glossip, and Bucklew.</p>
-</section><section class="memo-section" id="vi-historical-and-moral-background-supports-restraint" data-title="VI. Historical and Moral Background Supports Restraint">
-<div class="section-label">VI. Historical and Moral Background Supports Restraint</div>
-<p class="memo-paragraph ">Historical traditions show longstanding concern with proportionality, moral discernment, and individualized judgment. Ancient Egyptian texts such as the Book of the Dead and medieval works like Dante’s Inferno depict judgment through ethical and spiritual lenses
+        <div class="section-label">Statement of Facts</div>
+        <p class="memo-paragraph">The defendant is a young mother who, in the months preceding the offense, experienced severe postpartum depression and symptoms consistent with postpartum psychosis. During that period she became increasingly distressed, disorganized, and unable to function normally.</p>
+        <p class="memo-paragraph">Her mental deterioration escalated into multiple suicide attempts. During these episodes, she caused physical harm to her children while attempting to harm herself. The medical record reflects repeated crisis behavior and escalating instability.</p>
+        <p class="memo-paragraph">Despite these warning signs, she did not receive adequate mental-health treatment. No comprehensive psychiatric evaluation was conducted, and no emergency intervention occurred before the offense. The lack of timely treatment likely worsened the mental-health crisis.</p>
+        <p class="memo-paragraph">These facts demonstrate that the defendant’s actions occurred during a period of profound mental instability, that she repeatedly sought assistance, and that her condition was not meaningfully addressed by the system.</p>
+      </section>
+
+      <section class="memo-section" id="introduction" data-title="Introduction">
+        <div class="section-label">Introduction</div>
+        <p class="memo-paragraph">This memorandum examines whether the Eighth Amendment permits the imposition of the death penalty when the defendant was experiencing severe postpartum psychosis, repeated suicidality, and impaired mental judgment at the time of the offense.</p>
+      </section>
+
+      <section class="memo-section" id="issue" data-title="Issue">
+        <div class="section-label">Issue</div>
+        <p class="memo-paragraph issue-text">Issue: Whether the Eighth Amendment permits the imposition of the death penalty when the defendant was experiencing severe postpartum psychosis, repeatedly sought help, and exhibited profound mental instability that substantially undermines moral blameworthiness and sentencing reliability.</p>
+      </section>
+
+      <section class="memo-section" id="i-general-constitutionality-of-capital-punishment" data-title="I. General Constitutionality of Capital Punishment">
+        <div class="section-label">I. General Constitutionality of Capital Punishment</div>
+        <p class="memo-paragraph">The Eighth Amendment limits the state’s power to impose capital punishment even though the death penalty is not per se unconstitutional. The Supreme Court has made clear that the punishment must be applied with fairness, individualized consideration, and procedural reliability.</p>
+        <p class="memo-paragraph">In Furman v. Georgia, 408 U.S. 238 (1972), the Court held that the death penalty as then administered was unconstitutional because it was imposed in an arbitrary and capricious manner. Four years later, Gregg v. Georgia, 428 U.S. 153 (1976), upheld revised capital statutes that provided guided discretion, bifurcated proceedings, and appellate review.</p>
+      </section>
+
+      <section class="memo-section" id="ii-severe-mental-illness-reduces-culpability" data-title="II. Severe Mental Illness Reduces Culpability">
+        <div class="section-label">II. Severe Mental Illness Reduces Culpability</div>
+        <p class="memo-paragraph">A defendant’s severe mental illness may significantly weaken the justification for execution because it affects moral blameworthiness, comprehension, and the reliability of punishment. Under the Eighth Amendment, the state cannot ignore substantial mitigating evidence that calls the fairness of death into question.</p>
+        <p class="memo-paragraph">In Atkins v. Virginia, 536 U.S. 304 (2002), the Court held that executing individuals with intellectual disability violates the Eighth Amendment because their impairments reduce moral culpability. In Ford v. Wainwright, 477 U.S. 399 (1986), the Court held that the Eighth Amendment prohibits executing a prisoner who is insane because such execution serves no legitimate penological purpose.</p>
+        <p class="memo-paragraph">Beyond competency at the time of execution, the Court has required that mental illness be considered as a mitigating factor during sentencing. In Eddings v. Oklahoma, 455 U.S. 104 (1982), the Court emphasized that the sentencer must consider all relevant mitigating evidence, including emotional disturbance and mental illness, before imposing death.</p>
+      </section>
+
+      <section class="memo-section" id="iii-disputed-intent-matters" data-title="III. Disputed Intent Matters">
+        <div class="section-label">III. Disputed Intent Matters</div>
+        <p class="memo-paragraph">Capital punishment depends on a reliable finding of the mental state required by law. If evidence of premeditation or specific intent is weak, contested, or inconsistent with severe mental illness, the death sentence becomes more vulnerable to constitutional challenge.</p>
+        <p class="memo-paragraph">Under Lockett v. Ohio, 438 U.S. 586 (1978), the sentencer must consider any aspect of the defendant’s character or record as a basis for a sentence less than death. Evidence that the defendant was in the throes of postpartum psychosis and suicidal crisis is highly relevant to culpability and sentence selection.</p>
+      </section>
+
+      <section class="memo-section" id="iv-racial-disparity-and-arbitrariness" data-title="IV. Racial Disparity and Arbitrariness">
+        <div class="section-label">IV. Racial Disparity and Arbitrariness</div>
+        <p class="memo-paragraph">Racial disparity in capital sentencing supports the broader argument that the death penalty is vulnerable to arbitrary application. Historical and modern studies have repeatedly demonstrated unequal treatment in charging, sentencing, and execution decisions.</p>
+        <p class="memo-paragraph">In McCleskey v. Kemp, 481 U.S. 279 (1987), the Court considered statistical evidence showing significant racial disparities in capital sentencing. Although the Court held that such evidence, standing alone, does not establish unconstitutional purpose, the risk of arbitrary application remains a central concern when combined with profound mental illness and inadequate mitigation review.</p>
+      </section>
+
+      <section class="memo-section" id="v-method-of-execution" data-title="V. Method of Execution">
+        <div class="section-label">V. Method of Execution</div>
+        <p class="memo-paragraph">Even when the death penalty is lawful in principle, the method used to carry it out may violate the Constitution if it creates an unacceptable risk of severe pain. The method of execution must be evaluated under a standard that accounts for medical realities and the prisoner’s condition.</p>
+        <p class="memo-paragraph">In Baze v. Rees, 553 U.S. 35 (2008), the Court held that a prisoner must show that the method creates a demonstrated risk of severe pain and that a feasible, readily implemented alternative exists. Applied here, the defendant’s postpartum psychosis and history of suicide attempts may increase the risk of unpredictable medical reactions to sedatives used in lethal injection.</p>
+      </section>
+
+      <section class="memo-section" id="vi-historical-and-moral-background-supports-restraint" data-title="VI. Historical and Moral Background Supports Restraint">
+        <div class="section-label">VI. Historical and Moral Background Supports Restraint</div>
+        <p class="memo-paragraph">Historical traditions show longstanding concern with proportionality, moral discernment, and individualized judgment. Ancient and modern legal traditions alike recognize that punishment should reflect the offender’s actual blameworthiness and mental state.</p>
+      </section>
+
+      <section class="memo-section" id="conclusion" data-title="Conclusion">
+        <div class="section-label">Conclusion</div>
+        <p class="memo-paragraph">The Eighth Amendment does not permit the imposition of death without a careful and individualized assessment of mental illness, diminished culpability, and reliable sentencing procedures. The defendant’s severe postpartum psychosis, repeated suicidality, and documented instability all support the conclusion that execution would be constitutionally suspect.</p>
+      </section>
+    </article>
+  </div>
+</main>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const searchBox = document.getElementById('memoSearch');
+    const searchButton = document.getElementById('searchButton');
+    const searchStatus = document.getElementById('searchStatus');
+    const memoDocument = document.getElementById('memoDocument');
+
+    if (!searchBox || !memoDocument) return;
+
+    function setStatus(message) {
+      if (searchStatus) searchStatus.textContent = message;
+    }
+
+    function clearHighlights() {
+      memoDocument.querySelectorAll('mark.search-highlight').forEach(mark => {
+        const text = document.createTextNode(mark.textContent || '');
+        mark.replaceWith(text);
+      });
+    }
+
+    function performSearch() {
+      const query = searchBox.value.trim();
+      clearHighlights();
+
+      if (!query) {
+        setStatus('Ready');
+        return;
+      }
+
+      if (query.length < 2) {
+        setStatus('Type at least 2 characters.');
+        return;
+      }
+
+      const normalizedQuery = query.toLowerCase();
+      const walker = document.createTreeWalker(memoDocument, NodeFilter.SHOW_TEXT, {
+        acceptNode(node) {
+          const parent = node.parentElement;
+          if (!parent) return NodeFilter.FILTER_REJECT;
+          if (parent.closest('mark.search-highlight, #memoSearch, #searchButton, #searchStatus, .search-wrap')) {
+            return NodeFilter.FILTER_REJECT;
+          }
+          return node.nodeValue && node.nodeValue.toLowerCase().includes(normalizedQuery)
+            ? NodeFilter.FILTER_ACCEPT
+            : NodeFilter.FILTER_REJECT;
+        }
+      });
+
+      const matches = [];
+      let node;
+      while ((node = walker.nextNode())) {
+        matches.push(node);
+      }
+
+      let firstHighlight = null;
+      let matchCount = 0;
+
+      matches.forEach(textNode => {
+        const text = textNode.nodeValue || '';
+        const lowerText = text.toLowerCase();
+        const fragment = document.createDocumentFragment();
+        let cursor = 0;
+        let index;
+
+        while ((index = lowerText.indexOf(normalizedQuery, cursor)) !== -1) {
+          fragment.appendChild(document.createTextNode(text.slice(cursor, index)));
+
+          const mark = document.createElement('mark');
+          mark.className = 'search-highlight';
+          mark.textContent = text.slice(index, index + query.length);
+          fragment.appendChild(mark);
+
+          if (!firstHighlight) firstHighlight = mark;
+          matchCount += 1;
+          cursor = index + query.length;
+        }
+
+        fragment.appendChild(document.createTextNode(text.slice(cursor)));
+        textNode.parentNode.replaceChild(fragment, textNode);
+      });
+
+      setStatus(matchCount ? `${matchCount} match${matchCount === 1 ? '' : 'es'} found.` : 'No matches found.');
+
+      if (firstHighlight) {
+        firstHighlight.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+
+    searchBox.addEventListener('input', performSearch);
+    searchBox.addEventListener('search', performSearch);
+    searchBox.addEventListener('keydown', event => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        performSearch();
+      }
+    });
+    searchButton?.addEventListener('click', performSearch);
+
+    const focusButton = document.getElementById('focusModeButton');
+    focusButton?.addEventListener('click', () => {
+      const enabled = document.body.classList.toggle('focus-mode');
+      focusButton.setAttribute('aria-pressed', String(enabled));
+      focusButton.textContent = enabled ? 'Exit focus mode' : 'Focus mode';
+    });
+
+    document.getElementById('printMemo')?.addEventListener('click', () => window.print());
+  });
+</script>
+</body>
+</html>
