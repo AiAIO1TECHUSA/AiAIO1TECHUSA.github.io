@@ -218,69 +218,105 @@ function initializeFocusMode() {
 }
 
 function initializeDocumentSearch() {
-  const searchBox = document.querySelector('input[placeholder*="Search this memo"]');
-  const searchButton = document.querySelector("#searchButton");
-  const searchStatus = document.querySelector("#searchStatus");
-  
-  if (!searchBox) return;
+  const searchBox = document.querySelector("#memoSearch");
 
-  function performSearch() {
-    const query = searchBox.value.trim().toLowerCase();
-    
-    // 1. Clean up old highlights
-    document.querySelectorAll('.search-highlight').forEach(el => {
-      el.outerHTML = el.innerHTML;
-    });
-
-    if (query.length < 3) {
-      if (searchStatus) searchStatus.textContent = query.length === 0 ? "Ready" : "Type 3+ characters...";
-      return;
-    }
-
-    // 2. Target the actual document content area specifically
-    const contentArea = document.querySelector('#memoDocument') || document.body;
-    const innerHTML = contentArea.innerHTML;
-    const regex = new RegExp(`(<[^>]*>)?([^<]*?${query}[^<]*?)(</[^>]*>)`, 'gi');
-    
-    // This is a more aggressive way to find and highlight text
-    let matchCount = 0;
-    const walker = document.createTreeWalker(contentArea, NodeFilter.SHOW_TEXT, null, false);
-    let node;
-    let firstMatchElement = null;
-
-    const textNodes = [];
-    while(node = walker.nextNode()) textNodes.push(node);
-
-    textNodes.forEach(textNode => {
-      if (textNode.nodeValue.toLowerCase().includes(query)) {
-        matchCount++;
-        const parent = textNode.parentNode;
-        const content = textNode.nodeValue;
-        const regexMatch = new RegExp(`(${query})`, 'gi');
-        const newHTML = content.replace(regexMatch, '<mark class="search-highlight">$1</mark>');
-        
-        const span = document.createElement('span');
-        span.innerHTML = newHTML;
-        parent.replaceChild(span, textNode);
-        
-        if (matchCount === 1) {
-          firstMatchElement = span.querySelector('.search-highlight');
-        }
-      }
-    });
-
-    if (searchStatus) {
-      searchStatus.textContent = matchCount > 0 ? `Found ${matchCount} matches` : "No matches found";
-    }
-
-    if (firstMatchElement) {
-      firstMatchElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
+  if (!searchBox) {
+    console.warn("Document search input #memoSearch was not found.");
+    return;
   }
 
-  searchBox.addEventListener('input', performSearch);
-  if (searchButton) searchButton.addEventListener('click', performSearch);
-  searchBox.addEventListener('keypress', (e) => { if (e.key === 'Enter') performSearch(); });
+  function clearHighlights() {
+    document.querySelectorAll("mark.search-highlight").forEach(mark => {
+      mark.replaceWith(document.createTextNode(mark.textContent));
+    });
+  }
+
+  function isExcluded(node) {
+    const parent = node.parentElement;
+    if (!parent) return true;
+
+    return Boolean(
+      parent.closest(
+        "script, style, noscript, textarea, input, select, option, mark.search-highlight"
+      )
+    );
+  }
+
+  searchBox.addEventListener("input", () => {
+    const query = searchBox.value.trim();
+
+    clearHighlights();
+
+    if (query.length < 3) return;
+
+    const walker = document.createTreeWalker(
+      document.body,
+      NodeFilter.SHOW_TEXT,
+      {
+        acceptNode(node) {
+          if (isExcluded(node)) {
+            return NodeFilter.FILTER_REJECT;
+          }
+
+          return node.nodeValue
+            .toLowerCase()
+            .includes(query.toLowerCase())
+            ? NodeFilter.FILTER_ACCEPT
+            : NodeFilter.FILTER_REJECT;
+        }
+      }
+    );
+
+    const matchingNodes = [];
+    let node;
+
+    while ((node = walker.nextNode())) {
+      matchingNodes.push(node);
+    }
+
+    let firstHighlight = null;
+    const normalizedQuery = query.toLowerCase();
+
+    matchingNodes.forEach(textNode => {
+      const text = textNode.nodeValue;
+      const lowerText = text.toLowerCase();
+      const fragment = document.createDocumentFragment();
+
+      let position = 0;
+      let matchIndex;
+
+      while ((matchIndex = lowerText.indexOf(normalizedQuery, position)) !== -1) {
+        fragment.appendChild(
+          document.createTextNode(text.slice(position, matchIndex))
+        );
+
+        const mark = document.createElement("mark");
+        mark.className = "search-highlight";
+        mark.textContent = text.slice(
+          matchIndex,
+          matchIndex + query.length
+        );
+
+        fragment.appendChild(mark);
+
+        if (!firstHighlight) {
+          firstHighlight = mark;
+        }
+
+        position = matchIndex + query.length;
+      }
+
+      fragment.appendChild(document.createTextNode(text.slice(position)));
+      textNode.parentNode.replaceChild(fragment, textNode);
+    });
+
+    if (firstHighlight) {
+      firstHighlight.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+    }
+  });
 }
 
 // --- START APP ---
