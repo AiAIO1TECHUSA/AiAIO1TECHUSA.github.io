@@ -219,71 +219,69 @@ function initializeFocusMode() {
 
 function initializeDocumentSearch() {
   const searchBox = document.querySelector('input[placeholder*="Search this memo"]');
-  const searchButton = document.querySelector("#searchButton"); // Target the new button
+  const searchButton = document.querySelector("#searchButton");
   const searchStatus = document.querySelector("#searchStatus");
   
   if (!searchBox) return;
 
-  // Define the actual search logic as a reusable function
   function performSearch() {
     const query = searchBox.value.trim().toLowerCase();
     
-    // Remove previous highlights
+    // 1. Clean up old highlights
     document.querySelectorAll('.search-highlight').forEach(el => {
       el.outerHTML = el.innerHTML;
     });
 
-    if (query.length === 0) {
-      if (searchStatus) searchStatus.textContent = "Ready";
-      return;
-    }
-
     if (query.length < 3) {
-      if (searchStatus) searchStatus.textContent = "Type at least 3 characters...";
+      if (searchStatus) searchStatus.textContent = query.length === 0 ? "Ready" : "Type 3+ characters...";
       return;
     }
 
-    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
-      acceptNode: (node) => (node.parentElement === searchBox) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT
-    }, false);
-
-    const nodes = [];
-    let node;
-    while (node = walker.nextNode()) nodes.push(node);
-
+    // 2. Target the actual document content area specifically
+    const contentArea = document.querySelector('#memoDocument') || document.body;
+    const innerHTML = contentArea.innerHTML;
+    const regex = new RegExp(`(<[^>]*>)?([^<]*?${query}[^<]*?)(</[^>]*>)`, 'gi');
+    
+    // This is a more aggressive way to find and highlight text
     let matchCount = 0;
-    nodes.forEach(textNode => {
-      const text = textNode.nodeValue;
-      if (text.toLowerCase().includes(query)) {
+    const walker = document.createTreeWalker(contentArea, NodeFilter.SHOW_TEXT, null, false);
+    let node;
+    let firstMatchElement = null;
+
+    const textNodes = [];
+    while(node = walker.nextNode()) textNodes.push(node);
+
+    textNodes.forEach(textNode => {
+      if (textNode.nodeValue.toLowerCase().includes(query)) {
         matchCount++;
+        const parent = textNode.parentNode;
+        const content = textNode.nodeValue;
+        const regexMatch = new RegExp(`(${query})`, 'gi');
+        const newHTML = content.replace(regexMatch, '<mark class="search-highlight">$1</mark>');
+        
         const span = document.createElement('span');
-        const regex = new RegExp(`(${query})`, 'gi');
-        span.innerHTML = text.replace(regex, '<mark class="search-highlight">$1</mark>');
-        textNode.parentNode.replaceChild(span, textNode);
+        span.innerHTML = newHTML;
+        parent.replaceChild(span, textNode);
+        
+        if (matchCount === 1) {
+          firstMatchElement = span.querySelector('.search-highlight');
+        }
       }
     });
 
     if (searchStatus) {
-      searchStatus.textContent = matchCount > 0 
-        ? `Found ${matchCount} matches` 
-        : "No matches found";
+      searchStatus.textContent = matchCount > 0 ? `Found ${matchCount} matches` : "No matches found";
+    }
+
+    if (firstMatchElement) {
+      firstMatchElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   }
 
-  // Trigger search when typing (Live Search)
   searchBox.addEventListener('input', performSearch);
-
-  // Trigger search when button is clicked (Action Search)
-  if (searchButton) {
-    searchButton.addEventListener('click', performSearch);
-  }
-
-  // Trigger search when "Enter" key is pressed
-  searchBox.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') performSearch();
-  });
+  if (searchButton) searchButton.addEventListener('click', performSearch);
+  searchBox.addEventListener('keypress', (e) => { if (e.key === 'Enter') performSearch(); });
 }
-
 
 // --- START APP ---
 document.addEventListener("DOMContentLoaded", () => {
