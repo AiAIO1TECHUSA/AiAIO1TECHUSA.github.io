@@ -1,8 +1,6 @@
-// standards-2027.js
-// Interactive 2027 standards panel for legal-memo-interactive.htm
-
 "use strict";
 
+// --- DATA ---
 const standards2027 = [
   {
     id: "mental-state",
@@ -10,8 +8,7 @@ const standards2027 = [
     title: "Mental-state and diminished-culpability review",
     status: "Review required",
     authority: "Eighth Amendment; Lockett v. Ohio; Eddings v. Oklahoma",
-    summary:
-      "Review whether evidence of severe mental illness, psychosis, impaired judgment, or diminished capacity was meaningfully considered.",
+    summary: "Review whether evidence of severe mental illness, psychosis, impaired judgment, or diminished capacity was meaningfully considered.",
     questions: [
       "Was the evidence presented to the sentencing authority?",
       "Was expert mental-health testimony obtained?",
@@ -26,8 +23,7 @@ const standards2027 = [
     title: "Intellectual-disability analysis",
     status: "Authority dependent",
     authority: "Atkins v. Virginia",
-    summary:
-      "Determine whether the record contains evidence relevant to intellectual disability and whether the applicable jurisdictional standard was followed.",
+    summary: "Determine whether the record contains evidence relevant to intellectual disability and whether the applicable jurisdictional standard was followed.",
     questions: [
       "Was an assessment conducted by a qualified professional?",
       "Were adaptive-functioning limitations evaluated?",
@@ -42,8 +38,7 @@ const standards2027 = [
     title: "Disclosure and preservation of favorable evidence",
     status: "Review required",
     authority: "Brady v. Maryland; Giglio v. United States",
-    summary:
-      "Review whether favorable evidence, impeachment material, and relevant expert or law-enforcement information were disclosed and preserved.",
+    summary: "Review whether favorable evidence, impeachment material, and relevant expert or law-enforcement information were disclosed and preserved.",
     questions: [
       "Was favorable evidence identified?",
       "Was impeachment evidence disclosed?",
@@ -58,8 +53,7 @@ const standards2027 = [
     title: "Independent expert review",
     status: "Recommended",
     authority: "Applicable procedural and evidentiary rules",
-    summary:
-      "Confirm that mental-health, medical, forensic, and pharmacological opinions were independently evaluated.",
+    summary: "Confirm that mental-health, medical, forensic, and pharmacological opinions were independently evaluated.",
     questions: [
       "Was the expert qualified for the specific opinion?",
       "Were the underlying records complete?",
@@ -74,8 +68,7 @@ const standards2027 = [
     title: "Execution-protocol reliability review",
     status: "Jurisdiction dependent",
     authority: "Applicable state and federal law",
-    summary:
-      "Evaluate whether the proposed execution method, protocol, personnel, and contingency procedures satisfy the controlling legal standards.",
+    summary: "Evaluate whether the proposed execution method, protocol, personnel, and contingency procedures satisfy the controlling legal standards.",
     questions: [
       "Was the current protocol obtained?",
       "Were medical risks independently assessed?",
@@ -92,6 +85,7 @@ const state = {
   openItems: new Set()
 };
 
+// --- UTILS ---
 function escapeHTML(value) {
   return String(value)
     .replaceAll("&", "&amp;")
@@ -107,88 +101,41 @@ function getCategories() {
 
 function filteredStandards() {
   const query = state.query.trim().toLowerCase();
-
   return standards2027.filter(item => {
-    const matchesCategory =
-      state.category === "All" || item.category === state.category;
-
+    const matchesCategory = state.category === "All" || item.category === state.category;
     const searchableText = [
-      item.title,
-      item.category,
-      item.status,
-      item.authority,
-      item.summary,
-      ...item.questions
-    ]
-      .join(" ")
-      .toLowerCase();
-
+      item.title, item.category, item.status, item.authority, item.summary, ...item.questions
+    ].join(" ").toLowerCase();
     return matchesCategory && (!query || searchableText.includes(query));
   });
 }
 
+// --- UI COMPONENTS ---
 function standardCard(item) {
   const isOpen = state.openItems.has(item.id);
-  const questions = item.questions
-    .map(question => `<li>${escapeHTML(question)}</li>`)
-    .join("");
+  const questions = item.questions.map(q => `<li>${escapeHTML(q)}</li>`).join("");
 
   return `
     <article class="standard-card ${isOpen ? "is-open" : ""}">
-      <button
-        class="standard-card-header"
-        type="button"
-        data-action="toggle"
-        data-id="${escapeHTML(item.id)}"
-        aria-expanded="${isOpen}"
-        aria-controls="details-${escapeHTML(item.id)}"
-      >
-        <span>
-          <small>${escapeHTML(item.category)}</small>
-          <strong>${escapeHTML(item.title)}</strong>
-        </span>
+      <button class="standard-card-header" type="button" data-action="toggle" data-id="${escapeHTML(item.id)}" aria-expanded="${isOpen}" aria-controls="details-${escapeHTML(item.id)}">
+        <span><small>${escapeHTML(item.category)}</small> <strong>${escapeHTML(item.title)}</strong></span>
         <span class="standard-status">${escapeHTML(item.status)}</span>
       </button>
-
-      <div
-        id="details-${escapeHTML(item.id)}"
-        class="standard-card-details"
-        ${isOpen ? "" : "hidden"}
-      >
+      <div id="details-${escapeHTML(item.id)}" class="standard-card-details" ${isOpen ? "" : "hidden"}>
         <p>${escapeHTML(item.summary)}</p>
         <p><strong>Authority:</strong> ${escapeHTML(item.authority)}</p>
-
         <h4>Review questions</h4>
         <ul>${questions}</ul>
-
-        ${
-          item.source
-            ? `<p><a href="${escapeHTML(
-                item.source
-              )}" target="_blank" rel="noopener">Open source</a></p>`
-            : `<p class="source-placeholder">Add a verified primary source before publication.</p>`
-        }
-
-        <button
-          class="copy-standard"
-          type="button"
-          data-action="copy"
-          data-id="${escapeHTML(item.id)}"
-        >
-          Copy standard
-        </button>
+        ${item.source ? `<p><a href="${escapeHTML(item.source)}" target="_blank" rel="noopener">Open source</a></p>` : `<p class="source-placeholder">Add a verified primary source before publication.</p>`}
+        <button class="copy-standard" type="button" data-action="copy" data-id="${escapeHTML(item.id)}">Copy standard</button>
       </div>
-    </article>
-  `;
+    </article>`;
 }
 
 function render() {
   const root = document.querySelector("#standards-2027");
-
   if (!root) {
-    console.warn(
-      'standards-2027.js: Add <div id="standards-2027"></div> to the HTML.'
-    );
+    console.warn('standards-2027.js: Add <div id="standards-2027"></div> to the HTML.');
     return;
   }
 
@@ -200,56 +147,23 @@ function render() {
         <div>
           <p class="eyebrow">Interactive review tool</p>
           <h2 id="standards-2027-title">2027 Standards Review</h2>
-          <p>
-            Use this tool to identify issues requiring legal, factual, medical,
-            or procedural verification.
-          </p>
+          <p>Use this tool to identify issues requiring legal, factual, medical, or procedural verification.</p>
         </div>
-
-        <span class="standards-date">
-          Updated ${new Intl.DateTimeFormat("en-US", {
-            dateStyle: "medium"
-          }).format(new Date())}
-        </span>
+        <span class="standards-date">Updated ${new Intl.DateTimeFormat("en-US", {dateStyle: "medium"}).format(new Date())}</span>
       </div>
-
       <div class="standards-controls">
         <label for="standards-search">Search standards</label>
-        <input
-          id="standards-search"
-          type="search"
-          placeholder="Search by topic, authority, or question"
-          value="${escapeHTML(state.query)}"
-        />
-
+        <input id="standards-search" type="search" placeholder="Search by topic, authority, or question" value="${escapeHTML(state.query)}"/>
         <label for="standards-category">Category</label>
         <select id="standards-category">
-          ${getCategories()
-            .map(
-              category => `
-                <option value="${escapeHTML(category)}"
-                  ${state.category === category ? "selected" : ""}>
-                  ${escapeHTML(category)}
-                </option>
-              `
-            )
-            .join("")}
+          ${getCategories().map(cat => `<option value="${escapeHTML(cat)}" ${state.category === cat ? "selected" : ""}>${escapeHTML(cat)}</option>`).join("")}
         </select>
       </div>
-
-      <p class="standards-count" aria-live="polite">
-        Showing ${results.length} of ${standards2027.length} standards
-      </p>
-
+      <p class="standards-count" aria-live="polite">Showing ${results.length} of ${standards2027.length} standards</p>
       <div class="standards-list">
-        ${
-          results.length
-            ? results.map(standardCard).join("")
-            : `<p class="no-results">No matching standards found.</p>`
-        }
+        ${results.length ? results.map(standardCard).join("") : `<p class="no-results">No matching standards found.</p>`}
       </div>
-    </section>
-  `;
+    </section>`;
 
   attachEvents(root);
 }
@@ -258,7 +172,6 @@ function attachEvents(root) {
   root.querySelector("#standards-search")?.addEventListener("input", event => {
     state.query = event.target.value;
     render();
-
     const input = document.querySelector("#standards-search");
     input?.focus();
     input?.setSelectionRange(state.query.length, state.query.length);
@@ -272,41 +185,20 @@ function attachEvents(root) {
   root.querySelectorAll('[data-action="toggle"]').forEach(button => {
     button.addEventListener("click", () => {
       const id = button.dataset.id;
-
-      if (state.openItems.has(id)) {
-        state.openItems.delete(id);
-      } else {
-        state.openItems.add(id);
-      }
-
+      state.openItems.has(id) ? state.openItems.delete(id) : state.openItems.add(id);
       render();
     });
   });
 
   root.querySelectorAll('[data-action="copy"]').forEach(button => {
     button.addEventListener("click", async () => {
-      const item = standards2027.find(
-        standard => standard.id === button.dataset.id
-      );
-
+      const item = standards2027.find(s => s.id === button.dataset.id);
       if (!item) return;
-
-      const text = [
-        item.title,
-        `Category: ${item.category}`,
-        `Status: ${item.status}`,
-        `Authority: ${item.authority}`,
-        item.summary,
-        "Review questions:",
-        ...item.questions.map(question => `- ${question}`)
-      ].join("\n");
-
+      const text = [item.title, `Category: ${item.category}`, `Status: ${item.status}`, `Authority: ${item.authority}`, item.summary, "Review questions:", ...item.questions.map(q => `- ${q}`)].join("\n");
       try {
         await navigator.clipboard.writeText(text);
         button.textContent = "Copied";
-        setTimeout(() => {
-          button.textContent = "Copy standard";
-        }, 1500);
+        setTimeout(() => { button.textContent = "Copy standard"; }, 1500);
       } catch {
         button.textContent = "Copy unavailable";
       }
@@ -314,457 +206,55 @@ function attachEvents(root) {
   });
 }
 
-document.addEventListener("DOMContentLoaded", render);
+// --- GLOBAL FEATURES ---
 function initializeFocusMode() {
   const focusButton = document.querySelector("#focusModeButton");
-
   if (!focusButton) return;
-
   focusButton.addEventListener("click", () => {
     const enabled = document.body.classList.toggle("focus-mode");
-
     focusButton.setAttribute("aria-pressed", String(enabled));
-    focusButton.textContent = enabled
-      ? "Exit focus mode"
-      : "Focus mode";
+    focusButton.textContent = enabled ? "Exit focus mode" : "Focus mode";
   });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  render();
-  initializeFocusMode();
-});
-// Document-wide search functionality
 function initializeDocumentSearch() {
+  // This targets the main search box at the top of your legal memo
   const searchBox = document.querySelector('input[placeholder*="Search this memo"]');
-  const resultsDiv = document.getElementById('search-results') || createResultsDiv();
-  
   if (!searchBox) return;
-// standards-2027.js
-// Interactive 2027 standards panel for legal-memo-interactive.htm
 
-"use strict";
-
-const standards2027 = [
-  {
-    id: "mental-state",
-    category: "Capital Sentencing",
-    title: "Mental-state and diminished-culpability review",
-    status: "Review required",
-    authority: "Eighth Amendment; Lockett v. Ohio; Eddings v. Oklahoma",
-    summary:
-      "Review whether evidence of severe mental illness, psychosis, impaired judgment, or diminished capacity was meaningfully considered.",
-    questions: [
-      "Was the evidence presented to the sentencing authority?",
-      "Was expert mental-health testimony obtained?",
-      "Was mitigating evidence individually considered?",
-      "Was the evidence documented in the sentencing record?"
-    ],
-    source: ""
-  },
-  {
-    id: "intellectual-disability",
-    category: "Capital Sentencing",
-    title: "Intellectual-disability analysis",
-    status: "Authority dependent",
-    authority: "Atkins v. Virginia",
-    summary:
-      "Determine whether the record contains evidence relevant to intellectual disability and whether the applicable jurisdictional standard was followed.",
-    questions: [
-      "Was an assessment conducted by a qualified professional?",
-      "Were adaptive-functioning limitations evaluated?",
-      "Was the onset requirement addressed?",
-      "Did the court apply the controlling jurisdictional test?"
-    ],
-    source: ""
-  },
-  {
-    id: "disclosure",
-    category: "Disclosure",
-    title: "Disclosure and preservation of favorable evidence",
-    status: "Review required",
-    authority: "Brady v. Maryland; Giglio v. United States",
-    summary:
-      "Review whether favorable evidence, impeachment material, and relevant expert or law-enforcement information were disclosed and preserved.",
-    questions: [
-      "Was favorable evidence identified?",
-      "Was impeachment evidence disclosed?",
-      "Were disclosure decisions documented?",
-      "Was the evidence available in time for meaningful use?"
-    ],
-    source: ""
-  },
-  {
-    id: "expert-review",
-    category: "Expert Evidence",
-    title: "Independent expert review",
-    status: "Recommended",
-    authority: "Applicable procedural and evidentiary rules",
-    summary:
-      "Confirm that mental-health, medical, forensic, and pharmacological opinions were independently evaluated.",
-    questions: [
-      "Was the expert qualified for the specific opinion?",
-      "Were the underlying records complete?",
-      "Were competing opinions addressed?",
-      "Were limitations and uncertainty disclosed?"
-    ],
-    source: ""
-  },
-  {
-    id: "execution-reliability",
-    category: "Execution Protocol",
-    title: "Execution-protocol reliability review",
-    status: "Jurisdiction dependent",
-    authority: "Applicable state and federal law",
-    summary:
-      "Evaluate whether the proposed execution method, protocol, personnel, and contingency procedures satisfy the controlling legal standards.",
-    questions: [
-      "Was the current protocol obtained?",
-      "Were medical risks independently assessed?",
-      "Were contingency procedures disclosed?",
-      "Were constitutional objections preserved?"
-    ],
-    source: ""
-  }
-];
-
-const state = {
-  query: "",
-  category: "All",
-  openItems: new Set()
-};
-
-function escapeHTML(value) {
-  return String(value)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
-
-function getCategories() {
-  return ["All", ...new Set(standards2027.map(item => item.category))];
-}
-
-function filteredStandards() {
-  const query = state.query.trim().toLowerCase();
-
-  return standards2027.filter(item => {
-    const matchesCategory =
-      state.category === "All" || item.category === state.category;
-
-    const searchableText = [
-      item.title,
-      item.category,
-      item.status,
-      item.authority,
-      item.summary,
-      ...item.questions
-    ]
-      .join(" ")
-      .toLowerCase();
-
-    return matchesCategory && (!query || searchableText.includes(query));
-  });
-}
-
-function standardCard(item) {
-  const isOpen = state.openItems.has(item.id);
-  const questions = item.questions
-    .map(question => `<li>${escapeHTML(question)}</li>`)
-    .join("");
-
-  return `
-    <article class="standard-card ${isOpen ? "is-open" : ""}">
-      <button
-        class="standard-card-header"
-        type="button"
-        data-action="toggle"
-        data-id="${escapeHTML(item.id)}"
-        aria-expanded="${isOpen}"
-        aria-controls="details-${escapeHTML(item.id)}"
-      >
-        <span>
-          <small>${escapeHTML(item.category)}</small>
-          <strong>${escapeHTML(item.title)}</strong>
-        </span>
-        <span class="standard-status">${escapeHTML(item.status)}</span>
-      </button>
-
-      <div
-        id="details-${escapeHTML(item.id)}"
-        class="standard-card-details"
-        ${isOpen ? "" : "hidden"}
-      >
-        <p>${escapeHTML(item.summary)}</p>
-        <p><strong>Authority:</strong> ${escapeHTML(item.authority)}</p>
-
-        <h4>Review questions</h4>
-        <ul>${questions}</ul>
-
-        ${
-          item.source
-            ? `<p><a href="${escapeHTML(
-                item.source
-              )}" target="_blank" rel="noopener">Open source</a></p>`
-            : `<p class="source-placeholder">Add a verified primary source before publication.</p>`
-        }
-
-        <button
-          class="copy-standard"
-          type="button"
-          data-action="copy"
-          data-id="${escapeHTML(item.id)}"
-        >
-          Copy standard
-        </button>
-      </div>
-    </article>
-  `;
-}
-
-function render() {
-  const root = document.querySelector("#standards-2027");
-
-  if (!root) {
-    console.warn(
-      'standards-2027.js: Add <div id="standards-2027"></div> to the HTML.'
-    );
-    return;
-  }
-
-  const results = filteredStandards();
-
-  root.innerHTML = `
-    <section class="standards-panel" aria-labelledby="standards-2027-title">
-      <div class="standards-heading">
-        <div>
-          <p class="eyebrow">Interactive review tool</p>
-          <h2 id="standards-2027-title">2027 Standards Review</h2>
-          <p>
-            Use this tool to identify issues requiring legal, factual, medical,
-            or procedural verification.
-          </p>
-        </div>
-
-        <span class="standards-date">
-          Updated ${new Intl.DateTimeFormat("en-US", {
-            dateStyle: "medium"
-          }).format(new Date())}
-        </span>
-      </div>
-
-      <div class="standards-controls">
-        <label for="standards-search">Search standards</label>
-        <input
-          id="standards-search"
-          type="search"
-          placeholder="Search by topic, authority, or question"
-          value="${escapeHTML(state.query)}"
-        />
-
-        <label for="standards-category">Category</label>
-        <select id="standards-category">
-          ${getCategories()
-            .map(
-              category => `
-                <option value="${escapeHTML(category)}"
-                  ${state.category === category ? "selected" : ""}>
-                  ${escapeHTML(category)}
-                </option>
-              `
-            )
-            .join("")}
-        </select>
-      </div>
-
-      <p class="standards-count" aria-live="polite">
-        Showing ${results.length} of ${standards2027.length} standards
-      </p>
-
-      <div class="standards-list">
-        ${
-          results.length
-            ? results.map(standardCard).join("")
-            : `<p class="no-results">No matching standards found.</p>`
-        }
-      </div>
-    </section>
-  `;
-
-  attachEvents(root);
-}
-
-function attachEvents(root) {
-  root.querySelector("#standards-search")?.addEventListener("input", event => {
-    state.query = event.target.value;
-    render();
-
-    const input = document.querySelector("#standards-search");
-    input?.focus();
-    input?.setSelectionRange(state.query.length, state.query.length);
-  });
-
-  root.querySelector("#standards-category")?.addEventListener("change", event => {
-    state.category = event.target.value;
-    render();
-  });
-
-  root.querySelectorAll('[data-action="toggle"]').forEach(button => {
-    button.addEventListener("click", () => {
-      const id = button.dataset.id;
-
-      if (state.openItems.has(id)) {
-        state.openItems.delete(id);
-      } else {
-        state.openItems.add(id);
-      }
-
-      render();
-    });
-  });
-
-  root.querySelectorAll('[data-action="copy"]').forEach(button => {
-    button.addEventListener("click", async () => {
-      const item = standards2027.find(
-        standard => standard.id === button.dataset.id
-      );
-
-      if (!item) return;
-
-      const text = [
-        item.title,
-        `Category: ${item.category}`,
-        `Status: ${item.status}`,
-        `Authority: ${item.authority}`,
-        item.summary,
-        "Review questions:",
-        ...item.questions.map(question => `- ${question}`)
-      ].join("\n");
-
-      try {
-        await navigator.clipboard.writeText(text);
-        button.textContent = "Copied";
-        setTimeout(() => {
-          button.textContent = "Copy standard";
-        }, 1500);
-      } catch {
-        button.textContent = "Copy unavailable";
-      }
-    });
-  });
-}
-
-document.addEventListener("DOMContentLoaded", render);
-
-function initializeFocusMode() {
-  const focusButton = document.querySelector("#focusModeButton");
-
-  if (!focusButton) return;
-
-  focusButton.addEventListener("click", () => {
-    const enabled = document.body.classList.toggle("focus-mode");
-
-    focusButton.setAttribute("aria-pressed", String(enabled));
-    focusButton.textContent = enabled
-      ? "Exit focus mode"
-      : "Focus mode";
-  });
-}
-
-// Document-wide search functionality
-function initializeDocumentSearch() {
-  const searchBox = document.querySelector('#memoSearch'); // FIXED: Changed selector to match your HTML ID
-  const resultsDiv = document.getElementById('search-results') || createResultsDiv();
-  
-  if (!searchBox) {
-    console.warn('memoSearch input not found. Make sure your HTML includes: <input id="memoSearch" type="search">');
-    return;
-  }
-
-  searchBox.addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-      performDocumentSearch(searchBox.value, resultsDiv);
-    }
-  });
-
-  // Optional: search on input (real-time)
   searchBox.addEventListener('input', function() {
-    if (this.value.length > 2) {
-      performDocumentSearch(this.value, resultsDiv);
-    }
+    const query = this.value.trim().toLowerCase();
+    
+    // Remove previous highlights
+    document.querySelectorAll('.search-highlight').forEach(el => {
+      el.outerHTML = el.innerHTML;
+    });
+
+    if (query.length < 3) return;
+
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+      acceptNode: (node) => (node.parentElement === searchBox) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT
+    }, false);
+
+    const nodes = [];
+    let node;
+    while (node = walker.nextNode()) nodes.push(node);
+
+    nodes.forEach(textNode => {
+      const text = textNode.nodeValue;
+      if (text.toLowerCase().includes(query)) {
+        const span = document.createElement('span');
+        const regex = new RegExp(`(${query})`, 'gi');
+        span.innerHTML = text.replace(regex, '<mark class="search-highlight">$1</mark>');
+        textNode.parentNode.replaceChild(span, textNode);
+      }
+    });
   });
 }
 
-function createResultsDiv() {
-  const div = document.createElement('div');
-  div.id = 'search-results';
-  div.style.cssText = 'margin: 20px 0; padding: 15px; background: #f0f0f0; border-radius: 4px; display: none;';
-  document.body.insertBefore(div, document.body.firstChild);
-  return div;
-}
-
-function performDocumentSearch(query, resultsDiv) {
-  // Clear previous highlights
-  document.querySelectorAll('.search-highlight').forEach(mark => {
-    const parent = mark.parentNode;
-    while (mark.firstChild) {
-      parent.insertBefore(mark.firstChild, mark);
-    }
-    parent.removeChild(mark);
-    parent.normalize();
-  });
-
-  if (!query.trim()) {
-    resultsDiv.style.display = 'none';
-    return;
-  }
-
-  const searchTerm = query.toLowerCase();
-  let matchCount = 0;
-  const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
-
-  // Search through text nodes
-  const walker = document.createTreeWalker(
-    document.body,
-    NodeFilter.SHOW_TEXT,
-    null
-  );
-
-  const nodesToHighlight = [];
-  let node;
-
-  while (node = walker.nextNode()) {
-    if (node.textContent.toLowerCase().includes(searchTerm) && 
-        !node.parentElement.closest('#standards-2027, #search-results')) {
-      nodesToHighlight.push(node);
-      matchCount += (node.textContent.match(regex) || []).length;
-    }
-  }
-
-  // Highlight matches
-  nodesToHighlight.forEach(node => {
-    const span = document.createElement('span');
-    span.innerHTML = node.textContent.replace(regex, '<mark class="search-highlight" style="background-color: yellow; font-weight: bold;">$1</mark>');
-    node.parentNode.replaceChild(span, node);
-  });
-
-  // Show results
-  resultsDiv.innerHTML = `<strong>${matchCount} match${matchCount !== 1 ? 'es' : ''} found for "${query}"</strong>`;
-  resultsDiv.style.display = 'block';
-
-  // Scroll to first result
-  const firstHighlight = document.querySelector('.search-highlight');
-  if (firstHighlight) {
-    firstHighlight.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  }
-}
-
-// Initialize on page load
-document.addEventListener('DOMContentLoaded', () => {
+// --- START APP ---
+document.addEventListener("DOMContentLoaded", () => {
   render();
   initializeFocusMode();
   initializeDocumentSearch();
 });
-
