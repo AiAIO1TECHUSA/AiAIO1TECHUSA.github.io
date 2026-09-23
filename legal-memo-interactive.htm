@@ -48,24 +48,44 @@ mark.memo-hit { background:#ffe08a; padding:0 .08em; border-radius:2px; }
 </head>
 <body>
 <main class="memo-app" id="memoApp">
-  
-  <!-- MOVE THE SEARCH HERE (with the new button) -->
-  <div class="search-wrap">
-    <label for="memoSearch">Search this memo</label>
-    <input id="memoSearch" type="search" placeholder="Search facts, cases, sections, or terms…" autocomplete="off" style="width: 100%; padding: 8px; margin: 10px 0; font-size: 16px;">
-    <button id="searchButton" type="button" style="padding: 8px 16px; margin: 10px 0; cursor: pointer;">Search</button>
-    <div class="search-status" id="searchStatus" aria-live="polite">Ready</div>
-  </div>
-
-<header class="memo-topbar">
-    <!-- Search stuff REMOVED from here -->
+  <header class="memo-topbar">
     <div class="actions">
       <a class="memo-btn" href="Paralegal-1.htm#paralegal">← Back to Paralegal-1</a>
-      <!-- rest of header content -->
-    </div>
-  </header>
-  <div class="memo-layout">
+     <button id="focusModeButton" type="button" aria-pressed="false">
+  Focus mode
+</button>
 
+      <button class="memo-btn" type="button" id="printMemo">Print</button>
+</div>
+
+<div class="search-wrap">
+  <label for="memoSearch">Search this memo</label>
+  <input id="memoSearch" type="search" placeholder="Search facts, cases, sections, or terms…" autocomplete="off"style="width: 100%; padding: 8px; margin: 10px 0; font-size: 16px;">
+  <div class="search-status" id="searchStatus" aria-live="polite">Ready</div>
+</div>
+
+<section id="standards-2027-section">
+  <div id="standards-2027"></div>
+</section>
+
+</header>
+
+  <div class="memo-layout">
+    <aside class="memo-nav" aria-label="Memo sections">
+      <h2>Memo Navigator</h2>
+      <div class="memo-nav-links"><a href="#statement-of-facts" class="section-link">Statement of Facts</a><a href="#introduction" class="section-link">Introduction</a><a href="#issue" class="section-link">Issue</a><a href="#i-general-constitutionality-of-capital-punishment" class="section-link">I. General Constitutionality of Capital Punishment</a><a href="#ii-severe-mental-illness-reduces-culpability" class="section-link">II. Severe Mental Illness Reduces Culpability</a><a href="#iii-disputed-intent-matters" class="section-link">III. Disputed Intent Matters</a><a href="#iv-racial-disparity-and-arbitrariness" class="section-link">IV. Racial Disparity and Arbitrariness</a><a href="#v-method-of-execution" class="section-link">V. Method of Execution</a><a href="#vi-historical-and-moral-background-supports-restraint" class="section-link">VI. Historical and Moral Background Supports Restraint</a><a href="#vii-atkins-v-virginia-as-a-case-study-in-prosecutorial-misconduct" class="section-link">VII. Atkins v. Virginia as a Case Study in Prosecutorial Misconduct</a><a href="#viii-arbitrariness-in-lethal-injection-a-constitutional-contradiction" class="section-link">VIII. Arbitrariness in Lethal Injection: A Constitutional Contradiction</a><a href="#ix-justice-brennan-s-furman-principles-reinforce-the-constitutional-case-against-execution" class="section-link">IX. Justice Brennan’s Furman Principles Reinforce the Constitutional Case Against Execution</a><a href="#conclusion" class="section-link">Conclusion</a><a href="#authorities" class="section-link">TABLE OF AUTHORITIES</a></div>
+    </aside>
+    <article class="memo-document" id="memoDocument">
+      <header class="memo-cover">
+        <div class="memo-kicker">Interactive Legal Memorandum</div>
+        <h1 class="memo-title">Capital Punishment Constitutional Analysis</h1>
+        <div class="memo-meta">
+          <div class="meta-card"><strong>Author</strong>Patricio Lucero, Paralegal</div>
+          <div class="meta-card"><strong>Recipient</strong>Supervising Attorney</div>
+          <div class="meta-card"><strong>Date</strong>August 7, 2026</div>
+          <div class="meta-card"><strong>Subject</strong>Eighth Amendment Issues of Law Concerning Mental Illness and Capital Sentencing</div>
+        </div>
+      </header>
       <section class="memo-section" id="statement-of-facts" data-title="Statement of Facts">
 <div class="section-label">Statement of Facts</div>
 <p class="memo-paragraph ">The defendant is a young mother who, in the months preceding the offense, experienced severe postpartum depression and symptoms consistent with postpartum psychosis. During this period, she repeatedly told neighbors, friends, and acquaintances that she was schizophrenic, that she heard voices, and that she feared she was losing control of her thoughts. Witnesses reported that she openly sought help, expressed confusion about her mental state, and stated that she did not feel safe being alone with her children.</p>
