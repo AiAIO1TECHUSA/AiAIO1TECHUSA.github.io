@@ -218,19 +218,30 @@ function initializeFocusMode() {
 }
 
 function initializeDocumentSearch() {
-  // This targets the main search box at the top of your legal memo
   const searchBox = document.querySelector('input[placeholder*="Search this memo"]');
+  const searchButton = document.querySelector("#searchButton"); // Target the new button
+  const searchStatus = document.querySelector("#searchStatus");
+  
   if (!searchBox) return;
 
-  searchBox.addEventListener('input', function() {
-    const query = this.value.trim().toLowerCase();
+  // Define the actual search logic as a reusable function
+  function performSearch() {
+    const query = searchBox.value.trim().toLowerCase();
     
     // Remove previous highlights
     document.querySelectorAll('.search-highlight').forEach(el => {
       el.outerHTML = el.innerHTML;
     });
 
-    if (query.length < 3) return;
+    if (query.length === 0) {
+      if (searchStatus) searchStatus.textContent = "Ready";
+      return;
+    }
+
+    if (query.length < 3) {
+      if (searchStatus) searchStatus.textContent = "Type at least 3 characters...";
+      return;
+    }
 
     const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
       acceptNode: (node) => (node.parentElement === searchBox) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT
@@ -240,17 +251,39 @@ function initializeDocumentSearch() {
     let node;
     while (node = walker.nextNode()) nodes.push(node);
 
+    let matchCount = 0;
     nodes.forEach(textNode => {
       const text = textNode.nodeValue;
       if (text.toLowerCase().includes(query)) {
+        matchCount++;
         const span = document.createElement('span');
         const regex = new RegExp(`(${query})`, 'gi');
         span.innerHTML = text.replace(regex, '<mark class="search-highlight">$1</mark>');
         textNode.parentNode.replaceChild(span, textNode);
       }
     });
+
+    if (searchStatus) {
+      searchStatus.textContent = matchCount > 0 
+        ? `Found ${matchCount} matches` 
+        : "No matches found";
+    }
+  }
+
+  // Trigger search when typing (Live Search)
+  searchBox.addEventListener('input', performSearch);
+
+  // Trigger search when button is clicked (Action Search)
+  if (searchButton) {
+    searchButton.addEventListener('click', performSearch);
+  }
+
+  // Trigger search when "Enter" key is pressed
+  searchBox.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') performSearch();
   });
 }
+
 
 // --- START APP ---
 document.addEventListener("DOMContentLoaded", () => {
