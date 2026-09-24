@@ -80,56 +80,103 @@ function initializeFocusMode() {
 }
 
 function initializeDocumentSearch() {
-  const searchBox = document.querySelector("#memoSearch");
+  const searchBox = document.querySelector("#memoSearch") || document.querySelector('input[placeholder*="Search this memo"]');
   const searchButton = document.querySelector("#searchButton");
   const searchStatus = document.querySelector("#searchStatus");
-  const documentRoot = document.querySelector("#memoDocument");
-  if (!searchBox || !documentRoot) return;
+  
+  // Combined search areas from your "fix" version
+  const searchAreas = document.querySelectorAll('#memoDocument, #standards-2027');
+  
+  if (!searchBox || searchAreas.length === 0) return;
 
-  // legal-memo-interactive.htm previously installed an input listener that
-  // searched after every character. Stop that legacy listener in the capture
-  // phase; searches must occur only on Enter or the Search button.
+  // Prevents legacy listeners from triggering multiple searches on every keystroke
   document.addEventListener("input", event => {
     if (event.target === searchBox) event.stopImmediatePropagation();
   }, true);
 
   const setStatus = message => { if (searchStatus) searchStatus.textContent = message; };
-  const clearHighlights = () => documentRoot.querySelectorAll("mark.search-highlight").forEach(mark => mark.replaceWith(document.createTextNode(mark.textContent || "")));
+
+  const clearHighlights = () => {
+    searchAreas.forEach(area => {
+      area.querySelectorAll("mark.search-highlight").forEach(mark => {
+        mark.replaceWith(document.createTextNode(mark.textContent || ""));
+      });
+    });
+  };
 
   function runSearch() {
     const query = searchBox.value.trim();
     clearHighlights();
+
     if (!query) { setStatus("Ready"); return; }
-    if (query.length < 2) { setStatus("Enter at least 2 characters."); return; }
+    
+    // Using the 3-character minimum from your fix version
+    if (query.length < 3) { 
+      setStatus("Type 3+ characters..."); 
+      return; 
+    }
 
     const needle = query.toLocaleLowerCase();
-    const walker = document.createTreeWalker(documentRoot, NodeFilter.SHOW_TEXT, {
-      acceptNode(node) {
-        const parent = node.parentElement;
-        if (!parent || parent.closest("mark.search-highlight, script, style, noscript, textarea, input, select, option")) return NodeFilter.FILTER_REJECT;
-        return node.nodeValue.toLocaleLowerCase().includes(needle) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
-      }
+    let firstHighlight = null;
+    let matchCount = 0;
+
+    searchAreas.forEach(area => {
+      const walker = document.createTreeWalker(area, NodeFilter.SHOW_TEXT, {
+        acceptNode(node) {
+          const parent = node.parentElement;
+          // Ensure we don't search inside existing highlights or script/style tags
+          if (!parent || parent.closest("mark.search-highlight, script, style, noscript, textarea, input, select, option")) {
+            return NodeFilter.FILTER_REJECT;
+          }
+          return node.nodeValue.toLocaleLowerCase().includes(needle) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+        }
+      });
+
+      const nodes = [];
+      let node;
+      while ((node = walker.nextNode())) nodes.push(node);
+
+      nodes.forEach(textNode => {
+        const text = textNode.nodeValue || "";
+        const lower = text.toLocaleLowerCase();
+        const fragment = document.createDocumentFragment();
+        let cursor = 0;
+        let index;
+
+        while ((index = lower.indexOf(needle, cursor)) !== -1) {
+          fragment.appendChild(document.createTextNode(text.slice(cursor, index)));
+          
+          const mark = document.createElement("mark");
+          mark.className = "search-highlight";
+          mark.textContent = text.slice(index, index + query.length);
+          fragment.appendChild(mark);
+
+          if (!firstHighlight) firstHighlight = mark;
+          matchCount++;
+          cursor = index + query.length;
+        }
+        fragment.appendChild(document.createTextNode(text.slice(cursor)));
+        textNode.parentNode.replaceChild(fragment, textNode);
+      });
     });
-    const nodes = []; let node;
-    while ((node = walker.nextNode())) nodes.push(node);
-    let firstHighlight = null; let matchCount = 0;
-    nodes.forEach(textNode => {
-      const text = textNode.nodeValue || ""; const lower = text.toLocaleLowerCase(); const fragment = document.createDocumentFragment();
-      let cursor = 0; let index;
-      while ((index = lower.indexOf(needle, cursor)) !== -1) {
-        fragment.appendChild(document.createTextNode(text.slice(cursor, index)));
-        const mark = document.createElement("mark"); mark.className = "search-highlight"; mark.textContent = text.slice(index, index + query.length); fragment.appendChild(mark);
-        if (!firstHighlight) firstHighlight = mark; matchCount++; cursor = index + query.length;
-      }
-      fragment.appendChild(document.createTextNode(text.slice(cursor))); textNode.parentNode.replaceChild(fragment, textNode);
-    });
+
     setStatus(matchCount ? `${matchCount} match${matchCount === 1 ? "" : "es"} found.` : "No matches found.");
     if (firstHighlight) firstHighlight.scrollIntoView({ behavior: "smooth", block: "center" });
   }
 
+  // Listeners
   searchButton?.addEventListener("click", runSearch);
   searchBox.addEventListener("search", runSearch);
-  searchBox.addEventListener("keydown", event => { if (event.key === "Enter") { event.preventDefault(); runSearch(); } });
+  searchBox.addEventListener("keydown", event => { 
+    if (event.key === "Enter") { 
+      event.preventDefault(); 
+      runSearch(); 
+    } 
+  });
+  
+  // If you want "search as you type" (from your fix version), uncomment the line below:
+  // searchBox.addEventListener('input', runSearch);
 }
+
 
 document.addEventListener("DOMContentLoaded", () => { render(); initializeFocusMode(); initializeDocumentSearch(); });
