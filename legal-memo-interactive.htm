@@ -176,7 +176,7 @@ mark.memo-hit { background:#ffe08a; padding:0 .08em; border-radius:2px; }
       });
     }
 
-    function performSearch() {
+    function runSearch() {
       const query = searchBox.value.trim();
       clearHighlights();
 
@@ -186,23 +186,28 @@ mark.memo-hit { background:#ffe08a; padding:0 .08em; border-radius:2px; }
       }
 
       if (query.length < 2) {
-        setStatus('Type at least 2 characters.');
+        setStatus('Enter at least 2 characters.');
         return;
       }
 
-      const normalizedQuery = query.toLowerCase();
-      const walker = document.createTreeWalker(memoDocument, NodeFilter.SHOW_TEXT, {
-        acceptNode(node) {
-          const parent = node.parentElement;
-          if (!parent) return NodeFilter.FILTER_REJECT;
-          if (parent.closest('mark.search-highlight, #memoSearch, #searchButton, #searchStatus, .search-wrap')) {
-            return NodeFilter.FILTER_REJECT;
+      const needle = query.toLowerCase();
+
+      const walker = document.createTreeWalker(
+        memoDocument,
+        NodeFilter.SHOW_TEXT,
+        {
+          acceptNode(node) {
+            const parent = node.parentElement;
+            if (!parent) return NodeFilter.FILTER_REJECT;
+            if (parent.closest('mark.search-highlight, script, style, noscript, textarea, input, select, option')) {
+              return NodeFilter.FILTER_REJECT;
+            }
+            return node.nodeValue && node.nodeValue.toLowerCase().includes(needle)
+              ? NodeFilter.FILTER_ACCEPT
+              : NodeFilter.FILTER_REJECT;
           }
-          return node.nodeValue && node.nodeValue.toLowerCase().includes(normalizedQuery)
-            ? NodeFilter.FILTER_ACCEPT
-            : NodeFilter.FILTER_REJECT;
         }
-      });
+      );
 
       const matches = [];
       let node;
@@ -220,7 +225,7 @@ mark.memo-hit { background:#ffe08a; padding:0 .08em; border-radius:2px; }
         let cursor = 0;
         let index;
 
-        while ((index = lowerText.indexOf(normalizedQuery, cursor)) !== -1) {
+        while ((index = lowerText.indexOf(needle, cursor)) !== -1) {
           fragment.appendChild(document.createTextNode(text.slice(cursor, index)));
 
           const mark = document.createElement('mark');
@@ -244,15 +249,15 @@ mark.memo-hit { background:#ffe08a; padding:0 .08em; border-radius:2px; }
       }
     }
 
-    searchBox.addEventListener('input', performSearch);
-    searchBox.addEventListener('search', performSearch);
+    // IMPORTANT: no input listener here
+    searchButton?.addEventListener('click', runSearch);
+    searchBox.addEventListener('search', runSearch);
     searchBox.addEventListener('keydown', event => {
       if (event.key === 'Enter') {
         event.preventDefault();
-        performSearch();
+        runSearch();
       }
     });
-    searchButton?.addEventListener('click', performSearch);
 
     const focusButton = document.getElementById('focusModeButton');
     focusButton?.addEventListener('click', () => {
