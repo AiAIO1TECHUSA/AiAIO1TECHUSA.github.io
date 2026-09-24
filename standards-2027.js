@@ -255,8 +255,8 @@ function initializeDocumentSearch() {
     const query = searchBox.value.trim();
     clearHighlights();
 
-    if (query.length < 3) {
-      setStatus(query ? "Enter at least 3 characters." : "Ready");
+    if (query.length < 2) {
+      setStatus(query ? "Enter at least 2 characters." : "Ready");
       return;
     }
 
@@ -303,9 +303,17 @@ function initializeDocumentSearch() {
     if (firstHighlight) firstHighlight.scrollIntoView({ behavior: "smooth", block: "center" });
   }
 
-  searchBox.addEventListener("input", runSearch);
-  searchBox.addEventListener("search", runSearch);
+  // Do not search on every keystroke. Searching on each input event causes
+  // the page to scroll to partial values such as "ju" or "ju" before the
+  // user has finished typing "jury instructions" or "judgement".
   searchButton?.addEventListener("click", runSearch);
+  searchBox.addEventListener("search", runSearch);
+  searchBox.addEventListener("keydown", event => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      runSearch();
+    }
+  });
 }
 
 // --- START APP ---
