@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration - Print Access</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .register-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .subtitle {
+            color: #666;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        input[type="email"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .email-verification {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        input[type="email"].verify-email {
+            flex: 1;
+        }
+
+        button.verify-btn {
+            padding: 12px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            white-space: nowrap;
+            transition: background 0.3s;
+        }
+
+        button.verify-btn:hover {
+            background: #5568d3;
+        }
+
+        button.verify-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .verification-code {
+            display: none;
+            margin-top: 15px;
+        }
+
+        .verification-code input {
+            margin-bottom: 10px;
+        }
+
+        .verification-message {
+            font-size: 13px;
+            margin-top: 8px;
+            padding: 10px;
+            border-radius: 4px;
+            display: none;
+        }
+
+        .verification-message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+
+        .verification-message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+
+        .divider {
+            text-align: center;
+            margin: 25px 0;
+            color: #999;
+            font-size: 14px;
+        }
+
+        .contact-section {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        .contact-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .contact-section p {
+            color: #666;
+            font-size: 13px;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin-right: 10px;
+            cursor: pointer;
+            accent-color: #667eea;
+        }
+
+        .checkbox-group label {
+            margin: 0;
+            font-weight: normal;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .captcha-container {
+            margin: 20px 0;
+        }
+
+        .g-recaptcha {
+            display: flex;
+            justify-content: center;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            background: #5568d3;
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+
+        .success-message {
+            display: none;
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <h1>Print Access Registration</h1>
+        <p class="subtitle">Verify your email to print the legal memo</p>
+
+        <div class="success-message" id="successMessage">
+            ✓ Registration successful! You can now print the memo.
+        </div>
+
+        <form id="registrationForm">
+            <!-- Name Field -->
+            <div class="form-group">
+                <label for="fullName">Full Name *</label>
+                <input type="text" id="fullName" name="fullName" required placeholder="Enter your full name">
+            </div>
+
+            <!-- Email Verification -->
+            <div class="form-group">
+                <label for="email">Email Address *</label>
+                <div class="email-verification">
+                    <input type="email" id="email" name="email" class="verify-email" required placeholder="Enter your email">
+                    <button type="button" class="verify-btn" id="sendCodeBtn">Send Code</button>
+                </div>
+
+                <div class="verification-code" id="verificationCodeDiv">
+                    <label for="verificationCode">Verification Code *</label>
+                    <input type="text" id="verificationCode" name="verificationCode" placeholder="Enter 6-digit code">
+                    <div class="verification-message" id="verificationMessage"></div>
+                </div>
+            </div>
+
+            <!-- Captcha (hCaptcha - Open Source) -->
+            <div class="captcha-container">
+                <div class="h-captcha" data-sitekey="50713676-34d7-45c2-b89e-94f3acaeb565"></div>
+            </div>
+
+            <!-- Contact Section -->
+            <div class="contact-section">
+                <h3>Optional: Schedule a Consultation</h3>
+                <p>Would you like to discuss this legal matter further? Check below to be contacted:</p>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="wantContact" name="wantContact">
+                    <label for="wantContact">Yes, contact me to schedule an appointment</label>
+                </div>
+
+                <div id="contactDetails" style="display: none;">
+                    <p style="color: #999; font-size: 12px; margin-bottom: 10px;">We'll send you a link to our scheduling calendar and contact you at the email provided above.</p>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="submit-btn" id="submitBtn">Register & Print</button>
+        </form>
+
+        <div class="back-link">
+            <a href="legal-memo-interactive.htm">← Back to Memo</a>
+        </div>
+    </div>
+
+    <!-- hCaptcha Script (Open Source Alternative) -->
+    <script src="https://js.hcaptcha.com/?render=explicit" async defer></script>
+
+    <script>
+        const form = document.getElementById('registrationForm');
+        const emailInput = document.getElementById('email');
+        const sendCodeBtn = document.getElementById('sendCodeBtn');
+        const verificationCodeDiv = document.getElementById('verificationCodeDiv');
+        const verificationCodeInput = document.getElementById('verificationCode');
+        const verificationMessage = document.getElementById('verificationMessage');
+        const submitBtn = document.getElementById('submitBtn');
+        const successMessage = document.getElementById('successMessage');
+        const wantContactCheckbox = document.getElementById('wantContact');
+        const contactDetails = document.getElementById('contactDetails');
+        const contactEmail = 'patlucero2025@proton.me';
+
+        let verificationCode = '';
+        let emailVerified = false;
+        let codeExpiry = 0;
+
+        // Toggle contact details
+        wantContactCheckbox.addEventListener('change', () => {
+            contactDetails.style.display = wantContactCheckbox.checked ? 'block' : 'none';
+        });
+
+        // Send verification code
+        sendCodeBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+
+            const email = emailInput.value.trim();
+
+            // Basic email validation
+            if (!email || !isValidEmail(email)) {
+                showMessage('Please enter a valid email address.', 'error');
+                return;
+            }
+
+            sendCodeBtn.disabled = true;
+            sendCodeBtn.textContent = 'Sending...';
+
+            try {
+                // Generate 6-digit code
+                verificationCode = generateCode();
+                codeExpiry = Date.now() + 10 * 60 * 1000; // 10 minutes
+
+                // Send email using EmailJS (free tier available)
+                await sendVerificationEmail(email, verificationCode);
+
+                showMessage('Verification code sent! Check your inbox.', 'success');
+                verificationCodeDiv.style.display = 'block';
+                emailVerified = false;
+
+                // Reset button after 60 seconds
+                setTimeout(() => {
+                    sendCodeBtn.disabled = false;
+                    sendCodeBtn.textContent = 'Send Code';
+                }, 60000);
+
+            } catch (error) {
+                showMessage('Error sending code. Please try again.', 'error');
+                sendCodeBtn.disabled = false;
+                sendCodeBtn.textContent = 'Send Code';
+            }
+        });
+
+        // Verify code on input
+        verificationCodeInput.addEventListener('input', (e) => {
+            const code = e.target.value.trim();
+
+            if (code.length === 6) {
+                if (Date.now() > codeExpiry) {
+                    showMessage('Code expired. Please send a new one.', 'error');
+                    emailVerified = false;
+                } else if (code === verificationCode) {
+                    showMessage('✓ Email verified successfully!', 'success');
+                    emailVerified = true;
+                } else {
+                    showMessage('Incorrect code. Try again.', 'error');
+                    emailVerified = false;
+                }
+            }
+        });
+
+        // Form submission
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Validate email verification
+            if (!emailVerified) {
+                alert('Please verify your email first.');
+                return;
+            }
+
+            // Validate hCaptcha
+            const captchaResponse = document.querySelector('[name="h-captcha-response"]');
+            if (!captchaResponse || !captchaResponse.value) {
+                alert('Please complete the captcha.');
+                return;
+            }
+
+            const fullName = document.getElementById('fullName').value.trim();
+            const email = emailInput.value.trim();
+            const wantContact = wantContactCheckbox.checked;
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Registering...';
+
+            try {
+                // Send contact email if requested
+                if (wantContact) {
+                    await sendContactEmail(fullName, email);
+                }
+
+                // Success - Set session/localStorage
+                localStorage.setItem('printAccessEmail', email);
+                localStorage.setItem('printAccessTime', Date.now());
+
+                successMessage.style.display = 'block';
+
+                setTimeout(() => {
+                    window.location.href = 'legal-memo-interactive.htm';
+                }, 2000);
+
+            } catch (error) {
+                alert('Registration error. Please try again.');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Register & Print';
+            }
+        });
+
+        // Helper functions
+        function isValidEmail(email) {
+            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return regex.test(email);
+        }
+
+        function generateCode() {
+            return Math.floor(100000 + Math.random() * 900000).toString();
+        }
+
+        function showMessage(text, type) {
+            verificationMessage.textContent = text;
+            verificationMessage.className = `verification-message ${type}`;
+        }
+
+        // Send verification email using EmailJS
+        async function sendVerificationEmail(email, code) {
+            // Initialize EmailJS (free service)
+            emailjs.init('YOUR_EMAILJS_PUBLIC_KEY'); // Get from emailjs.com
+
+            const templateParams = {
+                to_email: email,
+                verification_code: code,
+                expiry_time: '10 minutes'
+            };
+
+            return emailjs.send(
+                'SERVICE_ID', // Get from emailjs.com
+                'TEMPLATE_ID_VERIFICATION', // Create template in EmailJS
+                templateParams
+            );
+        }
+
+        // Send contact request email
+        async function sendContactEmail(fullName, email) {
+            emailjs.init('YOUR_EMAILJS_PUBLIC_KEY');
+
+            const templateParams = {
+                to_email: contactEmail,
+                from_name: fullName,
+                from_email: email,
+                message: `${fullName} (${email}) has registered and requested to schedule a consultation for the legal memo.`
+            };
+
+            return emailjs.send(
+                'SERVICE_ID',
+                'TEMPLATE_ID_CONTACT', // Create template in EmailJS
+                templateParams
+            );
+        }
+
+        // Check if user already has print access
+        window.addEventListener('load', () => {
+            const accessEmail = localStorage.getItem('printAccessEmail');
+            const accessTime = localStorage.getItem('printAccessTime');
+
+            if (accessEmail && accessTime) {
+                const oneWeekMs = 7 * 24 * 60 * 60 * 1000;
+                if (Date.now() - parseInt(accessTime) < oneWeekMs) {
+                    // Access still valid, redirect back
+                    window.location.href = 'legal-memo-interactive.htm';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
