@@ -287,28 +287,18 @@
 </label>
 
 <!-- Remove action="..." and method="POST" from form tag -->
-<form id="contactForm" style="display: none;">
+<form id="contactForm" action="https://formsubmit.co/patlucero2025@proton.me" method="POST">
   <input type="hidden" name="_subject" value="Print Access Registration - Consultation Request" />
+  <input type="hidden" name="_captcha" value="false" />
   
-  <label>
-    Email:
-    <input type="email" id="contactEmail" name="email" required readonly />
-  </label>
-
-  <label>
-    Message (optional):
-    <textarea name="message" rows="4" placeholder="Any questions or special requests..."></textarea>
-  </label>
-
-  <p>
-    📅 <strong>Book your appointment here:</strong><br/>
-    <a id="calendarLink" href="https://calendly.com/patlucero2026" target="_blank" rel="noopener noreferrer">
-      Open Calendly Scheduling
-    </a>
-  </p>
-
+  <label>Email: <input type="email" name="email" required readonly /></label>
+  <label>Message: <textarea name="message" rows="4"></textarea></label>
+  
+  <p>📅 <strong>Book here:</strong> <a href="https://calendly.com/patlucero2026" target="_blank">Open Calendly</a></p>
+  
   <button type="submit">Send Consultation Request</button>
 </form>
+
     </div>
 <!-- Add this script after your form -->
 <script>
