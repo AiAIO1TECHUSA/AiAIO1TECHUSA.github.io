@@ -57,23 +57,32 @@ class RegistrationManager {
     // ============================================
 
     initContactToggle() {
-        const checkbox = document.getElementById('wantContact');
-        const form = document.getElementById('contactForm');
-        const emailField = document.getElementById('contactEmail');
+    const checkbox = document.getElementById('wantContact');
+    const form = document.getElementById('contactForm');
+    const emailField = document.getElementById('contactEmail');
+    const calendarLink = document.getElementById('calendarLink');
 
-        if (checkbox && form) {
-            checkbox.addEventListener('change', () => {
-                form.style.display = checkbox.checked ? 'block' : 'none';
-            });
+    if (checkbox && form) {
+        checkbox.addEventListener('change', () => {
+            form.style.display = checkbox.checked ? 'block' : 'none';
+        });
 
-            // Auto-populate email from registration
-            const storedEmail = this.getStoredEmail();
-            if (storedEmail && emailField) {
-                emailField.value = storedEmail;
-                emailField.readOnly = true;
-            }
+        // Auto-populate email from registration
+        const storedEmail = this.getStoredEmail();
+        if (storedEmail && emailField) {
+            emailField.value = storedEmail;
+            emailField.readOnly = true;
+        }
+
+        // Set calendar link to your Calendly profile
+        if (calendarLink) {
+            calendarLink.href = 'https://calendly.com/patlucero2026';
+            calendarLink.target = '_blank';
+            calendarLink.rel = 'noopener noreferrer';
         }
     }
+}
+
 
     // ============================================
     // PRINT & REDIRECT
