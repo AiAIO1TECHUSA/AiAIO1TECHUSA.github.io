@@ -276,19 +276,40 @@
             </div>
 
             <!-- Contact Section -->
-            <div class="contact-section">
-                <h3>Optional: Schedule a Consultation</h3>
-                <p>Would you like to discuss this legal matter further? Check below to be contacted:</p>
+           <div id="contactSection" style="display: none;">
+    <h3>Schedule a Consultation</h3>
+    
+    <label>
+        <input type="checkbox" id="wantContact" />
+        Yes, I'd like to schedule a consultation appointment
+    </label>
 
-                <div class="checkbox-group">
-                    <input type="checkbox" id="wantContact" name="wantContact">
-                    <label for="wantContact">Yes, contact me to schedule an appointment</label>
-                </div>
+    <form id="contactForm" style="display: none;" action="https://formsubmit.co/patlucero2025@proton.me" method="POST">
+        
+        <input type="hidden" name="_subject" value="Print Access Registration - Consultation Request" />
+        <input type="hidden" name="_captcha" value="false" />
+        
+        <label>
+            Email:
+            <input type="email" id="contactEmail" name="email" required readonly />
+        </label>
 
-                <div id="contactDetails" style="display: none;">
-                    <p style="color: #999; font-size: 12px; margin-bottom: 10px;">We'll send you a link to our scheduling calendar and contact you at the email provided above.</p>
-                </div>
-            </div>
+        <label>
+            Message (optional):
+            <textarea name="message" rows="4" placeholder="Any questions or special requests..."></textarea>
+        </label>
+
+        <p>
+            📅 <strong>Book your appointment here:</strong><br/>
+            <a id="calendarLink" href="https://calendly.com/patlucero2026" target="_blank" rel="noopener noreferrer">
+                Open Calendly Scheduling
+            </a>
+        </p>
+
+        <button type="submit">Send Consultation Request</button>
+    </form>
+</div>
+
 
             <!-- Submit Button -->
             <button type="submit" class="submit-btn" id="submitBtn">Register & Print</button>
