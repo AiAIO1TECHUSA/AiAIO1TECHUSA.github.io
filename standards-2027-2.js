@@ -5,7 +5,7 @@ class RegistrationManager {
     constructor() {
         this.storageKey = 'registerStatus_legal_memo';
         this.expirationDays = 7;
-        this.calendarUrl = 'https://YOUR_CALENDAR_URL_HERE'; // TBD
+        this.calendarUrl = 'https://calendly.com/patlucero2026';
     }
 
     // ============================================
