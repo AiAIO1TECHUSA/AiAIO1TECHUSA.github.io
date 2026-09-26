@@ -68,11 +68,11 @@ class RegistrationManager {
         });
 
         // Auto-populate email from registration
-        const storedEmail = this.getStoredEmail();
-        if (storedEmail && emailField) {
-            emailField.value = storedEmail;
-            emailField.readOnly = true;
-        }
+const storedEmail = this.getStoredEmail();
+if (storedEmail && emailField) {
+    emailField.value = storedEmail;
+    // DON'T set readOnly — let it be editable if needed
+}
 
         // Set calendar link to your Calendly profile
         if (calendarLink) {
