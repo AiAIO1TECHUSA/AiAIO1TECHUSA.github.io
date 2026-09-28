@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>hCaptcha Test</title>
+    <title>hCaptcha Verification</title>
     <style>
         * {
             margin: 0;
@@ -57,23 +57,30 @@
         }
 
         input[type="email"],
-        input[type="text"] {
+        input[type="text"],
+        textarea {
             width: 100%;
             padding: 12px 16px;
             border: 1px solid #ddd;
             border-radius: 6px;
             font-size: 16px;
+            font-family: inherit;
             transition: border-color 0.3s;
         }
 
         input[type="email"]:focus,
-        input[type="text"]:focus {
+        input[type="text"]:focus,
+        textarea:focus {
             outline: none;
             border-color: #667eea;
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
-        /* hCaptcha container */
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
         .h-captcha {
             display: flex;
             justify-content: center;
@@ -147,10 +154,10 @@
 </head>
 <body>
     <div class="container">
-        <h1>Verify Your Identity</h1>
-        <p class="subtitle">Complete the form below to continue</p>
+        <h1>Contact & Verification</h1>
+        <p class="subtitle">Complete the form below to reach out</p>
 
-        <form id="captchaForm">
+        <form id="contactForm">
             <div class="form-group">
                 <label for="name">Full Name</label>
                 <input 
@@ -174,6 +181,16 @@
             </div>
 
             <div class="form-group">
+                <label for="message">Message</label>
+                <textarea 
+                    id="message" 
+                    name="message" 
+                    placeholder="Your message here..." 
+                    required
+                ></textarea>
+            </div>
+
+            <div class="form-group">
                 <label>Prove you're human</label>
                 <div class="h-captcha" data-sitekey="c6161412-56f8-4014-96f4-058eba2a53b0"></div>
             </div>
@@ -194,25 +211,21 @@
 
     <!-- Form Handler -->
     <script>
-        class CaptchaFormHandler {
+        class ContactFormHandler {
             constructor() {
-                this.form = document.getElementById('captchaForm');
+                this.form = document.getElementById('contactForm');
                 this.submitBtn = document.getElementById('submitBtn');
                 this.messageEl = document.getElementById('message');
                 this.debugOutput = document.getElementById('debugOutput');
                 this.hcaptchaSiteKey = 'c6161412-56f8-4014-96f4-058eba2a53b0';
+                this.formSubmitEndpoint = 'https://formsubmit.co/patlucero2025@proton.me';
                 
                 this.init();
             }
 
             init() {
-                this.log('CaptchaFormHandler initialized');
+                this.log('ContactFormHandler initialized');
                 this.form.addEventListener('submit', (e) => this.handleSubmit(e));
-                
-                // Wait for hCaptcha to load
-                window.addEventListener('load', () => {
-                    this.log('hCaptcha library loaded');
-                });
             }
 
             log(message) {
@@ -220,7 +233,6 @@
                 const logEntry = `[${timestamp}] ${message}`;
                 console.log(logEntry);
                 
-                // Add to debug output
                 const p = document.createElement('p');
                 p.textContent = logEntry;
                 this.debugOutput.appendChild(p);
@@ -231,23 +243,18 @@
                 e.preventDefault();
                 this.log('Form submission started');
                 
-                // Get form values
                 const name = document.getElementById('name').value.trim();
                 const email = document.getElementById('email').value.trim();
+                const message = document.getElementById('message').value.trim();
 
-                // Validate inputs
-                if (!name) {
-                    this.showError('Please enter your name');
-                    return;
-                }
-                if (!email) {
-                    this.showError('Please enter your email');
+                if (!name || !email || !message) {
+                    this.showError('Please fill in all fields');
+                    this.log('ERROR: Missing required fields');
                     return;
                 }
 
                 this.log(`Name: ${name}, Email: ${email}`);
 
-                // Get hCaptcha token
                 const token = hcaptcha.getResponse();
                 
                 if (!token) {
@@ -258,29 +265,27 @@
 
                 this.log(`hCaptcha token received: ${token.substring(0, 20)}...`);
 
-                // Disable button during submission
                 this.submitBtn.disabled = true;
-                this.submitBtn.textContent = 'Verifying...';
+                this.submitBtn.textContent = 'Sending...';
 
                 try {
-                    // Send to your backend (or EmailJS)
-                    const response = await fetch('https://formsubmit.co/patlucero2025@proton.me', {
+                    // Create FormData for FormSubmit.co
+                    const formData = new FormData();
+                    formData.append('name', name);
+                    formData.append('email', email);
+                    formData.append('message', message);
+                    formData.append('h-captcha-response', token);
+                    formData.append('_captcha', 'false'); // Disable FormSubmit's built-in captcha
+
+                    const response = await fetch(this.formSubmitEndpoint, {
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            name: name,
-                            email: email,
-                            hcaptcha_token: token,
-                            timestamp: new Date().toISOString(),
-                        })
+                        body: formData
                     });
 
                     this.log(`Server response: ${response.status} ${response.statusText}`);
 
                     if (response.ok) {
-                        this.showSuccess('Verification successful! Check your email.');
+                        this.showSuccess('Message sent successfully! Check your email.');
                         this.log('Form submitted successfully');
                         this.form.reset();
                         hcaptcha.reset();
@@ -308,11 +313,9 @@
             }
         }
 
-        // Initialize when DOM is ready
         document.addEventListener('DOMContentLoaded', () => {
-            new CaptchaFormHandler();
+            new ContactFormHandler();
         });
     </script>
 </body>
-  </html>
-  
+</html>
