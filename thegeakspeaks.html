@@ -186,7 +186,254 @@ img {
     gap: 12px;
 	
 	}
-  </style><script src="../cdn.iubenda.com/cs/iubenda_cs.js" async=""></script><link rel="modulepreload" href="aes.js"></head><!-- AlterVista Custom CSS --><!-- End AlterVista Custom CSS -->
+  </style>
+	<style>
+  /* 🎨 Video Agent Styles */
+  #videoAgent {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    color: #fff;
+    padding: 40px 20px;
+    margin: 40px 0;
+    border-radius: 12px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  .agent-header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .agent-header h2 {
+    font-size: 28px;
+    margin: 0 0 10px;
+    color: #00d4ff;
+  }
+
+  .agent-header p {
+    font-size: 14px;
+    color: #aaa;
+    margin: 0;
+  }
+
+  /* Upload Zone */
+  .upload-zone {
+    background: rgba(0, 212, 255, 0.1);
+    border: 2px dashed #00d4ff;
+    border-radius: 8px;
+    padding: 30px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 20px;
+  }
+
+  .upload-zone:hover {
+    background: rgba(0, 212, 255, 0.2);
+    border-color: #00ffff;
+  }
+
+  .upload-zone.drag-over {
+    background: rgba(0, 212, 255, 0.3);
+    transform: scale(1.02);
+  }
+
+  .upload-zone p {
+    margin: 0;
+    font-size: 16px;
+    color: #00d4ff;
+  }
+
+  /* Stats */
+  .video-stats {
+    background: rgba(0, 212, 255, 0.1);
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 13px;
+    text-align: center;
+  }
+
+  .video-stats p {
+    margin: 5px 0;
+    color: #00ffff;
+  }
+
+  /* Slideshow */
+  .slideshow-container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .video-viewer {
+    margin-bottom: 20px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #000;
+  }
+
+  video {
+    width: 100%;
+    display: block;
+  }
+
+  .video-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0, 212, 255, 0.1);
+    padding: 10px 15px;
+    font-size: 13px;
+    color: #00ffff;
+  }
+
+  #videoTitle {
+    font-weight: 600;
+  }
+
+  /* Controls */
+  .slideshow-controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    background: #00d4ff;
+    color: #1a1a2e;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+  }
+
+  .btn:hover {
+    background: #00ffff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
+  }
+
+  .btn:active {
+    transform: translateY(0);
+  }
+
+  .btn-prev, .btn-next {
+    min-width: 120px;
+  }
+
+  .btn-play-pause {
+    min-width: 140px;
+  }
+
+  /* Gallery */
+  .video-gallery {
+    margin: 30px 0;
+  }
+
+  .video-gallery p {
+    font-size: 13px;
+    color: #aaa;
+    margin-bottom: 10px;
+  }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px;
+  }
+
+  .gallery-item {
+    background: rgba(0, 212, 255, 0.1);
+    border: 2px solid transparent;
+    border-radius: 6px;
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 12px;
+    color: #aaa;
+    transition: all 0.3s ease;
+  }
+
+  .gallery-item:hover {
+    border-color: #00d4ff;
+    background: rgba(0, 212, 255, 0.2);
+  }
+
+  .gallery-item.active {
+    border-color: #00ffff;
+    background: rgba(0, 212, 255, 0.3);
+    color: #00ffff;
+  }
+
+  /* Agent Status */
+  .agent-status {
+    text-align: center;
+    margin-top: 20px;
+    padding: 15px;
+    background: rgba(0, 212, 255, 0.05);
+    border-radius: 8px;
+    font-size: 13px;
+  }
+
+  #agentMessage {
+    margin: 0;
+    color: #00d4ff;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    #videoAgent {
+      padding: 20px 15px;
+    }
+
+    .agent-header h2 {
+      font-size: 22px;
+    }
+
+    .slideshow-controls {
+      gap: 8px;
+    }
+
+    .btn {
+      padding: 10px 18px;
+      font-size: 13px;
+    }
+
+    .gallery-grid {
+      grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    }
+
+    .video-info {
+      flex-direction: column;
+      gap: 8px;
+      text-align: center;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .agent-header h2 {
+      font-size: 18px;
+    }
+
+    .slideshow-controls {
+      flex-direction: column;
+    }
+
+    .btn {
+      width: 100%;
+    }
+
+    .gallery-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+	</style> 
+	 
+	 <script src="../cdn.iubenda.com/cs/iubenda_cs.js" async=""></script><link rel="modulepreload" href="aes.js"></head><!-- AlterVista Custom CSS --><!-- End AlterVista Custom CSS -->
     	
 		<body><header class="entry-header sound-blast">
   <h1 class="entry-title">🔊 #ConcertLoLo #PlayMeSUM</h1>
@@ -400,4 +647,190 @@ Bellagio Fountains Your Amazing! Alexandara Daddario Ya I Know!</font></p>
 </div>
 
 
-</font></article></body></html>
+</font>
+</article>
+<!-- 🤖 AI Video Agent Slideshow Module --><section id="videoAgent" class="video-agent-container">
+  <div class="agent-header">
+    <h2>🤖 Video AI Agent</h2>
+    <p>Upload your compressed MP4 videos • I'll create an interactive slideshow</p>
+  </div>
+
+  <div class="agent-controls">
+    <div class="upload-zone" id="uploadZone">
+      <p>📤 Drag videos here or click to select</p>
+      <input type="file" id="videoInput" multiple accept="video/mp4" style="display:none;">
+    </div>
+
+    <div class="video-stats" id="videoStats" style="display:none;">
+      <p id="videoCount">Videos loaded: 0</p>
+      <p id="totalSize">Total size: 0 MB</p>
+    </div>
+  </div>
+
+  <div class="slideshow-container" id="slideshowContainer" style="display:none;">
+    <div class="video-viewer">
+      <video id="mainVideo" controls width="100%"></video>
+      <div class="video-info">
+        <span id="videoTitle">Video 1</span>
+        <span id="videoCounter">1 / 1</span>
+      </div>
+    </div>
+
+    <div class="slideshow-controls">
+      <button class="btn btn-prev" onclick="agentPrevVideo()">← Previous</button>
+      <button class="btn btn-play-pause" id="playPauseBtn" onclick="agentTogglePlay()">⏸ Pause</button>
+      <button class="btn btn-next" onclick="agentNextVideo()">Next →</button>
+    </div>
+
+    <div class="video-gallery">
+      <p>Quick Select:</p>
+      <div class="gallery-grid" id="galleryGrid"></div>
+    </div>
+
+    <div class="agent-status">
+      <p id="agentMessage">🤖 Ready to play videos</p>
+    </div>
+  </div>
+</section> 
+
+<script>
+  // 🤖 AI Video Agent JavaScript Module
+  const videoAgent = {
+    videos: [],
+    currentIndex: 0,
+    isPlaying: false,
+
+    init() {
+      const uploadZone = document.getElementById('uploadZone');
+      const videoInput = document.getElementById('videoInput');
+
+      uploadZone.addEventListener('click', () => videoInput.click());
+      uploadZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadZone.classList.add('drag-over');
+      });
+      uploadZone.addEventListener('dragleave', () => {
+        uploadZone.classList.remove('drag-over');
+      });
+      uploadZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadZone.classList.remove('drag-over');
+        this.handleFiles(e.dataTransfer.files);
+      });
+
+      videoInput.addEventListener('change', (e) => {
+        this.handleFiles(e.target.files);
+      });
+    },
+
+    handleFiles(files) {
+      this.videos = [];
+      let totalSize = 0;
+
+      Array.from(files).forEach((file) => {
+        if (file.type.startsWith('video/')) {
+          const url = URL.createObjectURL(file);
+          this.videos.push({
+            name: file.name,
+            url: url,
+            size: (file.size / (1024 * 1024)).toFixed(2),
+          });
+          totalSize += file.size / (1024 * 1024);
+        }
+      });
+
+      if (this.videos.length > 0) {
+        this.showSlideshow();
+        this.updateStats(totalSize);
+        this.agentSpeak(`🤖 Loaded ${this.videos.length} video(s). Ready to play!`);
+      }
+    },
+
+    showSlideshow() {
+      document.getElementById('uploadZone').style.display = 'none';
+      document.getElementById('videoStats').style.display = 'block';
+      document.getElementById('slideshowContainer').style.display = 'block';
+      this.loadVideo(0);
+      this.buildGallery();
+    },
+
+    loadVideo(index) {
+      const video = document.getElementById('mainVideo');
+      const data = this.videos[index];
+      video.src = data.url;
+      video.load();
+      document.getElementById('videoTitle').textContent = data.name;
+      document.getElementById('videoCounter').textContent = `${index + 1} / ${this.videos.length}`;
+      this.isPlaying = true;
+      document.getElementById('playPauseBtn').textContent = '⏸ Pause';
+      this.updateGallery(index);
+    },
+
+    updateStats(totalSize) {
+      document.getElementById('videoCount').textContent = `Videos loaded: ${this.videos.length}`;
+      document.getElementById('totalSize').textContent = `Total size: ${totalSize.toFixed(2)} MB`;
+    },
+
+    buildGallery() {
+      const grid = document.getElementById('galleryGrid');
+      grid.innerHTML = '';
+      this.videos.forEach((video, idx) => {
+        const item = document.createElement('div');
+        item.className = 'gallery-item';
+        item.textContent = `${idx + 1}`;
+        item.onclick = () => {
+          this.currentIndex = idx;
+          this.loadVideo(idx);
+        };
+        grid.appendChild(item);
+      });
+    },
+
+    updateGallery(index) {
+      document.querySelectorAll('.gallery-item').forEach((item, idx) => {
+        idx === index ? item.classList.add('active') : item.classList.remove('active');
+      });
+    },
+
+    agentSpeak(message) {
+      document.getElementById('agentMessage').textContent = message;
+    },
+  };
+
+  // Global control functions
+  function agentNextVideo() {
+    videoAgent.currentIndex = (videoAgent.currentIndex + 1) % videoAgent.videos.length;
+    videoAgent.loadVideo(videoAgent.currentIndex);
+    videoAgent.agentSpeak(`🤖 Playing video ${videoAgent.currentIndex + 1}`);
+  }
+
+  function agentPrevVideo() {
+    videoAgent.currentIndex = (videoAgent.currentIndex - 1 + videoAgent.videos.length) % videoAgent.videos.length;
+    videoAgent.loadVideo(videoAgent.currentIndex);
+    videoAgent.agentSpeak(`🤖 Playing video ${videoAgent.currentIndex + 1}`);
+  }
+
+  function agentTogglePlay() {
+    const video = document.getElementById('mainVideo');
+    const btn = document.getElementById('playPauseBtn');
+    if (videoAgent.isPlaying) {
+      video.pause();
+      btn.textContent = '▶ Play';
+      videoAgent.isPlaying = false;
+      videoAgent.agentSpeak('⏸ Video paused');
+    } else {
+      video.play();
+      btn.textContent = '⏸ Pause';
+      videoAgent.isPlaying = true;
+      videoAgent.agentSpeak('▶ Video playing');
+    }
+  }
+
+  // Initialize on page load
+  document.addEventListener('DOMContentLoaded', () => {
+    videoAgent.init();
+  });
+</script>
+	
+</body>
+</html>
