@@ -1,0 +1,287 @@
+/* ===================================
+   SLIDESHOW SECTION STYLES
+   =================================== */
+
+/* Main Slideshow Container */
+.slideshow-container {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 50px 30px;
+  border-radius: 15px;
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.25);
+  max-width: 900px;
+  margin: 60px auto;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.slideshow-container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 55px rgba(0, 0, 0, 0.35);
+}
+
+/* Slideshow Title */
+.slideshow-title {
+  font-size: 2.2em;
+  font-weight: 700;
+  color: white;
+  text-align: center;
+  margin-bottom: 30px;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+  letter-spacing: 0.5px;
+}
+
+/* Video Display Area */
+.video-display {
+  background: #1a1a1a;
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 30px 0;
+  aspect-ratio: 16 / 9;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 2px 10px rgba(0, 0, 0, 0.5);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.video-display video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Video Counter/Status */
+.video-counter {
+  text-align: center;
+  color: white;
+  font-size: 1.1em;
+  margin: 20px 0;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+/* Slideshow Controls */
+.slideshow-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin: 30px 0;
+  flex-wrap: wrap;
+}
+
+.control-btn {
+  background: white;
+  color: #667eea;
+  border: none;
+  padding: 13px 28px;
+  border-radius: 25px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  font-size: 1em;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+}
+
+.control-btn:hover {
+  background: #667eea;
+  color: white;
+  transform: scale(1.08);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+}
+
+.control-btn:active {
+  transform: scale(0.95);
+}
+
+.control-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Upload Section */
+.upload-section {
+  background: rgba(255, 255, 255, 0.08);
+  border: 2.5px dashed rgba(255, 255, 255, 0.6);
+  border-radius: 12px;
+  padding: 40px 25px;
+  text-align: center;
+  margin: 35px 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.upload-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+  transform: translateX(-100%);
+  transition: transform 0.5s ease;
+}
+
+.upload-section:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: #ffd700;
+  box-shadow: 0 8px 25px rgba(255, 215, 0, 0.2);
+}
+
+.upload-section:hover::before {
+  transform: translateX(100%);
+}
+
+.upload-section p {
+  color: white;
+  font-size: 1.1em;
+  margin: 12px 0;
+  font-weight: 500;
+  position: relative;
+  z-index: 1;
+}
+
+.upload-section input[type="file"] {
+  display: none;
+}
+
+/* Status Badge */
+.status-badge {
+  display: inline-block;
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-weight: 700;
+  text-align: center;
+  margin: 15px 0;
+  font-size: 0.95em;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.status-badge.active {
+  background: #4ade80;
+  color: white;
+}
+
+.status-badge.empty {
+  background: #f97316;
+  color: white;
+}
+
+.status-badge.processing {
+  background: #3b82f6;
+  color: white;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  }
+  50% {
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.35);
+  }
+}
+
+/* Quick Select Section */
+.quick-select {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 25px;
+  border-radius: 12px;
+  margin-top: 30px;
+  border-left: 4px solid #ffd700;
+  transition: all 0.3s ease;
+}
+
+.quick-select:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-left-color: #ffed4e;
+}
+
+.quick-select p {
+  color: white;
+  margin-bottom: 15px;
+  font-weight: 600;
+  font-size: 1.05em;
+  letter-spacing: 0.3px;
+}
+
+.quick-select button {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  padding: 10px 18px;
+  border-radius: 20px;
+  margin: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  font-size: 0.95em;
+}
+
+.quick-select button:hover {
+  background: rgba(255, 255, 255, 0.35);
+  border-color: rgba(255, 255, 255, 0.8);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255, 255, 255, 0.15);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .slideshow-container {
+    padding: 35px 20px;
+    margin: 40px 15px;
+  }
+
+  .slideshow-title {
+    font-size: 1.8em;
+  }
+
+  .slideshow-controls {
+    gap: 10px;
+  }
+
+  .control-btn {
+    padding: 11px 22px;
+    font-size: 0.9em;
+  }
+
+  .upload-section {
+    padding: 30px 15px;
+  }
+
+  .video-display {
+    margin: 20px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .slideshow-container {
+    padding: 25px 15px;
+    border-radius: 10px;
+  }
+
+  .slideshow-title {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+  }
+
+  .control-btn {
+    padding: 10px 18px;
+    font-size: 0.85em;
+    width: 100%;
+  }
+
+  .slideshow-controls {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .quick-select button {
+    width: 100%;
+  }
+}
