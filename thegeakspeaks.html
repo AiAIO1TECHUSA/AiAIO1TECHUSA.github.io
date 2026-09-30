@@ -406,49 +406,58 @@ Bellagio Fountains Your Amazing! Alexandara Daddario Ya I Know!</font></p>
 
 </font>
 </article>
-<!-- 🤖 AI Video Agent Slideshow Module --><section id="videoAgent" class="video-agent-container">
-  <div class="agent-header">
-    <h2>🤖 Video AI Agent</h2>
-    <p>Upload your compressed MP4 videos • I'll create an interactive slideshow</p>
-  </div>
+<!-- Video AI Agent Section -->
+<section class="slideshow-container">
+  <h2 class="slideshow-title">🤖 Video AI Agent</h2>
+  
+  <div class="upload-section">
+    <label for="video-upload">
+      <p>📤 Drag videos here or click to select</p>
+      <p style="font-size: 0.9em; opacity: 0.8;">Compressed MP4 format recommended</p>
+      <input type="file" id="video-upload" multiple accept="video/mp4">
+    </label>
+  </div>
 
-  <div class="agent-controls">
-    <div class="upload-zone" id="uploadZone">
-      <p>📤 Drag videos here or click to select</p>
-      <input type="file" id="videoInput" multiple accept="video/mp4" style="display:none;">
-    </div>
+  <div class="status-badge active">
+    <span id="video-count">Videos loaded: 0</span>
+  </div>
 
-    <div class="video-stats" id="videoStats" style="display:none;">
-      <p id="videoCount">Videos loaded: 0</p>
-      <p id="totalSize">Total size: 0 MB</p>
-    </div>
-  </div>
+  <div class="status-badge">
+    <span id="total-size">Total size: 0 MB</span>
+  </div>
 
-  <div class="slideshow-container" id="slideshowContainer" style="display:none;">
-    <div class="video-viewer">
-      <video id="mainVideo" controls width="100%"></video>
-      <div class="video-info">
-        <span id="videoTitle">Video 1</span>
-        <span id="videoCounter">1 / 1</span>
-      </div>
-    </div>
+  <!-- Video Display -->
+  <div class="video-display">
+    <video id="main-video" controls>
+      Your browser does not support the video tag.
+    </video>
+  </div>
 
-    <div class="slideshow-controls">
-      <button class="btn btn-prev" onclick="agentPrevVideo()">← Previous</button>
-      <button class="btn btn-play-pause" id="playPauseBtn" onclick="agentTogglePlay()">⏸ Pause</button>
-      <button class="btn btn-next" onclick="agentNextVideo()">Next →</button>
-    </div>
+  <!-- Video Counter -->
+  <div class="video-counter">
+    <span id="current-video">Video 1</span> <span id="video-indicator">1 / 1</span>
+  </div>
 
-    <div class="video-gallery">
-      <p>Quick Select:</p>
-      <div class="gallery-grid" id="galleryGrid"></div>
-    </div>
+  <!-- Controls -->
+  <div class="slideshow-controls">
+    <button class="control-btn" id="prev-btn">← Previous</button>
+    <button class="control-btn" id="play-btn">⏸ Pause</button>
+    <button class="control-btn" id="next-btn">Next →</button>
+  </div>
 
-    <div class="agent-status">
-      <p id="agentMessage">🤖 Ready to play videos</p>
-    </div>
-  </div>
-</section> 
+  <!-- Quick Select -->
+  <div class="quick-select">
+    <p>Quick Select:</p>
+    <button class="quick-select-btn">Sample Videos</button>
+    <button class="quick-select-btn">Trending</button>
+    <button class="quick-select-btn">Recent</button>
+  </div>
+
+  <div class="status-badge processing" style="margin-top: 20px;">
+    🤖 Ready to play videos
+  </div>
+</section>
+
 
 <script>
   // 🤖 AI Video Agent JavaScript Module
