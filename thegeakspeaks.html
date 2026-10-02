@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="terabox-videos.css">
   <link rel="stylesheet" href="slideshow.css">
   <style type="text/css">
-
+<style>
 figure {
   float: right;
   width: 30%;
@@ -34,50 +34,8 @@ background: linear-gradient(90deg, rgba(20,49,253,0.49) 3%, rgba(2,255,203,0.179
 filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#020000",endColorstr="#ff004c",GradientType=1);
 }
 p.artbdtxt {font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;font-size: 22pt;font-weight: 500;color: #c888c;text-shadow:rgba(2,7,7,0) -1px 0,rgba(0,7,.5,2) 0 -1px,rgba(255,255,255,100) 0 1p[...]
-}</style><style>
-        /* Container for responsive video */
-        .video-container {
-            position: relative;
-            padding-bottom: 56.25%; /* 16:9 aspect ratio */
-            padding-top: 25px;
-            height: 0;
-        }
-        .video-container video {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-        /* Optional styling for link */
-        .external-link {
-            display: inline-block;
-            margin-top: 15px;
-            font-size: 16px;
-            color: #007BFF;
-            text-decoration: none;
-        }
-        .external-link:hover {
-            text-decoration: underline;
-        }
-      /* CSS for responsive video container */
-    .video-container {
-      position: relative;
-      padding-bottom: 56.25%; /* 16:9 aspect ratio */
-      height: 0;
-      overflow: hidden;
-      max-width: 100%;
-      background: #000;
-    }
-
-    .video-container iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border: 0;
-    }
+} 
+	  
 .sound-blast {
   background: radial-gradient(circle at center, #ff0066 0%, #330066 100%);
   color: #fff;
@@ -406,11 +364,12 @@ Bellagio Fountains Your Amazing! Alexandara Daddario Ya I Know!</font></p>
 
 </font>
 </article>
+ 
 <!-- Video AI Agent Section -->
 <section class="slideshow-container">
   <h2 class="slideshow-title">🤖 Video AI Agent</h2>
   
-  <div class="upload-section">
+  <div class="upload-section" id="drop-zone">
     <label for="video-upload">
       <p>📤 Drag videos here or click to select</p>
       <p style="font-size: 0.9em; opacity: 0.8;">Compressed MP4 format recommended</p>
@@ -422,181 +381,31 @@ Bellagio Fountains Your Amazing! Alexandara Daddario Ya I Know!</font></p>
     <span id="video-count">Videos loaded: 0</span>
   </div>
 
-  <div class="status-badge">
-    <span id="total-size">Total size: 0 MB</span>
-  </div>
-
-  <!-- Video Display -->
   <div class="video-display">
     <video id="main-video" controls>
+      <source id="video-source" src="" type="video/mp4">
       Your browser does not support the video tag.
     </video>
   </div>
 
-  <!-- Video Counter -->
   <div class="video-counter">
-    <span id="current-video">Video 1</span> <span id="video-indicator">1 / 1</span>
+    <span id="current-video">Video 1</span> <span id="video-indicator">0 / 0</span>
   </div>
 
-  <!-- Controls -->
   <div class="slideshow-controls">
     <button class="control-btn" id="prev-btn">← Previous</button>
     <button class="control-btn" id="play-btn">⏸ Pause</button>
     <button class="control-btn" id="next-btn">Next →</button>
   </div>
 
-  <!-- Quick Select -->
-  <div class="quick-select">
-    <p>Quick Select:</p>
-    <button class="quick-select-btn">Sample Videos</button>
-    <button class="quick-select-btn">Trending</button>
-    <button class="quick-select-btn">Recent</button>
-  </div>
-
-  <div class="status-badge processing" style="margin-top: 20px;">
+  <div class="status-badge processing">
     🤖 Ready to play videos
   </div>
 </section>
 
+<!-- Link JavaScript -->
+<script src="slideshow.js"></script>
 
-<script>
-  // 🤖 AI Video Agent JavaScript Module
-  const videoAgent = {
-    videos: [],
-    currentIndex: 0,
-    isPlaying: false,
 
-    init() {
-      const uploadZone = document.getElementById('uploadZone');
-      const videoInput = document.getElementById('videoInput');
-
-      uploadZone.addEventListener('click', () => videoInput.click());
-      uploadZone.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        uploadZone.classList.add('drag-over');
-      });
-      uploadZone.addEventListener('dragleave', () => {
-        uploadZone.classList.remove('drag-over');
-      });
-      uploadZone.addEventListener('drop', (e) => {
-        e.preventDefault();
-        uploadZone.classList.remove('drag-over');
-        this.handleFiles(e.dataTransfer.files);
-      });
-
-      videoInput.addEventListener('change', (e) => {
-        this.handleFiles(e.target.files);
-      });
-    },
-
-    handleFiles(files) {
-      this.videos = [];
-      let totalSize = 0;
-
-      Array.from(files).forEach((file) => {
-        if (file.type.startsWith('video/')) {
-          const url = URL.createObjectURL(file);
-          this.videos.push({
-            name: file.name,
-            url: url,
-            size: (file.size / (1024 * 1024)).toFixed(2),
-          });
-          totalSize += file.size / (1024 * 1024);
-        }
-      });
-
-      if (this.videos.length > 0) {
-        this.showSlideshow();
-        this.updateStats(totalSize);
-        this.agentSpeak(`🤖 Loaded ${this.videos.length} video(s). Ready to play!`);
-      }
-    },
-
-    showSlideshow() {
-      document.getElementById('uploadZone').style.display = 'none';
-      document.getElementById('videoStats').style.display = 'block';
-      document.getElementById('slideshowContainer').style.display = 'block';
-      this.loadVideo(0);
-      this.buildGallery();
-    },
-
-    loadVideo(index) {
-      const video = document.getElementById('mainVideo');
-      const data = this.videos[index];
-      video.src = data.url;
-      video.load();
-      document.getElementById('videoTitle').textContent = data.name;
-      document.getElementById('videoCounter').textContent = `${index + 1} / ${this.videos.length}`;
-      this.isPlaying = true;
-      document.getElementById('playPauseBtn').textContent = '⏸ Pause';
-      this.updateGallery(index);
-    },
-
-    updateStats(totalSize) {
-      document.getElementById('videoCount').textContent = `Videos loaded: ${this.videos.length}`;
-      document.getElementById('totalSize').textContent = `Total size: ${totalSize.toFixed(2)} MB`;
-    },
-
-    buildGallery() {
-      const grid = document.getElementById('galleryGrid');
-      grid.innerHTML = '';
-      this.videos.forEach((video, idx) => {
-        const item = document.createElement('div');
-        item.className = 'gallery-item';
-        item.textContent = `${idx + 1}`;
-        item.onclick = () => {
-          this.currentIndex = idx;
-          this.loadVideo(idx);
-        };
-        grid.appendChild(item);
-      });
-    },
-
-    updateGallery(index) {
-      document.querySelectorAll('.gallery-item').forEach((item, idx) => {
-        idx === index ? item.classList.add('active') : item.classList.remove('active');
-      });
-    },
-
-    agentSpeak(message) {
-      document.getElementById('agentMessage').textContent = message;
-    },
-  };
-
-  // Global control functions
-  function agentNextVideo() {
-    videoAgent.currentIndex = (videoAgent.currentIndex + 1) % videoAgent.videos.length;
-    videoAgent.loadVideo(videoAgent.currentIndex);
-    videoAgent.agentSpeak(`🤖 Playing video ${videoAgent.currentIndex + 1}`);
-  }
-
-  function agentPrevVideo() {
-    videoAgent.currentIndex = (videoAgent.currentIndex - 1 + videoAgent.videos.length) % videoAgent.videos.length;
-    videoAgent.loadVideo(videoAgent.currentIndex);
-    videoAgent.agentSpeak(`🤖 Playing video ${videoAgent.currentIndex + 1}`);
-  }
-
-  function agentTogglePlay() {
-    const video = document.getElementById('mainVideo');
-    const btn = document.getElementById('playPauseBtn');
-    if (videoAgent.isPlaying) {
-      video.pause();
-      btn.textContent = '▶ Play';
-      videoAgent.isPlaying = false;
-      videoAgent.agentSpeak('⏸ Video paused');
-    } else {
-      video.play();
-      btn.textContent = '⏸ Pause';
-      videoAgent.isPlaying = true;
-      videoAgent.agentSpeak('▶ Video playing');
-    }
-  }
-
-  // Initialize on page load
-  document.addEventListener('DOMContentLoaded', () => {
-    videoAgent.init();
-  });
-</script>
-	
 </body>
 </html>
