@@ -21,11 +21,8 @@ class SlideshowManager {
     this.nextBtn = document.getElementById('next-btn');
     this.playBtn = document.getElementById('play-btn');
     this.videoCountDisplay = document.getElementById('video-count');
-    this.totalSizeDisplay = document.getElementById('total-size');
     this.currentVideoDisplay = document.getElementById('current-video');
     this.videoIndicator = document.getElementById('video-indicator');
-    this.statusMessage = document.getElementById('status-message');
-    this.quickSelectBtns = document.querySelectorAll('.quick-select-btn');
 
     this.init();
   }
@@ -35,16 +32,12 @@ class SlideshowManager {
     this.uploadInput.addEventListener('change', (e) => this.handleFileSelect(e));
     this.dropZone.addEventListener('dragover', (e) => this.handleDragOver(e));
     this.dropZone.addEventListener('drop', (e) => this.handleDrop(e));
+    this.dropZone.addEventListener('click', () => this.uploadInput.click());
 
     // Control buttons
     this.prevBtn.addEventListener('click', () => this.previousVideo());
     this.nextBtn.addEventListener('click', () => this.nextVideo());
     this.playBtn.addEventListener('click', () => this.togglePlay());
-
-    // Quick select buttons
-    this.quickSelectBtns.forEach(btn => {
-      btn.addEventListener('click', () => this.loadQuickVideo(btn.dataset.video));
-    });
 
     // Video event listeners
     this.videoElement.addEventListener('play', () => this.updatePlayButton());
@@ -61,26 +54,43 @@ class SlideshowManager {
   handleDragOver(e) {
     e.preventDefault();
     e.stopPropagation();
-    this.dropZone.style.background = 'rgba(255, 255, 255, 0.3)';
+    this.dropZone.classList.add('drag-over');
+  }
+
+  handleDragLeave(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    this.dropZone.classList.remove('drag-over');
   }
 
   handleDrop(e) {
     e.preventDefault();
     e.stopPropagation();
-    this.dropZone.style.background = 'rgba(255, 255, 255, 0.1)';
+    this.dropZone.classList.remove('drag-over');
     
     const files = Array.from(e.dataTransfer.files);
     const videoFiles = files.filter(f => f.type.startsWith('video/'));
-    this.addVideos(videoFiles);
+    
+    if (videoFiles.length > 0) {
+      this.addVideos(videoFiles);
+    } else {
+      alert('Please drop video files only (MP4, WebM, etc.)');
+    }
   }
 
   addVideos(files) {
     if (files.length === 0) {
-      this.updateStatus('No video files selected', 'empty');
+      alert('No video files selected');
       return;
     }
 
     files.forEach(file => {
+      // Check file size (limit to 100MB)
+      if (file.size > 100 * 1024 * 1024) {
+        alert(`${file.name} is too large (max 100MB)`);
+        return;
+      }
+
       const reader = new FileReader();
       reader.onload = (e) => {
         this.uploadedVideos.push({
@@ -91,43 +101,29 @@ class SlideshowManager {
         });
         this.updateAllVideos();
       };
+      
+      reader.onerror = () => {
+        alert(`Error reading file: ${file.name}`);
+      };
+      
       reader.readAsDataURL(file);
     });
-
-    this.updateStatus('Videos processing...', 'processing');
-  }
-
-  loadQuickVideo(videoKey) {
-    if (this.videoLibrary[videoKey]) {
-      this.allVideos = [{
-        name: videoKey.replace(/([A-Z])/g, ' $1'),
-        src: this.videoLibrary[videoKey],
-        type: 'library'
-      }];
-      this.currentIndex = 0;
-      this.playVideo();
-      this.updateStatus('🤖 Library video loaded', 'active');
-    }
   }
 
   updateAllVideos() {
-    // Combine library videos (on demand) with uploaded videos
-    this.allVideos = [
-      ...Object.entries(this.videoLibrary).map(([key, url]) => ({
-        name: key.replace(/([A-Z])/g, ' $1'),
-        src: url,
-        type: 'library'
-      })),
-      ...this.uploadedVideos
-    ];
-
+    this.allVideos = [...this.uploadedVideos];
+    
+    if (this.allVideos.length > 0) {
+      this.currentIndex = 0;
+      this.playVideo();
+    }
+    
     this.updateUI();
-    this.updateStatus('✅ Videos ready to play', 'active');
   }
 
   playVideo() {
     if (this.allVideos.length === 0) {
-      this.updateStatus('No videos available', 'empty');
+      alert('No videos available to play');
       return;
     }
 
@@ -164,9 +160,27 @@ class SlideshowManager {
 
   updateUI() {
     const uploadedCount = this.uploadedVideos.length;
-    const libraryCount = Object.keys(this.videoLibrary).length;
-    const totalCount = uploadedCount + libraryCount;
-
-    this.videoCountDisplay.textContent = `Videos loaded: ${uploadedCount}`;
     
-    const totalSize = this.uploadedVide
+    if (this.videoCountDisplay) {
+      this.videoCountDisplay.textContent = `Videos loaded: ${uploadedCount}`;
+    }
+
+    if (this.videoIndicator && this.allVideos.length > 0) {
+      this.videoIndicator.textContent = `${this.currentIndex + 1} / ${this.allVideos.length}`;
+    }
+
+    if (this.currentVideoDisplay && this.allVideos.length > 0) {
+      this.currentVideoDisplay.textContent = `${this.allVideos[this.currentIndex].name}`;
+    }
+
+    // Disable/enable navigation buttons
+    if (this.prevBtn) this.prevBtn.disabled = this.allVideos.length === 0;
+    if (this.nextBtn) this.nextBtn.disabled = this.allVideos.length === 0;
+    if (this.playBtn) this.playBtn.disabled = this.allVideos.length === 0;
+  }
+}
+
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+  new SlideshowManager();
+});
