@@ -1,0 +1,176 @@
+
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🤖 Family Media Agent - Preserve Memories</title>
+  <link rel="stylesheet" href="family-media-agent.css">
+</head>
+<body>
+  <!-- 🤖 Family Media Agent -->
+  <section id="familyMediaAgent" class="media-agent-container">
+    <div class="agent-header">
+      <h1>🤖 Family Media Agent</h1>
+      <p>Preserve precious family moments • Create video slideshows • Download forever</p>
+    </div>
+
+    <!-- Tab Navigation -->
+    <div class="agent-tabs">
+      <button class="tab-btn active" onclick="switchTab('create')">📸 Create Slideshow</button>
+      <button class="tab-btn" onclick="switchTab('gallery')">🎬 My Videos</button>
+      <button class="tab-btn" onclick="switchTab('settings')">⚙️ Settings</button>
+    </div>
+
+    <!-- CREATE TAB -->
+    <div id="createTab" class="tab-content active">
+      <div class="create-container">
+
+        <!-- Image Upload -->
+        <div class="upload-section">
+          <div class="section-header">
+            <h2>Step 1: Upload Family Photos</h2>
+            <p>Select images from your device, thumb drive, or smartphone</p>
+          </div>
+
+          <div class="upload-zone" id="imageUploadZone">
+            <div class="upload-icon">📸</div>
+            <p>Drag photos here or click to select</p>
+            <small>JPG, PNG, WebP • Up to 50 images</small>
+            <input type="file" id="imageInput" multiple accept="image/*" style="display:none;">
+          </div>
+
+          <div class="image-stats" id="imageStats" style="display:none;">
+            <p id="imageCount">📷 Images loaded: 0</p>
+            <button class="btn-clear-images" onclick="clearImages()">Remove all</button>
+          </div>
+        </div>
+
+        <!-- Image Preview Grid -->
+        <div class="preview-section" id="previewSection" style="display:none;">
+          <div class="section-header">
+            <h2>Step 2: Arrange Your Photos</h2>
+            <p>Drag to reorder • Click to remove</p>
+          </div>
+
+          <div class="preview-grid" id="previewGrid"></div>
+        </div>
+
+        <!-- Video Settings -->
+        <div class="settings-section" id="videoSettingsSection" style="display:none;">
+          <div class="section-header">
+            <h2>Step 3: Create Your Video</h2>
+            <p>Customize timing and quality</p>
+          </div>
+
+          <div class="settings-grid">
+            <div class="setting-item">
+              <label>Duration per photo (seconds):</label>
+              <div class="slider-group">
+                <input type="range" id="imageDuration" min="1" max="10" value="3" oninput="updateDurationDisplay()">
+                <span id="durationDisplay" class="slider-value">3s</span>
+              </div>
+            </div>
+
+            <div class="setting-item">
+              <label>Video quality:</label>
+              <select id="videoQuality">
+                <option value="1080">1080p - Best Quality (Larger file)</option>
+                <option value="720" selected>720p - Balanced (Recommended)</option>
+                <option value="480">480p - Smallest File (Faster)</option>
+              </select>
+            </div>
+
+            <div class="setting-item">
+              <label>Video name:</label>
+              <input type="text" id="videoName" placeholder="Family Memories 2024" value="Family Memories">
+            </div>
+
+            <div class="setting-item">
+              <label>Music/Background:</label>
+              <select id="musicTrack">
+                <option value="none">None</option>
+                <option value="soft">Soft Piano</option>
+                <option value="warm">Warm Acoustic</option>
+                <option value="upbeat">Upbeat & Happy</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="video-preview-info">
+            <p id="estimatedLength">Estimated video length: 0 seconds</p>
+            <p id="estimatedSize">Estimated file size: 0 MB</p>
+          </div>
+        </div>
+
+        <!-- Creation Controls -->
+        <div class="control-buttons" id="controlButtons" style="display:none;">
+          <button class="btn btn-primary" onclick="createVideoSlideshow()">🎬 Create Video Slideshow</button>
+          <button class="btn btn-secondary" onclick="resetAgent()">🔄 Start Over</button>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="creation-progress" id="creationProgress" style="display:none;">
+          <h3>Creating your video...</h3>
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+          <p id="progressText">Initializing... 0%</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- GALLERY TAB -->
+    <div id="galleryTab" class="tab-content" style="display:none;">
+      <div class="gallery-container">
+        <div class="section-header">
+          <h2>Your Created Videos</h2>
+          <p>Download to thumb drive, phone, or watch below</p>
+        </div>
+
+        <div class="videos-list" id="videosList">
+          <p class="empty-message">No videos created yet. Go to "Create Slideshow" to get started!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SETTINGS TAB -->
+    <div id="settingsTab" class="tab-content" style="display:none;">
+      <div class="settings-container">
+        <div class="settings-section">
+          <h2>Player Settings</h2>
+          <label>
+            <input type="checkbox" id="autoplayVideos" checked> Autoplay videos
+          </label>
+          <label>
+            <input type="checkbox" id="loopVideos" checked> Loop when finished
+          </label>
+          <label>
+            <input type="checkbox" id="showTimestamps" checked> Show photo timing
+          </label>
+        </div>
+
+        <div class="settings-section">
+          <h2>Download Options</h2>
+          <label>
+            <input type="checkbox" id="includeMetadata" checked> Include photo info
+          </label>
+          <p class="help-text">Files are stored locally on your device. Clear browser data to delete.</p>
+        </div>
+
+        <div class="agent-message">
+          <p id="settingsMessage">✅ Ready to preserve your family memories</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Agent Status Footer -->
+    <div class="agent-footer">
+      <p id="agentMessage">🤖 Welcome to Family Media Agent • Select photos to start</p>
+    </div>
+  </section>
+
+  <script src="family-media-agent.js"></script>
+</body>
+</html>
+
+Sent with Proton Mail secure email.
