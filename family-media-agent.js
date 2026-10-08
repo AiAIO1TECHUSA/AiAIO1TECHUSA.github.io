@@ -9,128 +9,6 @@ class FamilyMediaAgent {
   init() {
     this.cacheElements();
     this.attachEventListeners();
-  }
-
-  cacheElements() {
-    // Match actual HTML IDs and selectors
-    this.imageInput = document.getElementById('imageInput');
-    this.imageUploadZone = document.getElementById('imageUploadZone');
-    this.imageCounter = document.getElementById('imageCount'); // HTML uses 'imageCount' not 'imageCounter'
-    this.imagePreview = document.getElementById('previewGrid'); // HTML uses 'previewGrid' not 'imagePreview'
-    this.removeAllBtn = document.querySelector('button[onclick="clearImages()"]'); // Target the actual clear button
-    
-    // Log missing elements for debugging
-    console.log('FamilyMediaAgent initialized:', {
-      imageInput: !!this.imageInput,
-      imageUploadZone: !!this.imageUploadZone,
-      imageCounter: !!this.imageCounter,
-      imagePreview: !!this.imagePreview,
-      removeAllBtn: !!this.removeAllBtn
-    });
-    
-    if (!this.imageInput) console.error('Missing: #imageInput');
-    if (!this.imageUploadZone) console.error('Missing: #imageUploadZone');
-    if (!this.imageCounter) console.error('Missing: #imageCount');
-    if (!this.imagePreview) console.error('Missing: #previewGrid');
-  }
-
-  attachEventListeners() {
-    // Click to upload
-    if (this.imageUploadZone && this.imageInput) {
-      this.imageUploadZone.addEventListener('click', () => {
-        this.imageInput.click();
-      });
-    }
-
-    // File input change
-    if (this.imageInput) {
-      this.imageInput.addEventListener('change', (e) => this.handleImageUpload(e));
-    }
-
-    // Drag and drop
-    if (this.imageUploadZone) {
-      this.imageUploadZone.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        this.imageUploadZone.style.borderColor = '#667eea';
-        this.imageUploadZone.style.background = 'rgba(102, 126, 234, 0.1)';
-      });
-
-      this.imageUploadZone.addEventListener('dragleave', () => {
-        this.imageUploadZone.style.borderColor = '';
-        this.imageUploadZone.style.background = '';
-      });
-
-      this.imageUploadZone.addEventListener('drop', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        this.imageUploadZone.style.borderColor = '';
-        this.imageUploadZone.style.background = '';
-        this.handleImageUpload({ target: { files: e.dataTransfer.files } });
-      });
-    }
-  }
-
-  handleImageUpload(event) {
-    const files = event.target?.files;
-    
-    if (!files || files.length === 0) {
-      console.warn('No files selected');
-      return;
-    }
-    
-    for (let file of files) {
-      if (file.type.startsWith('image/')) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          this.images.push({
-            name: file.name,
-            data: e.target.result,
-            timestamp: Date.now()
-          });
-          console.log(`Image added: ${file.name} (Total: ${this.images.length})`);
-          this.updateImageCount();
-          this.renderImagePreview();
-          this.showPreviewSection();
-        };
-        reader.onerror = () => {
-          console.error(`Failed to read file: ${file.name}`);
-        };
-        reader.readAsDataURL(file);
-      } else {
-        console.warn(`Skipped non-image file: ${file.name}`);
-      }
-    }
-  }
-
-  updateImageCount() {
-    if (this.imageCounter) {
-      this.imageCounter.textContent = `📷 Images loaded: ${this.images.length}`;
-    }
-    
-    // Show/hide image stats and preview sections
-    const imageStats = document.getElementById('imageStats');
-    const previewSection = document.getElementById('previewSection');
-    const videoSettingsSection = document.getElementById('videoSettingsSection');
-    
-    if (this.images.length > 0) {
-      if (imageStats) imageStats.style.display = 'block';
-      if (previewSection) previewSection.style.display = 'block';
-      if (videoSettingsSection) videoSettingsSection.style.display = 'block';
-    } else {
-      if (imageStats) imageStats.style.display = 'none';
-      if (previewSection) previewSection.style.display = 'none';
-// Family Media Agent - Image Upload Handler
-class FamilyMediaAgent {
-  constructor() {
-    this.images = [];
-    this.currentTab = 'create';
-    this.init();
-  }
-
-  init() {
-    this.cacheElements();
-    this.attachEventListeners();
     this.updateImageCount();
   }
 
@@ -141,7 +19,7 @@ class FamilyMediaAgent {
     this.imagePreview = document.getElementById('previewGrid');
     this.removeAllBtn = document.querySelector('.btn-clear-images');
 
-    console.log('FamilyMediaAgent DOM lookup:', {
+    console.log('FamilyMediaAgent initialized:', {
       imageInput: !!this.imageInput,
       imageUploadZone: !!this.imageUploadZone,
       imageCounter: !!this.imageCounter,
@@ -233,24 +111,29 @@ class FamilyMediaAgent {
     const imageStats = document.getElementById('imageStats');
     const previewSection = document.getElementById('previewSection');
     const videoSettingsSection = document.getElementById('videoSettingsSection');
+    const controlButtons = document.getElementById('controlButtons');
 
     if (this.images.length > 0) {
       if (imageStats) imageStats.style.display = 'block';
       if (previewSection) previewSection.style.display = 'block';
       if (videoSettingsSection) videoSettingsSection.style.display = 'block';
+      if (controlButtons) controlButtons.style.display = 'flex';
     } else {
       if (imageStats) imageStats.style.display = 'none';
       if (previewSection) previewSection.style.display = 'none';
       if (videoSettingsSection) videoSettingsSection.style.display = 'none';
+      if (controlButtons) controlButtons.style.display = 'none';
     }
   }
 
   showPreviewSections() {
     const previewSection = document.getElementById('previewSection');
     const videoSettingsSection = document.getElementById('videoSettingsSection');
+    const controlButtons = document.getElementById('controlButtons');
 
     if (previewSection) previewSection.style.display = 'block';
     if (videoSettingsSection) videoSettingsSection.style.display = 'block';
+    if (controlButtons) controlButtons.style.display = 'flex';
   }
 
   renderImagePreview() {
@@ -315,6 +198,53 @@ function switchTab(tabName, event) {
 
   if (event && event.target) {
     event.target.classList.add('active');
+  }
+}
+
+// Create video slideshow
+function createVideoSlideshow() {
+  if (!window.mediaAgent || window.mediaAgent.images.length === 0) {
+    alert('Please upload images first');
+    return;
+  }
+  
+  const videoName = document.getElementById('videoName').value || 'Family Memories';
+  const duration = document.getElementById('imageDuration').value || 3;
+  const quality = document.getElementById('videoQuality').value || '720';
+  
+  console.log('Creating video:', { videoName, duration, quality, imageCount: window.mediaAgent.images.length });
+  alert(`Video creation started!\nName: ${videoName}\nImages: ${window.mediaAgent.images.length}\nDuration: ${duration}s each\nQuality: ${quality}p\n\nNote: This demo shows the UI. Actual video encoding requires a backend service.`);
+}
+
+// Reset agent
+function resetAgent() {
+  if (window.mediaAgent) {
+    window.mediaAgent.removeAllImages();
+    document.getElementById('videoName').value = 'Family Memories';
+    document.getElementById('imageDuration').value = 3;
+    document.getElementById('videoQuality').value = '720';
+    document.getElementById('musicTrack').value = 'none';
+    switchTab('create');
+  }
+}
+
+// Update duration display
+function updateDurationDisplay() {
+  const duration = document.getElementById('imageDuration').value;
+  const display = document.getElementById('durationDisplay');
+  if (display) {
+    display.textContent = duration + 's';
+  }
+  
+  // Update estimated length
+  if (window.mediaAgent) {
+    const totalSeconds = window.mediaAgent.images.length * parseInt(duration);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    const estimatedLength = document.getElementById('estimatedLength');
+    if (estimatedLength) {
+      estimatedLength.textContent = `Estimated video length: ${minutes}m ${seconds}s`;
+    }
   }
 }
 
