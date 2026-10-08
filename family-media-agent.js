@@ -230,9 +230,10 @@ class FamilyMediaAgent {
     };
 
     recorder.onstop = () => {
-      const blob = new Blob(chunks, { type: mimeType || 'video/webm' });
+      const blob = new Blob(chunks, { type: mimeType || 'video/mp4' });
       const videoDataUrl = URL.createObjectURL(blob);
-      const cleanedName = `${name.replace(/\s+/g, '-') || 'family-memories'}-${Date.now()}.webm`;
+      const extension = mimeType && mimeType.includes('webm') ? 'webm' : 'mp4';
+      const cleanedName = `${name.replace(/\s+/g, '-') || 'family-memories'}-${Date.now()}.${extension}`;
 
       const videoRecord = {
         name: cleanedName,
@@ -292,10 +293,10 @@ class FamilyMediaAgent {
 
   getSupportedMimeType() {
     const types = [
+      'video/mp4',
       'video/webm;codecs=vp9,opus',
       'video/webm;codecs=vp8,opus',
-      'video/webm',
-      'video/mp4'
+      'video/webm'
     ];
 
     return types.find((type) => MediaRecorder.isTypeSupported(type)) || '';
