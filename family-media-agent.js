@@ -25,22 +25,11 @@ class FamilyMediaAgent {
     this.creationProgress = document.getElementById('creationProgress');
     this.progressFill = document.getElementById('progressFill');
     this.progressText = document.getElementById('progressText');
-
-    console.log('FamilyMediaAgent initialized:', {
-      imageInput: !!this.imageInput,
-      imageUploadZone: !!this.imageUploadZone,
-      imageCounter: !!this.imageCounter,
-      imagePreview: !!this.imagePreview,
-      removeAllBtn: !!this.removeAllBtn,
-      videosList: !!this.videosList
-    });
   }
 
   attachEventListeners() {
     if (this.imageUploadZone && this.imageInput) {
-      this.imageUploadZone.addEventListener('click', () => {
-        this.imageInput.click();
-      });
+      this.imageUploadZone.addEventListener('click', () => this.imageInput.click());
     }
 
     if (this.imageInput) {
@@ -65,7 +54,6 @@ class FamilyMediaAgent {
         e.stopPropagation();
         this.imageUploadZone.style.borderColor = '';
         this.imageUploadZone.style.background = '';
-
         const files = e.dataTransfer && e.dataTransfer.files ? e.dataTransfer.files : [];
         this.handleImageUpload({ target: { files } });
       });
@@ -78,10 +66,7 @@ class FamilyMediaAgent {
 
   handleImageUpload(event) {
     const files = event && event.target && event.target.files ? event.target.files : [];
-    if (!files || files.length === 0) {
-      console.warn('No files selected');
-      return;
-    }
+    if (!files || files.length === 0) return;
 
     for (const file of files) {
       if (!file || !file.type || !file.type.startsWith('image/')) {
@@ -102,11 +87,7 @@ class FamilyMediaAgent {
         this.renderImagePreview();
         this.showPreviewSections();
       };
-
-      reader.onerror = () => {
-        console.error(`Failed to read file: ${file.name}`);
-      };
-
+      reader.onerror = () => console.error(`Failed to read file: ${file.name}`);
       reader.readAsDataURL(file);
     }
   }
@@ -145,14 +126,10 @@ class FamilyMediaAgent {
   }
 
   renderImagePreview() {
-    if (!this.imagePreview) {
-      console.warn('Preview grid not found');
-      return;
-    }
+    if (!this.imagePreview) return;
 
     if (this.images.length === 0) {
-      this.imagePreview.innerHTML =
-        '<p style="text-align:center; opacity:0.6; grid-column:1 / -1;">No images yet</p>';
+      this.imagePreview.innerHTML = '<p style="text-align:center; opacity:0.6; grid-column:1 / -1;">No images yet</p>';
       return;
     }
 
@@ -167,23 +144,17 @@ class FamilyMediaAgent {
 
   removeImage(index) {
     if (index < 0 || index >= this.images.length) return;
-
     this.images.splice(index, 1);
     this.updateImageCount();
     this.renderImagePreview();
-    console.log(`Image removed. Remaining: ${this.images.length}`);
   }
 
   removeAllImages() {
     this.images = [];
     this.updateImageCount();
     this.renderImagePreview();
-    console.log('All images cleared');
   }
 
-  /**
-   * Create video and upload to server
-   */
   async createVideoSlideshow() {
     if (!this.images || this.images.length === 0) {
       alert('Please upload at least one image first');
@@ -192,32 +163,29 @@ class FamilyMediaAgent {
 
     const videoName = document.getElementById('videoName')?.value || 'Family Memories';
     const duration = document.getElementById('imageDuration')?.value || 3;
-    const quality = document.getElementById('videoQuality')?.value || '720';
 
     try {
-      // Show progress
       if (this.creationProgress) this.creationProgress.style.display = 'block';
       this.updateProgress(0, 'Creating video...');
 
-      // Create a mock video file (in production, this would use FFmpeg on the backend)
-      const mockVideoBlob = this.createMockVideo(videoName, this.images.length, duration);
-      
-      // Upload video
+      const blob = this.createMockVideo(videoName, this.images.length, duration);
       this.updateProgress(10, 'Uploading video...');
-      const result = await this.apiClient.uploadVideo(mockVideoBlob, (progress) => {
+
+      const result = await this.apiClient.uploadVideo(blob, (progress) => {
         this.updateProgress(Math.min(90, 10 + (progress / 100) * 80), 'Uploading...');
       });
 
-      this.updateProgress(100, 'Upload complete!');
-      console.log('Video uploaded:', result);
+      if (!result || !result.success) {
+        throw new Error(result?.error || 'Upload failed');
+      }
 
-      // Wait a moment then reset
+      this.updateProgress(100, 'Upload complete!');
+      console.log('Upload response:', result);
       setTimeout(() => {
         this.resetAgent();
         this.loadVideos();
         alert(`✅ Video "${videoName}" created and saved!\n\nView it in the "My Videos" tab.`);
-      }, 1500);
-
+      }, 1200);
     } catch (error) {
       console.error('Video creation failed:', error);
       this.updateProgress(0, 'Upload failed');
@@ -226,10 +194,6 @@ class FamilyMediaAgent {
     }
   }
 
-  /**
-   * Create a mock video blob for demo purposes
-   * In production, use FFmpeg or a video encoding API
-   */
   createMockVideo(name, imageCount, duration) {
     const text = `Family Memories\n${imageCount} photos\n${duration}s each`;
     const blob = new Blob([text], { type: 'video/mp4' });
@@ -237,21 +201,11 @@ class FamilyMediaAgent {
     return blob;
   }
 
-  /**
-   * Update progress bar
-   */
   updateProgress(percent, text) {
-    if (this.progressFill) {
-      this.progressFill.style.width = percent + '%';
-    }
-    if (this.progressText) {
-      this.progressText.textContent = text + ` ${Math.round(percent)}%`;
-    }
+    if (this.progressFill) this.progressFill.style.width = percent + '%';
+    if (this.progressText) this.progressText.textContent = text + ` ${Math.round(percent)}%`;
   }
 
-  /**
-   * Load videos from server
-   */
   async loadVideos() {
     try {
       const data = await this.apiClient.listVideos();
@@ -260,12 +214,10 @@ class FamilyMediaAgent {
     } catch (error) {
       console.warn('Failed to load videos:', error.message);
       this.videos = [];
+      this.renderVideosList();
     }
   }
 
-  /**
-   * Render videos gallery
-   */
   renderVideosList() {
     if (!this.videosList) return;
 
@@ -294,15 +246,11 @@ class FamilyMediaAgent {
     `).join('');
   }
 
-  /**
-   * Delete video from server
-   */
   async deleteVideo(filename) {
     if (!confirm(`Delete "${filename}"?`)) return;
 
     try {
       await this.apiClient.deleteVideo(filename);
-      console.log('Video deleted:', filename);
       this.loadVideos();
     } catch (error) {
       console.error('Delete failed:', error);
@@ -311,46 +259,28 @@ class FamilyMediaAgent {
   }
 }
 
-// Global HTML helper used by the inline button
 function clearImages() {
-  if (window.mediaAgent) {
-    window.mediaAgent.removeAllImages();
-  }
+  if (window.mediaAgent) window.mediaAgent.removeAllImages();
 }
 
-// Tab switching function
 function switchTab(tabName, event) {
-  document.querySelectorAll('.tab-content').forEach(tab => {
-    tab.classList.remove('active');
-  });
-
-  document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.classList.remove('active');
-  });
+  document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
 
   const selectedTab = document.getElementById(tabName + 'Tab');
-  if (selectedTab) {
-    selectedTab.classList.add('active');
-  }
+  if (selectedTab) selectedTab.classList.add('active');
 
-  if (event && event.target) {
-    event.target.classList.add('active');
-  }
+  if (event && event.target) event.target.classList.add('active');
 
-  // Load videos when switching to gallery tab
   if (tabName === 'gallery' && window.mediaAgent) {
     window.mediaAgent.loadVideos();
   }
 }
 
-// Create video slideshow
 function createVideoSlideshow() {
-  if (window.mediaAgent) {
-    window.mediaAgent.createVideoSlideshow();
-  }
+  if (window.mediaAgent) window.mediaAgent.createVideoSlideshow();
 }
 
-// Reset agent
 function resetAgent() {
   if (window.mediaAgent) {
     window.mediaAgent.removeAllImages();
@@ -363,26 +293,20 @@ function resetAgent() {
   }
 }
 
-// Update duration display
 function updateDurationDisplay() {
   const duration = document.getElementById('imageDuration').value;
   const display = document.getElementById('durationDisplay');
-  if (display) {
-    display.textContent = duration + 's';
-  }
+  if (display) display.textContent = duration + 's';
 
   if (window.mediaAgent) {
     const totalSeconds = window.mediaAgent.images.length * parseInt(duration);
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = totalSeconds % 60;
     const estimatedLength = document.getElementById('estimatedLength');
-    if (estimatedLength) {
-      estimatedLength.textContent = `Estimated video length: ${minutes}m ${seconds}s`;
-    }
+    if (estimatedLength) estimatedLength.textContent = `Estimated video length: ${minutes}m ${seconds}s`;
   }
 }
 
-// Initialize when page loads
 document.addEventListener('DOMContentLoaded', () => {
   window.mediaAgent = new FamilyMediaAgent();
 });

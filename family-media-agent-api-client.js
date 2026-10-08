@@ -7,58 +7,68 @@ class MediaAgentAPIClient {
     this.videoUrl = null;
   }
 
-  /**
-   * Upload video to server
-   * @param {File} videoFile - The video file to upload
-   * @param {Function} onProgress - Callback for upload progress
-   * @returns {Promise} - Resolves with upload response
-   */
   async uploadVideo(videoFile, onProgress = null) {
     try {
       const formData = new FormData();
       formData.append('video', videoFile);
 
-      const xhr = new XMLHttpRequest();
+      const endpoints = [
+        `${this.baseUrl}/upload-video`,
+        `${this.baseUrl}/api/upload-video`
+      ];
 
-      // Track upload progress
-      if (onProgress) {
-        xhr.upload.addEventListener('progress', (e) => {
-          if (e.lengthComputable) {
-            const percentComplete = (e.loaded / e.total) * 100;
-            onProgress(percentComplete);
+      let lastError = null;
+
+      for (const endpoint of endpoints) {
+        try {
+          const xhr = new XMLHttpRequest();
+
+          if (onProgress) {
+            xhr.upload.addEventListener('progress', (e) => {
+              if (e.lengthComputable) {
+                const percentComplete = (e.loaded / e.total) * 100;
+                onProgress(percentComplete);
+              }
+            });
           }
-        });
+
+          const response = await new Promise((resolve, reject) => {
+            xhr.addEventListener('load', () => {
+              if (xhr.status >= 200 && xhr.status < 300) {
+                try {
+                  const data = JSON.parse(xhr.responseText || '{}');
+                  resolve(data);
+                } catch (e) {
+                  reject(new Error('Invalid server response'));
+                }
+              } else {
+                reject(new Error(`Upload failed: ${xhr.status} ${xhr.statusText}`));
+              }
+            });
+
+            xhr.addEventListener('error', () => reject(new Error('Network error during upload')));
+            xhr.open('POST', endpoint);
+            xhr.send(formData);
+          });
+
+          if (response && response.success === false) {
+            throw new Error(response.error || 'Upload failed');
+          }
+
+          this.videoUrl = response && response.url ? response.url : null;
+          return response;
+        } catch (error) {
+          lastError = error;
+        }
       }
 
-      return new Promise((resolve, reject) => {
-        xhr.addEventListener('load', () => {
-          if (xhr.status === 200) {
-            const response = JSON.parse(xhr.responseText);
-            this.videoUrl = response.url;
-            resolve(response);
-          } else {
-            reject(new Error(`Upload failed: ${xhr.status} ${xhr.statusText}`));
-          }
-        });
-
-        xhr.addEventListener('error', () => {
-          reject(new Error('Network error during upload'));
-        });
-
-        xhr.open('POST', `${this.baseUrl}/api/upload-video`);
-        xhr.send(formData);
-      });
-
+      throw lastError || new Error('Upload failed');
     } catch (error) {
       console.error('Upload error:', error);
       throw error;
     }
   }
 
-  /**
-   * Get list of uploaded videos
-   * @returns {Promise} - Resolves with list of videos
-   */
   async listVideos() {
     try {
       const response = await fetch(`${this.baseUrl}/api/videos`);
@@ -70,11 +80,6 @@ class MediaAgentAPIClient {
     }
   }
 
-  /**
-   * Delete a video from server
-   * @param {String} filename - The filename to delete
-   * @returns {Promise} - Resolves with delete response
-   */
   async deleteVideo(filename) {
     try {
       const response = await fetch(`${this.baseUrl}/api/delete-video/${filename}`, {
@@ -88,10 +93,6 @@ class MediaAgentAPIClient {
     }
   }
 
-  /**
-   * Check if server is running
-   * @returns {Promise<Boolean>}
-   */
   async isServerReady() {
     try {
       const response = await fetch(`${this.baseUrl}/health`);
@@ -103,7 +104,6 @@ class MediaAgentAPIClient {
   }
 }
 
-// Export for use in browser
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = MediaAgentAPIClient;
 }
