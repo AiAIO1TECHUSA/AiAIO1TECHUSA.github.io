@@ -120,25 +120,148 @@ class FamilyMediaAgent {
     } else {
       if (imageStats) imageStats.style.display = 'none';
       if (previewSection) previewSection.style.display = 'none';
+// Family Media Agent - Image Upload Handler
+class FamilyMediaAgent {
+  constructor() {
+    this.images = [];
+    this.currentTab = 'create';
+    this.init();
+  }
+
+  init() {
+    this.cacheElements();
+    this.attachEventListeners();
+    this.updateImageCount();
+  }
+
+  cacheElements() {
+    this.imageInput = document.getElementById('imageInput');
+    this.imageUploadZone = document.getElementById('imageUploadZone');
+    this.imageCounter = document.getElementById('imageCount');
+    this.imagePreview = document.getElementById('previewGrid');
+    this.removeAllBtn = document.querySelector('.btn-clear-images');
+
+    console.log('FamilyMediaAgent DOM lookup:', {
+      imageInput: !!this.imageInput,
+      imageUploadZone: !!this.imageUploadZone,
+      imageCounter: !!this.imageCounter,
+      imagePreview: !!this.imagePreview,
+      removeAllBtn: !!this.removeAllBtn
+    });
+  }
+
+  attachEventListeners() {
+    if (this.imageUploadZone && this.imageInput) {
+      this.imageUploadZone.addEventListener('click', () => {
+        this.imageInput.click();
+      });
+    }
+
+    if (this.imageInput) {
+      this.imageInput.addEventListener('change', (e) => this.handleImageUpload(e));
+    }
+
+    if (this.imageUploadZone) {
+      this.imageUploadZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        this.imageUploadZone.style.borderColor = '#667eea';
+        this.imageUploadZone.style.background = 'rgba(102, 126, 234, 0.1)';
+      });
+
+      this.imageUploadZone.addEventListener('dragleave', () => {
+        this.imageUploadZone.style.borderColor = '';
+        this.imageUploadZone.style.background = '';
+      });
+
+      this.imageUploadZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        this.imageUploadZone.style.borderColor = '';
+        this.imageUploadZone.style.background = '';
+
+        const files = e.dataTransfer && e.dataTransfer.files ? e.dataTransfer.files : [];
+        this.handleImageUpload({ target: { files } });
+      });
+    }
+
+    if (this.removeAllBtn) {
+      this.removeAllBtn.addEventListener('click', () => this.removeAllImages());
+    }
+  }
+
+  handleImageUpload(event) {
+    const files = event && event.target && event.target.files ? event.target.files : [];
+    if (!files || files.length === 0) {
+      console.warn('No files selected');
+      return;
+    }
+
+    for (const file of files) {
+      if (!file || !file.type || !file.type.startsWith('image/')) {
+        console.warn('Skipped non-image file:', file && file.name ? file.name : 'unknown');
+        continue;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.images.push({
+          name: file.name,
+          data: e.target.result,
+          timestamp: Date.now()
+        });
+
+        console.log(`Image added: ${file.name} | total=${this.images.length}`);
+        this.updateImageCount();
+        this.renderImagePreview();
+        this.showPreviewSections();
+      };
+
+      reader.onerror = () => {
+        console.error(`Failed to read file: ${file.name}`);
+      };
+
+      reader.readAsDataURL(file);
+    }
+  }
+
+  updateImageCount() {
+    if (this.imageCounter) {
+      this.imageCounter.textContent = `📷 Images loaded: ${this.images.length}`;
+    }
+
+    const imageStats = document.getElementById('imageStats');
+    const previewSection = document.getElementById('previewSection');
+    const videoSettingsSection = document.getElementById('videoSettingsSection');
+
+    if (this.images.length > 0) {
+      if (imageStats) imageStats.style.display = 'block';
+      if (previewSection) previewSection.style.display = 'block';
+      if (videoSettingsSection) videoSettingsSection.style.display = 'block';
+    } else {
+      if (imageStats) imageStats.style.display = 'none';
+      if (previewSection) previewSection.style.display = 'none';
       if (videoSettingsSection) videoSettingsSection.style.display = 'none';
     }
   }
 
-  showPreviewSection() {
+  showPreviewSections() {
     const previewSection = document.getElementById('previewSection');
-    if (previewSection) {
-      previewSection.style.display = 'block';
-    }
+    const videoSettingsSection = document.getElementById('videoSettingsSection');
+
+    if (previewSection) previewSection.style.display = 'block';
+    if (videoSettingsSection) videoSettingsSection.style.display = 'block';
   }
 
   renderImagePreview() {
     if (!this.imagePreview) {
-      console.warn('Preview grid element not found');
+      console.warn('Preview grid not found');
       return;
     }
-    
+
     if (this.images.length === 0) {
-      this.imagePreview.innerHTML = '<p style="text-align: center; opacity: 0.6; grid-column: 1/-1;">No images yet</p>';
+      this.imagePreview.innerHTML =
+        '<p style="text-align:center; opacity:0.6; grid-column:1 / -1;">No images yet</p>';
       return;
     }
 
@@ -152,6 +275,8 @@ class FamilyMediaAgent {
   }
 
   removeImage(index) {
+    if (index < 0 || index >= this.images.length) return;
+
     this.images.splice(index, 1);
     this.updateImageCount();
     this.renderImagePreview();
@@ -166,7 +291,7 @@ class FamilyMediaAgent {
   }
 }
 
-// Global helper function for HTML onclick
+// Global HTML helper used by the inline button
 function clearImages() {
   if (window.mediaAgent) {
     window.mediaAgent.removeAllImages();
@@ -174,24 +299,20 @@ function clearImages() {
 }
 
 // Tab switching function
-function switchTab(tabName) {
-  // Hide all tabs
+function switchTab(tabName, event) {
   document.querySelectorAll('.tab-content').forEach(tab => {
     tab.classList.remove('active');
   });
-  
-  // Remove active class from all buttons
+
   document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.classList.remove('active');
   });
-  
-  // Show selected tab
+
   const selectedTab = document.getElementById(tabName + 'Tab');
   if (selectedTab) {
     selectedTab.classList.add('active');
   }
-  
-  // Highlight active button
+
   if (event && event.target) {
     event.target.classList.add('active');
   }
