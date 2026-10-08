@@ -25,6 +25,8 @@ class FamilyMediaAgent {
     this.creationProgress = document.getElementById('creationProgress');
     this.progressFill = document.getElementById('progressFill');
     this.progressText = document.getElementById('progressText');
+
+    console.log('FamilyMediaAgent initialized');
   }
 
   attachEventListeners() {
@@ -68,6 +70,8 @@ class FamilyMediaAgent {
     const files = event && event.target && event.target.files ? event.target.files : [];
     if (!files || files.length === 0) return;
 
+    let imageCount = 0;
+
     for (const file of files) {
       if (!file || !file.type || !file.type.startsWith('image/')) {
         console.warn('Skipped non-image file:', file && file.name ? file.name : 'unknown');
@@ -82,7 +86,8 @@ class FamilyMediaAgent {
           timestamp: Date.now()
         });
 
-        console.log(`Image added: ${file.name} | total=${this.images.length}`);
+        imageCount++;
+        console.log(`Image added: ${file.name} (Total: ${this.images.length})`);
         this.updateImageCount();
         this.renderImagePreview();
         this.showPreviewSections();
@@ -147,12 +152,14 @@ class FamilyMediaAgent {
     this.images.splice(index, 1);
     this.updateImageCount();
     this.renderImagePreview();
+    console.log(`Image removed. Remaining: ${this.images.length}`);
   }
 
   removeAllImages() {
     this.images = [];
     this.updateImageCount();
     this.renderImagePreview();
+    console.log('All images cleared');
   }
 
   async createVideoSlideshow() {
@@ -168,36 +175,60 @@ class FamilyMediaAgent {
       if (this.creationProgress) this.creationProgress.style.display = 'block';
       this.updateProgress(0, 'Creating video...');
 
+      // Create mock video blob
       const blob = this.createMockVideo(videoName, this.images.length, duration);
-      this.updateProgress(10, 'Uploading video...');
+      this.updateProgress(10, 'Preparing file...');
 
-      const result = await this.apiClient.uploadVideo(blob, (progress) => {
-        this.updateProgress(Math.min(90, 10 + (progress / 100) * 80), 'Uploading...');
-      });
+      // Try to upload to backend if available
+      let uploadSuccess = false;
+      try {
+        this.updateProgress(20, 'Uploading to server...');
+        const result = await this.apiClient.uploadVideo(blob, (progress) => {
+          this.updateProgress(Math.min(90, 20 + (progress / 100) * 70), 'Uploading...');
+        });
 
-      if (!result || !result.success) {
-        throw new Error(result?.error || 'Upload failed');
+        if (result && result.success) {
+          uploadSuccess = true;
+          this.updateProgress(100, 'Upload complete!');
+          console.log('Video uploaded:', result);
+        }
+      } catch (uploadError) {
+        console.warn('Server upload failed, falling back to local download:', uploadError.message);
       }
 
-      this.updateProgress(100, 'Upload complete!');
-      console.log('Upload response:', result);
       setTimeout(() => {
         this.resetAgent();
-        this.loadVideos();
-        alert(`✅ Video "${videoName}" created and saved!\n\nView it in the "My Videos" tab.`);
+
+        if (uploadSuccess) {
+          this.loadVideos();
+          alert(`✅ Video "${videoName}" created and uploaded!\\n\\nView it in the "My Videos" tab.`);
+        } else {
+          // Offer local download
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = blob.name;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+
+          alert(`📥 Video "${videoName}" created!\\n\\nFile download started (check your Downloads folder).\\n\\nNote: Server upload is only available when running the Node.js backend locally.`);
+        }
       }, 1200);
+
     } catch (error) {
       console.error('Video creation failed:', error);
-      this.updateProgress(0, 'Upload failed');
+      this.updateProgress(0, 'Creation failed');
       alert(`❌ Failed to create video: ${error.message}`);
       if (this.creationProgress) this.creationProgress.style.display = 'none';
     }
   }
 
   createMockVideo(name, imageCount, duration) {
-    const text = `Family Memories\n${imageCount} photos\n${duration}s each`;
+    const text = `Family Memories\\n${imageCount} photos\\n${duration}s each\\nCreated: ${new Date().toLocaleString()}`;
     const blob = new Blob([text], { type: 'video/mp4' });
-    blob.name = `${name.replace(/\s+/g, '-')}-${Date.now()}.mp4`;
+    blob.name = `${name.replace(/\\s+/g, '-')}-${Date.now()}.mp4`;
     return blob;
   }
 
@@ -212,7 +243,7 @@ class FamilyMediaAgent {
       this.videos = data.videos || [];
       this.renderVideosList();
     } catch (error) {
-      console.warn('Failed to load videos:', error.message);
+      console.warn('Failed to load videos from server:', error.message);
       this.videos = [];
       this.renderVideosList();
     }
@@ -222,7 +253,7 @@ class FamilyMediaAgent {
     if (!this.videosList) return;
 
     if (this.videos.length === 0) {
-      this.videosList.innerHTML = '<p class="empty-message">No videos created yet. Go to "Create Slideshow" to get started!</p>';
+      this.videosList.innerHTML = '<p class="empty-message">No videos uploaded to server yet.\\n\\nNote: Videos created locally will download to your device (check Downloads folder). To see them here, run the Node.js backend server.</p>';
       return;
     }
 
@@ -251,6 +282,7 @@ class FamilyMediaAgent {
 
     try {
       await this.apiClient.deleteVideo(filename);
+      console.log('Video deleted:', filename);
       this.loadVideos();
     } catch (error) {
       console.error('Delete failed:', error);
@@ -259,6 +291,7 @@ class FamilyMediaAgent {
   }
 }
 
+// Global helpers
 function clearImages() {
   if (window.mediaAgent) window.mediaAgent.removeAllImages();
 }
@@ -307,6 +340,7 @@ function updateDurationDisplay() {
   }
 }
 
+// Initialize when page loads
 document.addEventListener('DOMContentLoaded', () => {
   window.mediaAgent = new FamilyMediaAgent();
 });
