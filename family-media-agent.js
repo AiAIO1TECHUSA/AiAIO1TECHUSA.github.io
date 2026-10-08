@@ -17,11 +17,15 @@ class FamilyMediaAgent {
     this.imageCounter = document.getElementById('imageCounter');
     this.imagePreview = document.getElementById('imagePreview');
     this.removeAllBtn = document.querySelector('.remove-all-btn');
+    
+    // Log missing elements for debugging
+    if (!this.imageInput) console.warn('Missing: imageInput element');
+    if (!this.imageUploadZone) console.warn('Missing: imageUploadZone element');
   }
 
   attachEventListeners() {
     // Click to upload
-    if (this.imageUploadZone) {
+    if (this.imageUploadZone && this.imageInput) {
       this.imageUploadZone.addEventListener('click', () => {
         this.imageInput.click();
       });
@@ -62,7 +66,12 @@ class FamilyMediaAgent {
   }
 
   handleImageUpload(event) {
-    const files = event.target.files;
+    const files = event.target?.files;
+    
+    if (!files || files.length === 0) {
+      console.warn('No files provided');
+      return;
+    }
     
     for (let file of files) {
       if (file.type.startsWith('image/')) {
@@ -76,7 +85,12 @@ class FamilyMediaAgent {
           this.updateImageCount();
           this.renderImagePreview();
         };
+        reader.onerror = () => {
+          console.error(`Failed to read file: ${file.name}`);
+        };
         reader.readAsDataURL(file);
+      } else {
+        console.warn(`Skipped non-image file: ${file.name}`);
       }
     }
   }
