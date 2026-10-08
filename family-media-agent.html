@@ -14,9 +14,9 @@
     </div>
 
     <div class="agent-tabs">
-      <button class="tab-btn active" onclick="switchTab('create', event)">📸 Create Slideshow</button>
-      <button class="tab-btn" onclick="switchTab('gallery', event)">🎬 My Videos</button>
-      <button class="tab-btn" onclick="switchTab('settings', event)">⚙️ Settings</button>
+      <button class="tab-btn active" type="button" onclick="switchTab('create', event)">📸 Create Slideshow</button>
+      <button class="tab-btn" type="button" onclick="switchTab('gallery', event)">🎬 My Videos</button>
+      <button class="tab-btn" type="button" onclick="switchTab('settings', event)">⚙️ Settings</button>
     </div>
 
     <div id="createTab" class="tab-content active">
@@ -36,7 +36,7 @@
 
           <div class="image-stats" id="imageStats" style="display:none;">
             <p id="imageCount">📷 Images loaded: 0</p>
-            <button class="btn-clear-images" onclick="clearImages()">Remove all</button>
+            <button class="btn-clear-images" type="button" onclick="clearImages()">Remove all</button>
           </div>
         </div>
 
@@ -95,8 +95,8 @@
         </div>
 
         <div class="control-buttons" id="controlButtons" style="display:none;">
-          <button class="btn btn-primary" onclick="createVideoSlideshow()">🎬 Create Video Slideshow</button>
-          <button class="btn btn-secondary" onclick="resetAgent()">🔄 Start Over</button>
+          <button class="btn btn-primary" type="button" onclick="createVideoSlideshow()">🎬 Create Video Slideshow</button>
+          <button class="btn btn-secondary" type="button" onclick="resetAgent()">🔄 Start Over</button>
         </div>
 
         <div class="creation-progress" id="creationProgress" style="display:none;">
@@ -134,7 +134,7 @@
         <div class="settings-section">
           <h2>Download Options</h2>
           <label><input type="checkbox" id="includeMetadata" checked> Include photo info</label>
-          <p class="help-text">Files are stored locally on your device. Clear browser data to delete.</p>
+          <p class="help-text">Videos are stored in your browser on this device.</p>
         </div>
 
         <div class="agent-message">
@@ -148,7 +148,6 @@
     </div>
   </section>
 
-  <script src="family-media-agent-api-client.js"></script>
   <script src="family-media-agent.js"></script>
 </body>
 </html>
