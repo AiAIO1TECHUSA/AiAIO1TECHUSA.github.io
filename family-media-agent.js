@@ -12,15 +12,26 @@ class FamilyMediaAgent {
   }
 
   cacheElements() {
+    // Match actual HTML IDs and selectors
     this.imageInput = document.getElementById('imageInput');
     this.imageUploadZone = document.getElementById('imageUploadZone');
-    this.imageCounter = document.getElementById('imageCounter');
-    this.imagePreview = document.getElementById('imagePreview');
-    this.removeAllBtn = document.querySelector('.remove-all-btn');
+    this.imageCounter = document.getElementById('imageCount'); // HTML uses 'imageCount' not 'imageCounter'
+    this.imagePreview = document.getElementById('previewGrid'); // HTML uses 'previewGrid' not 'imagePreview'
+    this.removeAllBtn = document.querySelector('button[onclick="clearImages()"]'); // Target the actual clear button
     
     // Log missing elements for debugging
-    if (!this.imageInput) console.warn('Missing: imageInput element');
-    if (!this.imageUploadZone) console.warn('Missing: imageUploadZone element');
+    console.log('FamilyMediaAgent initialized:', {
+      imageInput: !!this.imageInput,
+      imageUploadZone: !!this.imageUploadZone,
+      imageCounter: !!this.imageCounter,
+      imagePreview: !!this.imagePreview,
+      removeAllBtn: !!this.removeAllBtn
+    });
+    
+    if (!this.imageInput) console.error('Missing: #imageInput');
+    if (!this.imageUploadZone) console.error('Missing: #imageUploadZone');
+    if (!this.imageCounter) console.error('Missing: #imageCount');
+    if (!this.imagePreview) console.error('Missing: #previewGrid');
   }
 
   attachEventListeners() {
@@ -58,18 +69,13 @@ class FamilyMediaAgent {
         this.handleImageUpload({ target: { files: e.dataTransfer.files } });
       });
     }
-
-    // Remove all button
-    if (this.removeAllBtn) {
-      this.removeAllBtn.addEventListener('click', () => this.removeAllImages());
-    }
   }
 
   handleImageUpload(event) {
     const files = event.target?.files;
     
     if (!files || files.length === 0) {
-      console.warn('No files provided');
+      console.warn('No files selected');
       return;
     }
     
@@ -82,8 +88,10 @@ class FamilyMediaAgent {
             data: e.target.result,
             timestamp: Date.now()
           });
+          console.log(`Image added: ${file.name} (Total: ${this.images.length})`);
           this.updateImageCount();
           this.renderImagePreview();
+          this.showPreviewSection();
         };
         reader.onerror = () => {
           console.error(`Failed to read file: ${file.name}`);
@@ -99,21 +107,46 @@ class FamilyMediaAgent {
     if (this.imageCounter) {
       this.imageCounter.textContent = `📷 Images loaded: ${this.images.length}`;
     }
+    
+    // Show/hide image stats and preview sections
+    const imageStats = document.getElementById('imageStats');
+    const previewSection = document.getElementById('previewSection');
+    const videoSettingsSection = document.getElementById('videoSettingsSection');
+    
+    if (this.images.length > 0) {
+      if (imageStats) imageStats.style.display = 'block';
+      if (previewSection) previewSection.style.display = 'block';
+      if (videoSettingsSection) videoSettingsSection.style.display = 'block';
+    } else {
+      if (imageStats) imageStats.style.display = 'none';
+      if (previewSection) previewSection.style.display = 'none';
+      if (videoSettingsSection) videoSettingsSection.style.display = 'none';
+    }
+  }
+
+  showPreviewSection() {
+    const previewSection = document.getElementById('previewSection');
+    if (previewSection) {
+      previewSection.style.display = 'block';
+    }
   }
 
   renderImagePreview() {
-    if (!this.imagePreview) return;
+    if (!this.imagePreview) {
+      console.warn('Preview grid element not found');
+      return;
+    }
     
     if (this.images.length === 0) {
-      this.imagePreview.innerHTML = '<p style="text-align: center; opacity: 0.6;">No images yet</p>';
+      this.imagePreview.innerHTML = '<p style="text-align: center; opacity: 0.6; grid-column: 1/-1;">No images yet</p>';
       return;
     }
 
     this.imagePreview.innerHTML = this.images.map((img, idx) => `
       <div class="image-item" draggable="true" data-index="${idx}">
-        <img src="${img.data}" alt="${img.name}">
+        <img src="${img.data}" alt="${img.name}" loading="lazy">
         <div class="image-info">${img.name}</div>
-        <button class="remove-btn" onclick="mediaAgent.removeImage(${idx})">✕</button>
+        <button class="remove-btn" type="button" onclick="mediaAgent.removeImage(${idx})">✕</button>
       </div>
     `).join('');
   }
@@ -122,12 +155,21 @@ class FamilyMediaAgent {
     this.images.splice(index, 1);
     this.updateImageCount();
     this.renderImagePreview();
+    console.log(`Image removed. Remaining: ${this.images.length}`);
   }
 
   removeAllImages() {
     this.images = [];
     this.updateImageCount();
     this.renderImagePreview();
+    console.log('All images cleared');
+  }
+}
+
+// Global helper function for HTML onclick
+function clearImages() {
+  if (window.mediaAgent) {
+    window.mediaAgent.removeAllImages();
   }
 }
 
