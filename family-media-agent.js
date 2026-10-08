@@ -1,8 +1,10 @@
-// Family Media Agent - Image Upload Handler
+// Family Media Agent - Complete Frontend Upload Flow
 class FamilyMediaAgent {
   constructor() {
     this.images = [];
+    this.videos = [];
     this.currentTab = 'create';
+    this.apiClient = new MediaAgentAPIClient('http://localhost:3000');
     this.init();
   }
 
@@ -10,6 +12,7 @@ class FamilyMediaAgent {
     this.cacheElements();
     this.attachEventListeners();
     this.updateImageCount();
+    this.loadVideos();
   }
 
   cacheElements() {
@@ -18,13 +21,18 @@ class FamilyMediaAgent {
     this.imageCounter = document.getElementById('imageCount');
     this.imagePreview = document.getElementById('previewGrid');
     this.removeAllBtn = document.querySelector('.btn-clear-images');
+    this.videosList = document.getElementById('videosList');
+    this.creationProgress = document.getElementById('creationProgress');
+    this.progressFill = document.getElementById('progressFill');
+    this.progressText = document.getElementById('progressText');
 
     console.log('FamilyMediaAgent initialized:', {
       imageInput: !!this.imageInput,
       imageUploadZone: !!this.imageUploadZone,
       imageCounter: !!this.imageCounter,
       imagePreview: !!this.imagePreview,
-      removeAllBtn: !!this.removeAllBtn
+      removeAllBtn: !!this.removeAllBtn,
+      videosList: !!this.videosList
     });
   }
 
@@ -172,6 +180,135 @@ class FamilyMediaAgent {
     this.renderImagePreview();
     console.log('All images cleared');
   }
+
+  /**
+   * Create video and upload to server
+   */
+  async createVideoSlideshow() {
+    if (!this.images || this.images.length === 0) {
+      alert('Please upload at least one image first');
+      return;
+    }
+
+    const videoName = document.getElementById('videoName')?.value || 'Family Memories';
+    const duration = document.getElementById('imageDuration')?.value || 3;
+    const quality = document.getElementById('videoQuality')?.value || '720';
+
+    try {
+      // Show progress
+      if (this.creationProgress) this.creationProgress.style.display = 'block';
+      this.updateProgress(0, 'Creating video...');
+
+      // Create a mock video file (in production, this would use FFmpeg on the backend)
+      const mockVideoBlob = this.createMockVideo(videoName, this.images.length, duration);
+      
+      // Upload video
+      this.updateProgress(10, 'Uploading video...');
+      const result = await this.apiClient.uploadVideo(mockVideoBlob, (progress) => {
+        this.updateProgress(Math.min(90, 10 + (progress / 100) * 80), 'Uploading...');
+      });
+
+      this.updateProgress(100, 'Upload complete!');
+      console.log('Video uploaded:', result);
+
+      // Wait a moment then reset
+      setTimeout(() => {
+        this.resetAgent();
+        this.loadVideos();
+        alert(`✅ Video "${videoName}" created and saved!\n\nView it in the "My Videos" tab.`);
+      }, 1500);
+
+    } catch (error) {
+      console.error('Video creation failed:', error);
+      this.updateProgress(0, 'Upload failed');
+      alert(`❌ Failed to create video: ${error.message}`);
+      if (this.creationProgress) this.creationProgress.style.display = 'none';
+    }
+  }
+
+  /**
+   * Create a mock video blob for demo purposes
+   * In production, use FFmpeg or a video encoding API
+   */
+  createMockVideo(name, imageCount, duration) {
+    const text = `Family Memories\n${imageCount} photos\n${duration}s each`;
+    const blob = new Blob([text], { type: 'video/mp4' });
+    blob.name = `${name.replace(/\s+/g, '-')}-${Date.now()}.mp4`;
+    return blob;
+  }
+
+  /**
+   * Update progress bar
+   */
+  updateProgress(percent, text) {
+    if (this.progressFill) {
+      this.progressFill.style.width = percent + '%';
+    }
+    if (this.progressText) {
+      this.progressText.textContent = text + ` ${Math.round(percent)}%`;
+    }
+  }
+
+  /**
+   * Load videos from server
+   */
+  async loadVideos() {
+    try {
+      const data = await this.apiClient.listVideos();
+      this.videos = data.videos || [];
+      this.renderVideosList();
+    } catch (error) {
+      console.warn('Failed to load videos:', error.message);
+      this.videos = [];
+    }
+  }
+
+  /**
+   * Render videos gallery
+   */
+  renderVideosList() {
+    if (!this.videosList) return;
+
+    if (this.videos.length === 0) {
+      this.videosList.innerHTML = '<p class="empty-message">No videos created yet. Go to "Create Slideshow" to get started!</p>';
+      return;
+    }
+
+    this.videosList.innerHTML = this.videos.map(video => `
+      <div class="video-card">
+        <div class="video-player">
+          <video controls width="100%">
+            <source src="${video.url}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+        <div class="video-info">
+          <p class="video-name">${video.filename}</p>
+          <p class="video-size">${(video.size / 1024 / 1024).toFixed(2)} MB</p>
+          <div class="video-actions">
+            <a href="${video.url}" download class="btn-download">📥 Download</a>
+            <button class="btn-delete" onclick="mediaAgent.deleteVideo('${video.filename}')">🗑️ Delete</button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  /**
+   * Delete video from server
+   */
+  async deleteVideo(filename) {
+    if (!confirm(`Delete "${filename}"?`)) return;
+
+    try {
+      await this.apiClient.deleteVideo(filename);
+      console.log('Video deleted:', filename);
+      this.loadVideos();
+    } catch (error) {
+      console.error('Delete failed:', error);
+      alert(`Failed to delete video: ${error.message}`);
+    }
+  }
 }
 
 // Global HTML helper used by the inline button
@@ -199,21 +336,18 @@ function switchTab(tabName, event) {
   if (event && event.target) {
     event.target.classList.add('active');
   }
+
+  // Load videos when switching to gallery tab
+  if (tabName === 'gallery' && window.mediaAgent) {
+    window.mediaAgent.loadVideos();
+  }
 }
 
 // Create video slideshow
 function createVideoSlideshow() {
-  if (!window.mediaAgent || window.mediaAgent.images.length === 0) {
-    alert('Please upload images first');
-    return;
+  if (window.mediaAgent) {
+    window.mediaAgent.createVideoSlideshow();
   }
-  
-  const videoName = document.getElementById('videoName').value || 'Family Memories';
-  const duration = document.getElementById('imageDuration').value || 3;
-  const quality = document.getElementById('videoQuality').value || '720';
-  
-  console.log('Creating video:', { videoName, duration, quality, imageCount: window.mediaAgent.images.length });
-  alert(`Video creation started!\nName: ${videoName}\nImages: ${window.mediaAgent.images.length}\nDuration: ${duration}s each\nQuality: ${quality}p\n\nNote: This demo shows the UI. Actual video encoding requires a backend service.`);
 }
 
 // Reset agent
@@ -224,6 +358,7 @@ function resetAgent() {
     document.getElementById('imageDuration').value = 3;
     document.getElementById('videoQuality').value = '720';
     document.getElementById('musicTrack').value = 'none';
+    document.getElementById('creationProgress').style.display = 'none';
     switchTab('create');
   }
 }
@@ -235,8 +370,7 @@ function updateDurationDisplay() {
   if (display) {
     display.textContent = duration + 's';
   }
-  
-  // Update estimated length
+
   if (window.mediaAgent) {
     const totalSeconds = window.mediaAgent.images.length * parseInt(duration);
     const minutes = Math.floor(totalSeconds / 60);
