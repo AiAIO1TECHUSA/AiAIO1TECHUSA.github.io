@@ -5,6 +5,7 @@ class FamilyMediaAgent {
     this.images = [];
     this.videos = [];
     this.currentTab = 'create';
+    this.isCreating = false;
     this.init();
   }
 
@@ -180,11 +181,17 @@ class FamilyMediaAgent {
   }
 
   async createVideoSlideshow() {
+    if (this.isCreating) {
+      alert('Video creation already in progress. Please wait.');
+      return;
+    }
+
     if (!this.images || this.images.length === 0) {
       alert('Please upload at least one image first.');
       return;
     }
 
+    this.isCreating = true;
     const duration = Number(document.getElementById('imageDuration')?.value || 3);
     const quality = Number(document.getElementById('videoQuality')?.value || 720);
     const name = (document.getElementById('videoName')?.value || 'Family Memories').trim() || 'Family Memories';
@@ -194,43 +201,99 @@ class FamilyMediaAgent {
 
     const width = quality >= 1080 ? 1920 : quality >= 720 ? 1280 : 854;
     const height = quality >= 1080 ? 1080 : quality >= 720 ? 720 : 480;
+    const fps = 30;
 
-    const canvas = document.createElement('canvas');
-    canvas.width = width;
-    canvas.height = height;
-    const ctx = canvas.getContext('2d');
+    try {
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
 
-    const frames = [];
-    for (let i = 0; i < this.images.length; i++) {
-      this.setProgress(Math.min(90, 10 + ((i / this.images.length) * 70)), `Loading photo ${i + 1}/${this.images.length}`);
-      const img = await this.loadImage(this.images[i].data);
-      const maxDim = Math.max(img.width, img.height);
-      const scale = Math.min(width / maxDim, height / maxDim);
-      const drawW = img.width * scale;
-      const drawH = img.height * scale;
-      const x = (width - drawW) / 2;
-      const y = (height - drawH) / 2;
+      // Check if captureStream is supported
+      if (!canvas.captureStream) {
+        throw new Error('Canvas recording not supported in this browser. Please use Chrome, Firefox, or Edge.');
+      }
 
-      ctx.clearRect(0, 0, width, height);
-      ctx.fillStyle = '#111827';
-      ctx.fillRect(0, 0, width, height);
-      ctx.drawImage(img, x, y, drawW, drawH);
+      // Preload all images
+      const loadedImages = [];
+      for (let i = 0; i < this.images.length; i++) {
+        this.setProgress(Math.min(20, 5 + ((i / this.images.length) * 15)), `Loading photo ${i + 1}/${this.images.length}`);
+        const img = await this.loadImage(this.images[i].data);
+        loadedImages.push(img);
+      }
 
-      const frame = await this.captureCanvasFrame(canvas);
-      frames.push(frame);
-    }
+      this.setProgress(25, 'Initializing video encoder...');
 
-    const mimeType = this.getSupportedMimeType();
-    const stream = canvas.captureStream(30);
-    const recorder = new MediaRecorder(stream, mimeType ? { mimeType } : undefined);
-    const chunks = [];
+      // Setup MediaRecorder with proper MIME type
+      const mimeType = this.getSupportedMimeType();
+      const stream = canvas.captureStream(fps);
+      const recorder = new MediaRecorder(stream, mimeType ? { mimeType } : undefined);
+      const chunks = [];
 
-    recorder.ondataavailable = (event) => {
-      if (event.data && event.data.size > 0) chunks.push(event.data);
-    };
+      recorder.ondataavailable = (event) => {
+        if (event.data && event.data.size > 0) {
+          chunks.push(event.data);
+        }
+      };
 
-    recorder.onstop = () => {
-      const blob = new Blob(chunks, { type: mimeType || 'video/mp4' });
+      // Promise wrapper for recorder stop event
+      const recordingComplete = new Promise((resolve) => {
+        recorder.onstop = () => {
+          resolve(chunks);
+        };
+      });
+
+      recorder.start();
+      this.setProgress(30, 'Rendering frames...');
+
+      // Render frames with proper timing
+      let frameCount = 0;
+      const totalFrames = this.images.length * duration * fps;
+
+      for (let i = 0; i < this.images.length; i++) {
+        const img = loadedImages[i];
+        
+        // Draw image on canvas
+        const maxDim = Math.max(img.width, img.height);
+        const scale = Math.min(width / maxDim, height / maxDim);
+        const drawW = img.width * scale;
+        const drawH = img.height * scale;
+        const x = (width - drawW) / 2;
+        const y = (height - drawH) / 2;
+
+        ctx.clearRect(0, 0, width, height);
+        ctx.fillStyle = '#111827';
+        ctx.fillRect(0, 0, width, height);
+        ctx.drawImage(img, x, y, drawW, drawH);
+
+        // Display frame for the specified duration
+        const frameDurationMs = 1000 / fps; // milliseconds per frame
+        const totalFramesPerImage = duration * fps;
+
+        for (let f = 0; f < totalFramesPerImage; f++) {
+          frameCount++;
+          const progress = 30 + ((frameCount / totalFrames) * 65);
+          this.setProgress(Math.min(95, progress), `Rendering frames... ${frameCount}/${totalFrames}`);
+          
+          await this.wait(frameDurationMs);
+        }
+      }
+
+      this.setProgress(96, 'Finalizing video...');
+      recorder.stop();
+
+      // Wait for recording to complete
+      const videoChunks = await recordingComplete;
+
+      this.setProgress(98, 'Creating download link...');
+
+      // Create video blob
+      const blob = new Blob(videoChunks, { type: mimeType || 'video/mp4' });
+      
+      if (blob.size === 0) {
+        throw new Error('Video recording produced empty file. Please try again.');
+      }
+
       const videoDataUrl = URL.createObjectURL(blob);
       const extension = mimeType && mimeType.includes('webm') ? 'webm' : 'mp4';
       const cleanedName = `${name.replace(/\s+/g, '-') || 'family-memories'}-${Date.now()}.${extension}`;
@@ -247,43 +310,31 @@ class FamilyMediaAgent {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(stored.slice(0, 20)));
       this.videos = stored.slice(0, 20);
       this.renderVideosList();
-      this.resetAgent();
+      
       this.setProgress(100, 'Video ready!');
-      setTimeout(() => this.hideProgress(), 1200);
-      alert(`🎬 Slideshow created!\n\n"${cleanedName}" has been saved in My Videos.\n\nIt will also download automatically when opened.`);
+      await this.wait(500);
+      this.hideProgress();
+      
+      this.resetAgent();
+      alert(`🎬 Slideshow created!\n\n"${cleanedName}" has been saved in My Videos.\n\nFile size: ${this.formatBytes(blob.size)}\n\nIt will now download to your device.`);
       this.triggerDownload(videoDataUrl, cleanedName);
-    };
 
-    this.setProgress(95, 'Rendering video...');
-    recorder.start();
-
-    for (let i = 0; i < frames.length; i++) {
-      const frame = frames[i];
-      ctx.clearRect(0, 0, width, height);
-      ctx.drawImage(frame, 0, 0, width, height);
-      await this.wait(duration * 1000 / 2);
+    } catch (error) {
+      console.error('Video creation failed:', error);
+      this.hideProgress();
+      alert(`❌ Error creating video:\n\n${error.message}\n\nPlease try:\n1. Using a different browser (Chrome, Firefox, Edge)\n2. Reducing the number of photos\n3. Reducing video quality\n4. Checking browser console for more details`);
+    } finally {
+      this.isCreating = false;
     }
-
-    recorder.stop();
   }
 
   async loadImage(src) {
     return new Promise((resolve, reject) => {
       const img = new Image();
+      img.crossOrigin = 'anonymous';
       img.onload = () => resolve(img);
-      img.onerror = reject;
+      img.onerror = () => reject(new Error(`Failed to load image: ${src.substring(0, 50)}...`));
       img.src = src;
-    });
-  }
-
-  captureCanvasFrame(canvas) {
-    return new Promise((resolve) => {
-      const tempCanvas = document.createElement('canvas');
-      tempCanvas.width = canvas.width;
-      tempCanvas.height = canvas.height;
-      const tempCtx = tempCanvas.getContext('2d');
-      tempCtx.drawImage(canvas, 0, 0);
-      resolve(tempCanvas);
     });
   }
 
@@ -296,14 +347,27 @@ class FamilyMediaAgent {
       'video/mp4',
       'video/webm;codecs=vp9,opus',
       'video/webm;codecs=vp8,opus',
+      'video/webm;codecs=vp8',
       'video/webm'
     ];
 
-    return types.find((type) => MediaRecorder.isTypeSupported(type)) || '';
+    for (const type of types) {
+      try {
+        if (MediaRecorder.isTypeSupported(type)) {
+          console.log('Using MIME type:', type);
+          return type;
+        }
+      } catch (e) {
+        console.warn('Error checking MIME type:', type, e);
+      }
+    }
+    
+    console.warn('No supported MIME type found, using default');
+    return '';
   }
 
   setProgress(percent, text) {
-    if (this.progressFill) this.progressFill.style.width = `${percent}%`;
+    if (this.progressFill) this.progressFill.style.width = `${Math.round(percent)}%`;
     if (this.progressText) this.progressText.textContent = `${text} ${Math.round(percent)}%`;
   }
 
