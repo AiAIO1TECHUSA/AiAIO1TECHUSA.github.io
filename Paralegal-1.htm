@@ -431,13 +431,19 @@
     <div class="iframe-wrapper video-player-wrapper">
       <h2>Video Upload Player</h2>
       <iframe 
-        src="thegeakspeaks.html#video-upload" 
-        width="100%" 
-        height="800px" 
-        frameborder="0"
-        loading="lazy"
-        title="Video Upload and Player">
-      </iframe>
+  id="thegeakspeaks-iframe"
+  src="thegeakspeaks.html#video-upload"
+  title="The Geak Speaks - Video Upload"
+  style="width: 100%; height: 600px; border: none; border-radius: 8px;"
+  loading="lazy">
+</iframe>
+
+<script>
+  document.getElementById('thegeakspeaks-iframe').addEventListener('load', function() {
+    this.contentWindow.location.hash = 'video-upload';
+  });
+</script>
+
     </div>
   </div>
 </section>
