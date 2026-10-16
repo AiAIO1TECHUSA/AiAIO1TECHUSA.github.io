@@ -126,6 +126,122 @@
         .pay-logo { height: 32px; }
         .mastercard-large { height: 44px; }
     }
+     /* HERO WARRIOR SECTION */
+.hero-warrior {
+  position: relative;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  padding: 60px 20px;
+  min-height: 100vh;
+  color: #fff;
+  overflow: hidden;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,...') /* military pattern */;
+  opacity: 0.1;
+  pointer-events: none;
+}
+
+.hero-container {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.hero-header {
+  text-align: center;
+  margin-bottom: 60px;
+  animation: fadeInDown 0.8s ease;
+}
+
+.hero-header h1 {
+  font-size: 3.5rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.hero-subtitle {
+  font-size: 1.3rem;
+  color: #ccc;
+  font-weight: 300;
+}
+
+/* IFRAME WRAPPERS */
+.iframe-wrapper {
+  margin-bottom: 80px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 30px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  animation: fadeInUp 0.8s ease;
+}
+
+.iframe-wrapper h2 {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 2px solid #ff6b6b;
+  padding-bottom: 10px;
+}
+
+.iframe-wrapper iframe {
+  border-radius: 4px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 768px) {
+  .hero-header h1 {
+    font-size: 2rem;
+  }
+  
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+  
+  .iframe-wrapper {
+    padding: 20px;
+  }
+  
+  .iframe-wrapper iframe {
+    height: 600px !important;
+  }
+}
+
+/* ANIMATIONS */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+     }
+     
     </style>
 </head>
 
@@ -288,6 +404,44 @@
             <button type="submit" class="contact-submit">Send Message</button>
         </form>
     </section>
+ <!-- HERO WARRIOR SECTION WITH EMBEDDED IFRAMES -->
+<section class="hero-warrior">
+  <div class="hero-overlay"></div>
+  
+  <div class="hero-container">
+    <div class="hero-header">
+      <h1>Your Family Legacy in Motion</h1>
+      <p class="hero-subtitle">Create video slideshows from your cherished moments</p>
+    </div>
+    
+    <!-- FAMILY MEDIA AGENT IFRAME -->
+    <div class="iframe-wrapper family-media-wrapper">
+      <h2>Family Media Agent</h2>
+      <iframe 
+        src="family-media-agent.html" 
+        width="100%" 
+        height="800px" 
+        frameborder="0"
+        loading="lazy"
+        title="Family Media Agent Tool">
+      </iframe>
+    </div>
+    
+    <!-- VIDEO UPLOAD PLAYER IFRAME -->
+    <div class="iframe-wrapper video-player-wrapper">
+      <h2>Video Upload Player</h2>
+      <iframe 
+        src="thegeakspeaks.html" 
+        width="100%" 
+        height="800px" 
+        frameborder="0"
+        loading="lazy"
+        title="Video Upload and Player">
+      </iframe>
+    </div>
+  </div>
+</section>
+ 
 
     <!-- ===========================
          MULTI-COLUMN ARTICLE
