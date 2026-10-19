@@ -1,10 +1,91 @@
-<!DOCTYPE html><html lang="en" dir="ltr">
-<head>
+<!DOCTYPE><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A responsive webpage with SEO optimization, 30% white space, and horizontal scrolling container.">
+    <link rel="stylesheet" href="../cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css">
+<script src="../cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <title>SEO Optimization AI</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+        header {
+            text-align: center;
+            padding: 2rem 0;
+            background-color: #2c3e50;
+            color: white;
+            margin-bottom: 2rem;
+        }
+        h1 {
+            margin: 0;
+        }
+        .scroll-container {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            gap: 1.5rem;
+            padding: 1rem 0;
+            margin: 2rem 0;
+            background: #ecf0f1;
+            border-radius: 8px;
+        }
+        .card {
+            flex: 0 0 auto;
+            width: 80vw;
+            max-width: 500px;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            scroll-snap-align: start;
+        }
+        @media (max-width: 600px) {
+            .card {
+                width: 90vw;
+            }
+        }
+    .code-block {
+  background: #2c2c2c;
+  color: #f0f0f0;
+  padding: 10px;
+  border-radius: 5px;
+  font-family: 'Courier New', Courier, monospace;
+  cursor: pointer;
+  margin-bottom: 5px;
+  transition: background 0.3s ease;
+}
+    .code-block-bot {
+    color: deepskyblue; /* Color for the code text */
+    margin: 5px 10px;  /* Margin for spacing */
+    background-color: #eaeaea; /* A bit darker background */
+    white-space: pre-wrap; /* Allows text to wrap correctly */
+}
+.code-block:hover {
+  background: #444;
+}
+.highlight {
+  background-color: #ffeb3b;
+  color: #000;
+}
+    </style>
+<link rel="modulepreload" href="aes.js">
+
     <!-- Meta Tags & SEO -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="Sports Bet Intelligence Agent - Real-time injury reports, player stats, team records, and betting analysis powered by AI.">
+    <meta name="description" content="Sports Picks Intelligence Agent - Real-time injury reports, player stats, team records, and betting analysis powered by AI.">
     <meta name="keywords" content="sports betting, injury reports, player stats, team records, bet analysis, AI sports intelligence">
     <meta name="author" content="#1techusa and AIO Sports Intelligence">
     <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
@@ -14,23 +95,12 @@
     <!-- Open Graph / Social Media -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://aiaio1techusa.github.io/SportsBetAgent.html">
-    <meta property="og:title" content="Sports Bet Intelligence Agent - AI-Powered Betting Analysis">
+    <meta property="og:title" content="Sports Picks Intelligence Agent - AI-Powered Picks Analysis">
     <meta property="og:description" content="Analyze sports bets with real-time injury reports, player stats, team records, and frontier news.">
     <meta property="og:image" content="https://aiaio1techusa.github.io/assets/sports-bet-agent-og.png">
     <meta property="og:site_name" content="Frontier LLM">
 
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:url" content="https://aiaio1techusa.github.io/SportsBetAgent.html">
-    <meta name="twitter:title" content="Sports Bet Intelligence Agent">
-    <meta name="twitter:description" content="AI-powered sports betting analysis with real-time data.">
-    <meta name="twitter:image" content="https://aiaio1techusa.github.io/assets/sports-bet-agent-og.png">
-
-    <!-- California Compliance & Legal -->
-    <meta name="legal:jurisdiction" content="California, United States">
-    <link rel="license" href="https://aiaio1techusa.github.io/terms-of-service.html">
-    <link rel="privacy-policy" href="https://aiaio1techusa.github.io/privacy-policy-ca.html">
-
+  
     <!-- Structured Data (JSON-LD) -->
     <script type="application/ld+json">
     {
@@ -61,8 +131,8 @@
     <link rel="alternate" hreflang="en" href="https://aiaio1techusa.github.io/SportsBetAgent.html">
 
     <!-- Favicon & Icons -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75' fill='%23007bff'>⚽</text></svg>">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><text y='140' font-size='140' fill='%23007bff'>⚽</text></svg>">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75' fill='%23007bff'>⚽🏈⚾🏒🏀</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><text y='140' font-size='140' fill='%23007bff'>⚽🏈⚾🏒🏀</text></svg>">
 
     <!-- Preconnect to External Services -->
     <link rel="preconnect" href="https://api.anthropic.com" crossorigin>
@@ -76,7 +146,7 @@
     <link rel="stylesheet" href="sports-bet-agent.css">
 
     <!-- Title & Branding -->
-    <title>Sports Bet Intelligence Agent - AI-Powered Betting Analysis | Frontier LLM</title>
+    <title>Sports Picks Intelligence Agent - AI-Powered Experts Analysis | Frontier LLM</title>
 </head>
 
 <body>
@@ -85,21 +155,21 @@
         <div class="container">
             <div class="header-content">
                 <div class="logo">
-                    <span>⚽</span>
+                    <span>⚾🏒🏀⚽🏈</span>
                     <div>
                         <h1>Frontier LLM</h1>
                         <div class="breadcrumb">
-                            <a href="https://aiaio1techusa.github.io/">Home</a> /
-                            <a href="https://aiaio1techusa.github.io/tools/">Tools</a> /
-                            Sports Bet Agent
+                            <a href="https://aiaio1techusa.github.io/">Military Apparel Shop</a>
+                            <a href="https://aiaio1techusa.github.io/Paralegal-1.htm">Interactive Tools</a>
+                            Sports Wager Agent
                         </div>
                     </div>
                 </div>
                 <nav>
                     <a href="https://aiaio1techusa.github.io/">Home</a>
-                    <a href="https://about.me/the1techusa" target="_blank">About</a>
-                    <a href="https://aiaio1techusa.github.io/privacy-policy-ca.html">Privacy (CA)</a>
-                    <a href="https://aiaio1techusa.github.io/terms-of-service.html">Terms</a>
+                    <a href="https://aiaio1techusa.github.io/">About</a>
+                    <a href="https://aiaio1techusa.github.io/index.htm">ai-aio-1techusa</a>
+                    <a href="https://aiaio1techusa.github.io/Paralegal-1.htm">ai-paralegal</a>
                 </nav>
             </div>
         </div>
@@ -108,15 +178,15 @@
     <!-- ===== MAIN CONTENT ===== -->
     <main>
         <section class="hero-section">
-            <h2>Sports Bet Intelligence</h2>
-            <p class="hero-subtitle">Analyze your bets with AI-powered insights using real-time injury reports, player statistics, and team records.</p>
+            <h2>Sports Experts Intelligence</h2>
+            <p class="hero-subtitle">Analyze your sports picks with AI-powered insights using real-time injury reports, player statistics, and team records.</p>
         </section>
 
         <!-- ===== FRONTIER LLM BOX ===== -->
         <div class="frontier-llm-box">
-            <h2>LLM-AGENT // Sports Bet Intelligence</h2>
+            <h2>LLM-AGENT // Sports Experts Intelligence</h2>
             <p class="subtext">
-                BET PARSING • INJURY UPDATES • PLAYER STATS • TEAM RECORDS • NEWS ANALYSIS
+                PICKS PARSING • INJURY UPDATES • PLAYER STATS • TEAM RECORDS • NEWS ANALYSIS
             </p>
 
             <form id="betForm">
@@ -129,8 +199,7 @@
                         type="text"
                         placeholder="Example: Lakers"
                         autocomplete="off"
-                        required
-                    >
+                        required>
                 </div>
 
                 <div class="form-group">
@@ -142,16 +211,15 @@
                         type="text"
                         placeholder="Example: Celtics"
                         autocomplete="off"
-                        required
-                    >
+                        required>
                 </div>
 
                 <div class="form-group">
                     <label for="betType">
-                        Bet Type
+                        Wager Type
                     </label>
                     <select id="betType" required>
-                        <option value="">Select Bet Type</option>
+                        <option value="">Select Wager Type</option>
                         <option value="moneyline">Moneyline</option>
                         <option value="spread">Point Spread</option>
                         <option value="over_under">Over/Under</option>
@@ -168,8 +236,7 @@
                         id="odds"
                         type="text"
                         placeholder="Example: -5.5 or -110"
-                        autocomplete="off"
-                    >
+                        autocomplete="off">
                 </div>
 
                 <div class="form-group">
@@ -193,8 +260,7 @@
                     <input
                         id="gameDate"
                         type="datetime-local"
-                        autocomplete="off"
-                    >
+                        autocomplete="off">
                 </div>
 
                 <div class="form-group">
@@ -204,16 +270,14 @@
                     <input
                         id="betTicketImage"
                         type="file"
-                        accept="image/*"
-                    >
+                        accept="image/*">
                     <div id="imagePreview" class="image-preview"></div>
                 </div>
 
                 <button
                     type="button"
-                    onclick="runBetIntelligenceScan()"
-                >
-                    Initiate Bet Intelligence Scan
+                    onclick="runBetIntelligenceScan()">
+                    Initiate AI Wager Scan
                 </button>
             </form>
 
@@ -225,50 +289,6 @@
             ></div>
         </div>
     </main>
-
-    <!-- ===== FOOTER ===== -->
-    <footer>
-        <div class="footer-content">
-            <div class="footer-section">
-                <h4>About This Tool</h4>
-                <p>Sports Bet Intelligence Agent analyzes sports bets using real-time data, injury reports, and AI-powered insights to help you make informed betting decisions.</p>
-            </div>
-
-            <div class="footer-section">
-                <h4>Legal & Compliance</h4>
-                <ul>
-                    <li><a href="https://aiaio1techusa.github.io/privacy-policy-ca.html">California Privacy Policy</a></li>
-                    <li><a href="https://aiaio1techusa.github.io/terms-of-service.html">Terms of Service</a></li>
-                    <li><a href="https://aiaio1techusa.github.io/responsible-gambling.html">Responsible Gambling</a></li>
-                    <li><a href="https://aiaio1techusa.github.io/disclaimer.html">Disclaimer</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-section">
-                <h4>Resources</h4>
-                <ul>
-                    <li><a href="https://aiaio1techusa.github.io/">Home</a></li>
-                    <li><a href="https://about.me/the1techusa" target="_blank">About Creator</a></li>
-                    <li><a href="https://aiaio1techusa.github.io/blog/">Blog</a></li>
-                    <li><a href="https://aiaio1techusa.github.io/contact/">Contact</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-section">
-                <h4>Connect</h4>
-                <ul>
-                    <li><a href="https://twitter.com/the1techusa" target="_blank">Twitter</a></li>
-                    <li><a href="https://linkedin.com/in/the1techusa" target="_blank">LinkedIn</a></li>
-                    <li><a href="https://github.com/aiaio1techusa" target="_blank">GitHub</a></li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="footer-bottom">
-            <p>&copy; <span id="currentYear"></span> Frontier LLM by #1techusa. All rights reserved.</p>
-            <p class="disclaimer">This tool is for informational purposes only and should not be considered financial or gambling advice.</p>
-        </div>
-    </footer>
 
     <!-- External JavaScript -->
     <script src="sports-bet-agent.js"></script>
