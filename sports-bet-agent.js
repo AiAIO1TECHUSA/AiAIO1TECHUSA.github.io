@@ -1,243 +1,543 @@
-// ===== SPORTS BET INTELLIGENCE AGENT =====
+/**
+ * FRONTIER LLM - SPORTS PICK AGENT
+ * LLM-AGENT Intelligence System v2.0
+ * Integrated E-Commerce Logic Applied to Sports Event Prediction
+ * 
+ * Architecture:
+ * - Anthropic Claude API integration
+ * - TheSportsDB data layer
+ * - Multi-sport adapters (NFL, NHL, MLB, NBA)
+ * - Real-time injury & statistical analysis
+ * - Confidence scoring & risk assessment
+ * 
+ * Author: #1techusa & AIO Sports Intelligence
+ */
 
-async function runBetIntelligenceScan() {
-const output = document.getElementById('output');
-output.innerHTML = '<p class="loading">⏳ Scanning bet intelligence...</p>';
+// ============================================================================
+// 1. CONFIGURATION & CONSTANTS
+// ============================================================================
 
-try {
-// 1. COLLECT BET DATA
-const betData = {
-homeTeam: document.getElementById('teamHome').value.trim(),
-awayTeam: document.getElementById('teamAway').value.trim(),
-betType: document.getElementById('betType').value,
-odds: document.getElementById('odds').value.trim(),
-sport: document.getElementById('sport').value,
-gameDate: document.getElementById('gameDate').value,
-ticketImage: document.getElementById('betTicketImage').files[0]
+const CONFIG = {
+  anthropic: {
+    apiKey: process.env.ANTHROPIC_API_KEY || '',
+    baseUrl: 'https://api.anthropic.com/v1/messages',
+    model: 'claude-3-5-sonnet-20241022',
+    maxTokens: 1024,
+  },
+  sportsdb: {
+    baseUrl: 'https://www.thesportsdb.com/api/v1/json/3',
+    timeout: 8000,
+  },
+  leagues: {
+    NFL: { id: 'nfl', sport: 'american-football', season: 2026 },
+    NHL: { id: 'nhl', sport: 'ice-hockey', season: 2026 },
+    MLB: { id: 'mlb', sport: 'baseball', season: 2026 },
+    NBA: { id: 'nba', sport: 'basketball', season: 2026 },
+  },
+  cache: {
+    ttl: 3600000, // 1 hour in milliseconds
+    maxSize: 500, // Max cached items
+  },
 };
 
-// Validate inputs
-if (!betData.homeTeam || !betData.awayTeam || !betData.sport) {
-output.innerHTML = '<p class="error">❌ Please fill in all required fields (teams and sport)</p>';
-return;
+// ============================================================================
+// 2. CACHE MANAGEMENT SYSTEM
+// ============================================================================
+
+class CacheManager {
+  constructor(ttl = CONFIG.cache.ttl) {
+    this.cache = new Map();
+    this.ttl = ttl;
+  }
+
+  set(key, value) {
+    if (this.cache.size >= CONFIG.cache.maxSize) {
+      // Remove oldest entry
+      const firstKey = this.cache.keys().next().value;
+      this.cache.delete(firstKey);
+    }
+    this.cache.set(key, {
+      value,
+      timestamp: Date.now(),
+    });
+  }
+
+  get(key) {
+    const entry = this.cache.get(key);
+    if (!entry) return null;
+
+    if (Date.now() - entry.timestamp > this.ttl) {
+      this.cache.delete(key);
+      return null;
+    }
+
+    return entry.value;
+  }
+
+  clear() {
+    this.cache.clear();
+  }
+
+  has(key) {
+    return this.get(key) !== null;
+  }
 }
 
-// 2. PARSE TICKET IMAGE (if provided)
-let ticketText = '';
-if (betData.ticketImage) {
-ticketText = await extractTextFromImage(betData.ticketImage);
+const cache = new CacheManager();
+
+// ============================================================================
+// 3. SPORTS DATA LAYER - TheSportsDB Integration
+// ============================================================================
+
+class SportsDataLayer {
+  constructor() {
+    this.baseUrl = CONFIG.sportsdb.baseUrl;
+    this.cache = cache;
+  }
+
+  async fetch(endpoint) {
+    const cacheKey = `sportsdb_${endpoint}`;
+
+    if (this.cache.has(cacheKey)) {
+      console.log(`[CACHE HIT] ${endpoint}`);
+      return this.cache.get(cacheKey);
+    }
+
+    try {
+      const response = await fetch(`${this.baseUrl}${endpoint}`, {
+        timeout: CONFIG.sportsdb.timeout,
+      });
+
+      if (!response.ok) {
+        throw new Error(
+          `TheSportsDB API Error: ${response.status} ${response.statusText}`
+        );
+      }
+
+      const data = await response.json();
+      this.cache.set(cacheKey, data);
+      return data;
+    } catch (error) {
+      console.error('[SPORTSDB ERROR]', error);
+      return null;
+    }
+  }
+
+  async fetchTeamStats(league, teamId) {
+    // Fetch last 10 games for team statistics
+    const endpoint = `/eventslast.php?id=${teamId}`;
+    const data = await this.fetch(endpoint);
+
+    if (!data || !data.results) return null;
+
+    return {
+      teamId,
+      league,
+      recentGames: data.results,
+      stats: this.calculateTeamStats(data.results),
+      lastUpdated: new Date().toISOString(),
+    };
+  }
+
+  calculateTeamStats(games) {
+    if (!games || games.length === 0) {
+      return {
+        avgPointsFor: 0,
+        avgPointsAgainst: 0,
+        winPercentage: 0,
+        homeWinPercentage: 0,
+        awayWinPercentage: 0,
+      };
+    }
+
+    const pointsFor = games.map((g) => parseInt(g.intHomeScore || 0));
+    const pointsAgainst = games.map((g) => parseInt(g.intAwayScore || 0));
+    const wins = games.filter((g) => g.intHomeScore > g.intAwayScore).length;
+
+    return {
+      avgPointsFor: (pointsFor.reduce((a, b) => a + b, 0) / games.length).toFixed(1),
+      avgPointsAgainst: (pointsAgainst.reduce((a, b) => a + b, 0) / games.length).toFixed(1),
+      winPercentage: ((wins / games.length) * 100).toFixed(1),
+      recentForm: games.slice(0, 5),
+    };
+  }
+
+  async fetchHeadToHead(team1Id, team2Id, league) {
+    // Placeholder for H2H logic
+    // In production, this would query league-specific APIs
+    const cacheKey = `h2h_${team1Id}_${team2Id}`;
+
+    if (this.cache.has(cacheKey)) {
+      return this.cache.get(cacheKey);
+    }
+
+    const h2hData = {
+      team1Id,
+      team2Id,
+      league,
+      matchups: [],
+      team1Wins: 0,
+      team2Wins: 0,
+      averagePointsTeam1: 0,
+      averagePointsTeam2: 0,
+      lastMeetingDate: null,
+    };
+
+    this.cache.set(cacheKey, h2hData);
+    return h2hData;
+  }
+
+  async fetchInjuryReports(league, team) {
+    // Integration point for real-time injury data
+    // In production, would scrape ESPN, league official sites, or use paid APIs
+    const cacheKey = `injuries_${league}_${team}`;
+
+    if (this.cache.has(cacheKey)) {
+      return this.cache.get(cacheKey);
+    }
+
+    const injuryData = {
+      league,
+      team,
+      reports: [],
+      lastUpdated: new Date().toISOString(),
+      severity: 'low', // low, medium, high
+    };
+
+    this.cache.set(cacheKey, injuryData);
+    return injuryData;
+  }
+
+  async fetchLineMovement(gameId) {
+    // Track spread movement over time
+    const cacheKey = `line_${gameId}`;
+
+    if (this.cache.has(cacheKey)) {
+      return this.cache.get(cacheKey);
+    }
+
+    const lineData = {
+      gameId,
+      initialSpread: 0,
+      currentSpread: 0,
+      movement: 0,
+      volumeIndicators: 'normal',
+      lastUpdated: new Date().toISOString(),
+    };
+
+    this.cache.set(cacheKey, lineData);
+    return lineData;
+  }
 }
 
-// 3. FETCH SPORTS DATA
-const sportsData = await fetchAllSportsData(betData);
+// ============================================================================
+// 4. SPORT-SPECIFIC ADAPTERS
+// ============================================================================
 
-// 4. CALL LLM FOR ANALYSIS
-const analysis = await analyzeBetWithClaude(betData, sportsData);
+class SportAdapter {
+  constructor(league) {
+    this.league = league;
+  }
 
-// 5. DISPLAY RESULTS
-displayBetAnalysis(analysis, betData, sportsData);
+  analyzeWeather(weather) {
+    // Override in subclasses
+    return { impact: 'minimal', factors: [] };
+  }
 
-} catch (error) {
-output.innerHTML = `<p class="error">❌ Error: ${error.message}</p>`;
-console.error(error);
-}
-}
+  getInjuryWeighting() {
+    // Override in subclasses
+    return {};
+  }
 
-// ===== DATA FETCHING =====
-
-async function fetchAllSportsData(betData) {
-const teams = [betData.homeTeam, betData.awayTeam];
-
-return {
-injuries: await fetchInjuryReports(teams, betData.sport),
-news: await fetchSportNews(teams, betData.sport),
-stats: await fetchPlayerStats(teams, betData.sport),
-records: await fetchTeamRecords(teams, betData.sport)
-};
+  assessHomeFieldAdvantage() {
+    // Override in subclasses
+    return 3; // points
+  }
 }
 
-async function fetchInjuryReports(teams, sport) {
-try {
-// Using ESPN or TheSportsDB API
-const responses = await Promise.all(
-teams.map(team =>
-fetch(`https://www.thesportsdb.com/api/v1/json/3/eventslast.php?id=${team}`)
-.then(r => r.json())
-.catch(() => ({ data: 'No injury data available' }))
-)
-);
-return responses;
-} catch (error) {
-return { error: 'Could not fetch injury data' };
-}
-}
+class NFLAdapter extends SportAdapter {
+  constructor() {
+    super('NFL');
+  }
 
-async function fetchSportNews(teams, sport) {
-// Fetch from ESPN RSS or sports news API
-try {
-const newsItems = await Promise.all(
-teams.map(team =>
-fetch(`https://api.example.com/news?team=${team}&sport=${sport}`)
-.then(r => r.json())
-.catch(() => ({ articles: [] }))
-)
-);
-return newsItems.slice(0, 5); // Top 5 news items
-} catch (error) {
-return { error: 'Could not fetch news' };
-}
-}
+  analyzeWeather(weather) {
+    const { temp, wind, condition } = weather;
+    const factors = [];
+    let impactScore = 0;
 
-async function fetchPlayerStats(teams, sport) {
-// Fetch key player statistics
-try {
-const stats = await Promise.all(
-teams.map(team =>
-fetch(`https://api.example.com/stats?team=${team}&sport=${sport}`)
-.then(r => r.json())
-.catch(() => ({ players: [] }))
-)
-);
-return stats;
-} catch (error) {
-return { error: 'Could not fetch player stats' };
-}
-}
+    // Wind severely affects passing games
+    if (wind > 15) {
+      factors.push('High wind reduces passing efficiency');
+      impactScore += 15;
+    }
 
-async function fetchTeamRecords(teams, sport) {
-// Fetch W-L records, streaks, etc.
-try {
-const records = await Promise.all(
-teams.map(team =>
-fetch(`https://api.example.com/standings?team=${team}&sport=${sport}`)
-.then(r => r.json())
-.catch(() => ({ record: 'N/A' }))
-)
-);
-return records;
-} catch (error) {
-return { error: 'Could not fetch records' };
-}
+    // Cold reduces scoring
+    if (temp < 40) {
+      factors.push('Cold weather reduces offensive scoring');
+      impactScore += 10;
+    }
+
+    // Rain increases fumbles and incompletions
+    if (condition === 'rain' || condition === 'snow') {
+      factors.push('Wet conditions favor rushing game');
+      impactScore += 12;
+    }
+
+    return {
+      impact: impactScore > 25 ? 'high' : impactScore > 10 ? 'moderate' : 'low',
+      score: impactScore,
+      factors,
+    };
+  }
+
+  getInjuryWeighting() {
+    return {
+      QB: 0.4, // 40% impact
+      RB: 0.25,
+      WR: 0.15,
+      OL: 0.2,
+      EDGE: 0.3,
+      CB: 0.25,
+      S: 0.2,
+      DL: 0.25,
+    };
+  }
+
+  assessHomeFieldAdvantage() {
+    return 3; // NFL home field advantage
+  }
+
+  assessBackToBackGames() {
+    return -2.5; // Fatigue factor
+  }
 }
 
-// ===== LLM ANALYSIS =====
+class NHLAdapter extends SportAdapter {
+  constructor() {
+    super('NHL');
+  }
 
-async function analyzeBetWithClaude(betData, sportsData) {
-const prompt = `
-You are a sports betting analyst. Analyze this bet based on current sports intelligence:
+  analyzeWeather(weather) {
+    // Indoor sport, weather is irrelevant
+    // But travel & back-to-back games matter heavily
+    return {
+      impact: 'minimal',
+      score: 0,
+      factors: ['Indoor sport - weather irrelevant'],
+    };
+  }
 
-BET DETAILS:
-- Home Team: ${betData.homeTeam}
-- Away Team: ${betData.awayTeam}
-- Bet Type: ${betData.betType}
-- Odds: ${betData.odds}
-- Sport: ${betData.sport}
-- Game Date: ${betData.gameDate}
+  getInjuryWeighting() {
+    return {
+      C: 0.35, // Center is critical
+      G: 0.5, // Goalie is most critical
+      LW: 0.2,
+      RW: 0.2,
+      D: 0.25,
+    };
+  }
 
-CURRENT SPORTS DATA:
-- Injuries: ${JSON.stringify(sportsData.injuries)}
-- Recent News: ${JSON.stringify(sportsData.news)}
-- Key Stats: ${JSON.stringify(sportsData.stats)}
-- Team Records: ${JSON.stringify(sportsData.records)}
+  assessHomeFieldAdvantage() {
+    return 1.5; // Less home advantage than NFL
+  }
 
-Provide analysis in this format:
-1. CONFIDENCE LEVEL: (High/Medium/Low with %)
-2. KEY RISK FACTORS: (injuries, form, trends)
-3. SUPPORTING FACTORS: (why this bet could hit)
-4. WIN/LOSS RECORD CONTEXT: (relevant streaks and matchups)
-5. FINAL RECOMMENDATION: (Lean yes/no/hold with reasoning)
-`;
-
-try {
-const response = await fetch('https://api.anthropic.com/v1/messages', {
-method: 'POST',
-headers: {
-'Content-Type': 'application/json',
-'x-api-key': 'YOUR_CLAUDE_API_KEY' // Store securely
-},
-body: JSON.stringify({
-model: 'claude-3-5-sonnet-20241022',
-max_tokens: 1024,
-messages: [
-{ role: 'user', content: prompt }
-]
-})
-});
-
-const data = await response.json();
-return data.content[0].text;
-} catch (error) {
-return `Error calling LLM: ${error.message}`;
-}
+  assessBackToBackGames() {
+    return -3.5; // Goalie fatigue is severe
+  }
 }
 
-// ===== IMAGE PROCESSING =====
+class MLBAdapter extends SportAdapter {
+  constructor() {
+    super('MLB');
+  }
 
-async function extractTextFromImage(imageFile) {
-// Simple approach: use Tesseract.js for OCR
-const reader = new FileReader();
-return new Promise((resolve) => {
-reader.onload = async (e) => {
-try {
-// This requires including Tesseract.js library
-// For KISS method, you might skip this and use manual entry
-resolve('Image processing would go here');
-} catch (error) {
-resolve('Could not process image');
-}
-};
-reader.readAsDataURL(imageFile);
-});
-}
+  analyzeWeather(weather) {
+    const { temp, wind, altitude } = weather;
+    const factors = [];
+    let impactScore = 0;
 
-// Image preview
-document.getElementById('betTicketImage')?.addEventListener('change', (e) => {
-const file = e.target.files[0];
-if (file) {
-const reader = new FileReader();
-reader.onload = (event) => {
-document.getElementById('imagePreview').innerHTML =
-`<img src="${event.target.result}" alt="Bet Ticket Preview">`;
-};
-reader.readAsDataURL(file);
-}
-});
+    // Ball carries further in warm weather
+    if (temp > 85) {
+      factors.push('Warm weather favors home run hitters');
+      impactScore += 8;
+    }
 
-// ===== DISPLAY RESULTS =====
+    // Wind dramatically affects fly balls
+    if (Math.abs(wind) > 10) {
+      factors.push('Wind affects fly ball distances');
+      impactScore += 12;
+    }
 
-function displayBetAnalysis(analysis, betData, sportsData) {
-const output = document.getElementById('output');
+    // High altitude inflates scoring
+    if (altitude > 5000) {
+      factors.push('High altitude increases scoring');
+      impactScore += 10;
+    }
 
-output.innerHTML = `
-<div class="analysis-result">
-<h3>📊 Bet Intelligence Report</h3>
+    return {
+      impact: impactScore > 20 ? 'high' : impactScore > 8 ? 'moderate' : 'low',
+      score: impactScore,
+      factors,
+    };
+  }
 
-<div class="bet-summary">
-<p><strong>Matchup:</strong> ${betData.awayTeam} @ ${betData.homeTeam}</p>
-<p><strong>Bet Type:</strong> ${betData.betType} (${betData.odds})</p>
-<p><strong>Sport:</strong> ${betData.sport.toUpperCase()}</p>
-</div>
+  getInjuryWeighting() {
+    return {
+      P: 0.45, // Pitcher is most critical
+      C: 0.2,
+      SS: 0.25,
+      OF: 0.15,
+    };
+  }
 
-<div class="analysis-content">
-${analysis.replace(/\n/g, '<br>')}
-</div>
-
-<div class="data-summary">
-<h4>📈 Data Sources Analyzed:</h4>
-<ul>
-<li>✓ Injury Reports</li>
-<li>✓ Recent News & Updates</li>
-<li>✓ Player Statistics</li>
-<li>✓ Team Records & Streaks</li>
-</ul>
-</div>
-</div>
-`;
+  assessHomeFieldAdvantage() {
+    return 2; // Lower than NFL
+  }
 }
 
-// Set today's date in footer
-document.getElementById('publish-date').textContent = new Date().toLocaleDateString('en-US', {
-year: 'numeric',
-month: 'long',
-day: 'numeric'
-});
+class NBAAdapter extends SportAdapter {
+  constructor() {
+    super('NBA');
+  }
+
+  analyzeWeather(weather) {
+    // Indoor sport, but travel matters
+    return {
+      impact: 'minimal',
+      score: 0,
+      factors: ['Indoor sport - travel fatigue is key factor'],
+    };
+  }
+
+  getInjuryWeighting() {
+    return {
+      PG: 0.3,
+      SG: 0.25,
+      SF: 0.25,
+      PF: 0.25,
+      C: 0.35, // Center slightly weighted up
+    };
+  }
+
+  assessHomeFieldAdvantage() {
+    return 3; // NBA home court advantage
+  }
+
+  assessBackToBackGames() {
+    return -2; // Less severe than NHL
+  }
+
+  assessB2BOpponent() {
+    return 1.5; // Advantage if opponent is on B2B
+  }
+}
+
+// ============================================================================
+// 5. ANALYSIS ENGINE
+// ============================================================================
+
+class SportsAnalysisEngine {
+  constructor(dataLayer) {
+    this.dataLayer = dataLayer;
+    this.adapters = {
+      NFL: new NFLAdapter(),
+      NHL: new NHLAdapter(),
+      MLB: new MLBAdapter(),
+      NBA: new NBAAdapter(),
+    };
+  }
+
+  async analyzeGame(gameData) {
+    const {
+      league,
+      homeTeam,
+      awayTeam,
+      spread,
+      overUnder,
+      weather,
+      gameDateTime,
+    } = gameData;
+
+    const adapter = this.adapters[league];
+
+    // Parallel data fetching
+    const [homeStats, awayStats, headToHead, homeInjuries, awayInjuries, lineMovement] =
+      await Promise.all([
+        this.dataLayer.fetchTeamStats(league, homeTeam.id),
+        this.dataLayer.fetchTeamStats(league, awayTeam.id),
+        this.dataLayer.fetchHeadToHead(homeTeam.id, awayTeam.id, league),
+        this.dataLayer.fetchInjuryReports(league, homeTeam.name),
+        this.dataLayer.fetchInjuryReports(league, awayTeam.name),
+        this.dataLayer.fetchLineMovement(gameData.gameId),
+      ]);
+
+    // Layer 1: INJURY IMPACT ANALYSIS
+    const injuryAnalysis = this.calculateInjuryImpact(
+      homeInjuries,
+      awayInjuries,
+      adapter.getInjuryWeighting(),
+      league
+    );
+
+    // Layer 2: STATISTICAL MODELING
+    const statsAnalysis = this.compareTeamStats(homeStats, awayStats, adapter, league);
+
+    // Layer 3: HISTORICAL CONTEXT
+    const historicalAnalysis = this.analyzeHistorical(headToHead, adapter);
+
+    // Layer 4: EXTERNAL FACTORS
+    const externalFactors = this.analyzeExternalFactors(
+      weather,
+      gameDateTime,
+      adapter,
+      league
+    );
+
+    // Layer 5: MARKET SIGNALS
+    const marketSignals = this.analyzeMarketSignals(lineMovement, spread);
+
+    return {
+      gameId: gameData.gameId,
+      league,
+      homeTeam: homeTeam.name,
+      awayTeam: awayTeam.name,
+      spread,
+      overUnder,
+      timestamp: new Date().toISOString(),
+      analysis: {
+        injuryAnalysis,
+        statsAnalysis,
+        historicalAnalysis,
+        externalFactors,
+        marketSignals,
+      },
+    };
+  }
+
+  calculateInjuryImpact(homeInjuries, awayInjuries, weighting, league) {
+    const homeImpact = homeInjuries?.severity === 'high' ? 0.85 : 1.0;
+    const awayImpact = awayInjuries?.severity === 'high' ? 0.85 : 1.0;
+
+    return {
+      homeTeamImpact: homeImpact,
+      awayTeamImpact: awayImpact,
+      adjustmentFactor: awayImpact / homeImpact,
+      criticalAbsences: {
+        home: homeInjuries?.reports?.slice(0, 3) || [],
+        away: awayInjuries?.reports?.slice(0, 3) || [],
+      },
+      confidence: 75,
+    };
+  }
+
+  compareTeamStats(homeStats, awayStats, adapter, league) {
+    if (!homeStats || !awayStats) {
+      return { error: 'Insufficient data' };
+    }
+
+    const homeOffense = parseFloat(homeStats.stats.avgPointsFor);
+    const homeDefense = parseFloat(homeStats.stats.avgPointsAgainst);
+    const awayOffense = parseFloat(awayStats.stats.avgPointsFor);
+    const awayDefense = parseFloat(awayStats.stats.avgPointsAgainst);
+
+    const expectedHomeScore = (homeOffense + aw
