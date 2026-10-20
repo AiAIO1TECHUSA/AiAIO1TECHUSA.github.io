@@ -503,7 +503,19 @@ Bellagio Fountains Your Amazing! Alexandara Daddario Ya I Know!</font></p>
 
 <!-- Link JavaScript -->
 <script src="slideshow.js"></script>
-
+function scrollToVideoPlayer() {
+  const videoSection = document.querySelector('.video-ai-agent') || 
+                       document.getElementById('video-player') ||
+                       document.querySelector('[class*="video"]');
+  
+  if (videoSection) {
+    videoSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } else {
+    // Fallback: scroll to bottom if video section ID not found
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+  }
+}
+	
 
 </body>
 </html>
