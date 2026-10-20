@@ -38,6 +38,8 @@ figcaption {
   border-right: 4px solid #002868;
   cursor: pointer;
   transition: all 0.3s ease;
+  text-decoration: none; /* Remove link underline */
+  color: inherit;
 }
 
 .military-service-honored:hover {
@@ -238,12 +240,13 @@ img {
 	 <script src="../cdn.iubenda.com/cs/iubenda_cs.js" async=""></script><link rel="modulepreload" href="aes.js"></head><!-- AlterVista Custom CSS --><!-- End AlterVista Custom CSS -->
     	
 		<body><header class="entry-header sound-blast">
-	<div class="military-service-honored" onclick="scrollToVideoPlayer()">
+	<a href="#video-player-section" class="military-service-honored">
   <span class="flag-animation">🇺🇸</span>
   <span class="military-text">
     Honoring Military Service | <span class="highlight">Click to View Veterans Tribute Videos</span>
   </span>
-	</div>
+</a>
+
 			
   <h1 class="entry-title">🔊 #ConcertLoLo #PlayMeSUM</h1>
    <section class="social-container">
@@ -464,7 +467,8 @@ Bellagio Fountains Your Amazing! Alexandara Daddario Ya I Know!</font></p>
  
 <!-- Video AI Agent Section -->
 <!-- Video AI Agent Section -->
-<section class="slideshow-container">
+	
+<section class="slideshow-container" id="video-player-section">
 	<h2 id="video-upload">🔊 #ConcertLoLo #PlayMeSUM › 🤖 Video AI Agent</h2>
   
   <div class="upload-section" id="drop-zone">
