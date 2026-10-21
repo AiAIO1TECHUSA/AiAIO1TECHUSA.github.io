@@ -3,15 +3,21 @@ let currentVideoIndex = 0;
 let playAllMode = false;
 
 document.addEventListener('DOMContentLoaded', function() {
-  const uploadArea = document.getElementById('uploadArea');
+  const uploadArea = document.querySelector('.video-upload-area'); // Use class selector
   const fileInput = document.getElementById('fileInput');
-  const uploadBtn = document.getElementById('uploadBtn');
+  const uploadBtn = document.getElementById('uploadButton'); // FIXED: was 'uploadBtn'
   const mainVideoDisplay = document.getElementById('mainVideoDisplay');
   const videoContainer = document.getElementById('videoContainer');
   const videoCounter = document.getElementById('videoCounter');
   const prevVideoBtn = document.getElementById('prevVideoBtn');
   const nextVideoBtn = document.getElementById('nextVideoBtn');
   const playAllBtn = document.createElement('button');
+
+  // Validate all elements exist
+  if (!uploadArea || !fileInput || !uploadBtn || !mainVideoDisplay || !videoContainer) {
+    console.error('Missing required elements. Check IDs in HTML.');
+    return;
+  }
 
   // Create "Play All" button
   playAllBtn.id = 'playAllBtn';
