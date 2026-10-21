@@ -479,22 +479,18 @@ Bellagio Fountains Your Amazing! Alexandara Daddario Ya I Know!</font></p>
     <p class="upload-count">Videos loaded: <span id="videoCount">0</span></p>
   </div>
 
-  <!-- Video Navigation -->
-  <div class="video-nav-controls">
-    <button id="prevVideoBtn" class="video-nav-btn prev-btn">← Previous</button>
-    <span id="videoCounter" class="video-counter">0 / 0</span>
-    <button id="nextVideoBtn" class="video-nav-btn next-btn">Next →</button>
-  </div>
-
   <!-- Video Display Area (Single Video View) -->
-  <div id="mainVideoDisplay" class="main-video-display">
-    <!-- Active video displays here -->
+  <video id="mainVideoDisplay" class="main-video-display" controls style="width: 100%; max-width: 600px; margin: 20px auto; display: block; border: 2px solid #FFB81C; background: #000; border-radius: 4px;"></video>
+
+  <!-- Video Navigation -->
+  <div class="video-nav-controls" style="text-align: center; margin: 20px 0;">
+    <button id="prevVideoBtn" class="video-nav-btn prev-btn" style="padding: 8px 15px; margin: 0 5px; background: #002868; color: #fff; border: 1px solid #FFB81C; cursor: pointer; border-radius: 4px;">← Previous</button>
+    <span id="videoCounter" class="video-counter" style="margin: 0 15px; font-weight: bold;">0 / 0</span>
+    <button id="nextVideoBtn" class="video-nav-btn next-btn" style="padding: 8px 15px; margin: 0 5px; background: #002868; color: #fff; border: 1px solid #FFB81C; cursor: pointer; border-radius: 4px;">Next →</button>
   </div>
 
   <!-- Video Grid (All Uploaded Videos) -->
-  <div id="videoContainer" class="video-container">
-    <!-- Videos will be displayed here as thumbnails -->
-  </div>
+  <div id="videoContainer" class="video-container" style="display: flex; flex-wrap: wrap; justify-content: center; margin-top: 20px; gap: 10px;"></div>
 </section>
 
 <script src="video-upload.js"></script>
