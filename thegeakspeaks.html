@@ -466,57 +466,35 @@ Bellagio Fountains Your Amazing! Alexandara Daddario Ya I Know!</font></p>
 </article>
  
 <!-- Video AI Agent Section -->
-<!-- Video AI Agent Section -->
 	
 <section class="slideshow-container" id="video-player-section">
 	<h2 id="video-upload">🔊 #ConcertLoLo #PlayMeSUM › 🤖 Video AI Agent</h2>
   
-  <div class="upload-section" id="drop-zone">
-    <label for="video-upload">
-      <p>📤 Drag videos here or click to select</p>
-      <p style="font-size: 0.9em; opacity: 0.8;">Compressed MP4 format recommended</p>
-      <input type="file" id="video-upload" multiple accept="video/mp4">
-    </label>
-  </div>
+  <!-- Video Upload Section -->
+<div class="video-upload-area" id="video-upload">
+  <input type="file" id="fileInput" accept="video/mp4" multiple hidden />
+  <button id="uploadButton" onclick="document.getElementById('fileInput').click()">
+    📤 Drag videos here or click to select
+  </button>
+  <p>Compressed MP4 format recommended</p>
+  <p>Videos loaded: <span id="videoCount">0</span></p>
+</div>
 
-  <div class="status-badge active">
-    <span id="video-count">Videos loaded: 0</span>
-  </div>
-
-  <div class="video-display">
-    <video id="main-video" controls>
-      <source id="video-source" src="" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
-  </div>
-
-  <div class="video-counter">
-    <span id="current-video">Video 1</span> <span id="video-indicator">0 / 0</span>
-  </div>
-
-  <div class="slideshow-controls">
-    <button class="control-btn" id="prev-btn">← Previous</button>
-    <button class="control-btn" id="play-btn">⏸ Pause</button>
-    <button class="control-btn" id="next-btn">Next →</button>
-  </div>
-
-  <div class="status-badge processing">
-    🤖 Ready to play videos
-  </div>
-</section>
-<!-- Link JavaScript -->
-<script src="slideshow.js"></script>
-function scrollToVideoPlayer() {
-  const videoSection = document.querySelector('.video-ai-agent') || 
-                       document.getElementById('video-player') ||
-                       document.querySelector('[class*="video"]');
+<script>
+document.getElementById('fileInput').addEventListener('change', function(e) {
+  const files = e.target.files;
+  document.getElementById('videoCount').textContent = files.length;
   
-  if (videoSection) {
-    videoSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  } else {
-    // Fallback: scroll to bottom if video section ID not found
-    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-  }
-}
+  // Store videos in localStorage
+  Array.from(files).forEach((file, index) => {
+    const reader = new FileReader();
+    reader.onload = function(event) {
+      localStorage.setItem(`video_${index}`, event.target.result);
+    };
+    reader.readAsDataURL(file);
+  });
+});
+</script>
+
 </body>
 </html>
