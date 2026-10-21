@@ -466,7 +466,6 @@ Bellagio Fountains Your Amazing! Alexandara Daddario Ya I Know!</font></p>
 </font>
 </article>
  
-<!-- Video Player Section -->
 <section class="video-player-section" id="video-player-section">
   <h2 class="entry-title-veterans">Video Tributes</h2>
   
@@ -480,12 +479,23 @@ Bellagio Fountains Your Amazing! Alexandara Daddario Ya I Know!</font></p>
     <p class="upload-count">Videos loaded: <span id="videoCount">0</span></p>
   </div>
 
-  <!-- Video Display Area -->
+  <!-- Video Navigation -->
+  <div class="video-nav-controls">
+    <button id="prevVideoBtn" class="video-nav-btn prev-btn">← Previous</button>
+    <span id="videoCounter" class="video-counter">0 / 0</span>
+    <button id="nextVideoBtn" class="video-nav-btn next-btn">Next →</button>
+  </div>
+
+  <!-- Video Display Area (Single Video View) -->
+  <div id="mainVideoDisplay" class="main-video-display">
+    <!-- Active video displays here -->
+  </div>
+
+  <!-- Video Grid (All Uploaded Videos) -->
   <div id="videoContainer" class="video-container">
-    <!-- Videos will be displayed here -->
+    <!-- Videos will be displayed here as thumbnails -->
   </div>
 </section>
-
 
 <script src="video-upload.js"></script>
 
