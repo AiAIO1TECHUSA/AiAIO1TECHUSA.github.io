@@ -1,168 +1,182 @@
+let videoArray = [];
+let currentVideoIndex = 0;
+let playAllMode = false;
+
 document.addEventListener('DOMContentLoaded', function() {
+  const uploadArea = document.getElementById('uploadArea');
   const fileInput = document.getElementById('fileInput');
-  const uploadButton = document.getElementById('uploadButton');
-  const videoContainer = document.getElementById('videoContainer');
+  const uploadBtn = document.getElementById('uploadBtn');
   const mainVideoDisplay = document.getElementById('mainVideoDisplay');
-  const videoCount = document.getElementById('videoCount');
-  const prevBtn = document.getElementById('prevVideoBtn');
-  const nextBtn = document.getElementById('nextVideoBtn');
+  const videoContainer = document.getElementById('videoContainer');
   const videoCounter = document.getElementById('videoCounter');
+  const prevVideoBtn = document.getElementById('prevVideoBtn');
+  const nextVideoBtn = document.getElementById('nextVideoBtn');
+  const playAllBtn = document.createElement('button');
 
-  let videos = []; // Array to store video objects
-  let currentVideoIndex = 0;
+  // Create "Play All" button
+  playAllBtn.id = 'playAllBtn';
+  playAllBtn.textContent = 'Play All';
+  playAllBtn.style.cssText = `
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #BF0A30, #002868);
+    color: #fff;
+    border: 2px solid #FFB81C;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 10px;
+    border-radius: 4px;
+  `;
+  uploadArea.parentElement.insertBefore(playAllBtn, uploadArea.nextSibling);
 
-  // Button click opens file picker
-  uploadButton.addEventListener('click', function() {
-    fileInput.click();
+  // Upload button click
+  uploadBtn.addEventListener('click', () => fileInput.click());
+
+  // File input change
+  fileInput.addEventListener('change', handleFileUpload);
+
+  // Drag and drop
+  uploadArea.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    uploadArea.style.borderColor = '#FFB81C';
   });
 
-  // Handle file selection
-  fileInput.addEventListener('change', function(e) {
+  uploadArea.addEventListener('dragleave', () => {
+    uploadArea.style.borderColor = '#BF0A30';
+  });
+
+  uploadArea.addEventListener('drop', (e) => {
+    e.preventDefault();
+    uploadArea.style.borderColor = '#BF0A30';
+    handleFileUpload({ target: { files: e.dataTransfer.files } });
+  });
+
+  // Handle file upload
+  function handleFileUpload(e) {
     const files = e.target.files;
-    Array.from(files).forEach((file) => {
-      const reader = new FileReader();
-      reader.onload = function(event) {
-        const videoData = event.target.result;
-        const videoId = `video_${Date.now()}_${Math.random()}`;
-        
-        // Save to localStorage
-        localStorage.setItem(videoId, videoData);
-        
-        // Add to videos array
-        videos.push({
-          id: videoId,
-          name: file.name,
-          data: videoData
-        });
-
-        // Display video
-        displayVideo(videoId, file.name, videoData);
-        updateCounter();
-        displayMainVideo(0); // Show first video in main display
-      };
-      reader.readAsDataURL(file);
-    });
-  });
-
-  // Display video as thumbnail in grid
-  function displayVideo(videoId, fileName, videoData) {
-    const videoItem = document.createElement('div');
-    videoItem.className = 'video-item';
-    videoItem.dataset.videoId = videoId;
-    videoItem.innerHTML = `
-      <video>
-        <source src="${videoData}" type="video/mp4">
-      </video>
-      <div class="video-item-info">
-        <p class="video-item-title">${fileName}</p>
-        <button class="video-item-delete" type="button">Delete</button>
-      </div>
-    `;
-    
-    // Thumbnail click switches main video
-    videoItem.addEventListener('click', function(e) {
-      if (!e.target.classList.contains('video-item-delete')) {
-        const index = videos.findIndex(v => v.id === videoId);
-        if (index !== -1) {
-          currentVideoIndex = index;
-          displayMainVideo(currentVideoIndex);
-        }
+    for (let file of files) {
+      if (file.type.startsWith('video/')) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          videoArray.push({
+            name: file.name,
+            data: event.target.result
+          });
+          renderVideos();
+          updateCounter();
+        };
+        reader.readAsDataURL(file);
       }
-    });
-    
-    // Delete button
-    const deleteBtn = videoItem.querySelector('.video-item-delete');
-    deleteBtn.addEventListener('click', function() {
-      localStorage.removeItem(videoId);
-      videos = videos.filter(v => v.id !== videoId);
-      videoItem.remove();
-      updateCounter();
+    }
+  }
+
+  // Render video thumbnails
+  function renderVideos() {
+    videoContainer.innerHTML = '';
+    videoArray.forEach((video, index) => {
+      const videoItem = document.createElement('div');
+      videoItem.style.cssText = `
+        position: relative;
+        width: 120px;
+        height: 90px;
+        margin: 10px;
+        cursor: pointer;
+        border: 2px solid #FFB81C;
+        background: #002868;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 12px;
+        text-align: center;
+        padding: 5px;
+        box-sizing: border-box;
+      `;
+      videoItem.innerHTML = `<span>${video.name}</span>`;
       
-      // Reset main video if needed
-      if (currentVideoIndex >= videos.length && videos.length > 0) {
-        currentVideoIndex = videos.length - 1;
-      }
-      displayMainVideo(currentVideoIndex);
-    });
-    
-    videoContainer.appendChild(videoItem);
-  }
-
-  // Display video in main player
-  function displayMainVideo(index) {
-    if (videos.length === 0) {
-      mainVideoDisplay.innerHTML = '<p style="text-align: center; padding: 2rem; color: #002868;">No videos uploaded yet</p>';
-      return;
-    }
-
-    if (index < 0) currentVideoIndex = 0;
-    if (index >= videos.length) currentVideoIndex = videos.length - 1;
-
-    const video = videos[currentVideoIndex];
-    mainVideoDisplay.innerHTML = `
-      <video controls>
-        <source src="${video.data}" type="video/mp4">
-        Your browser does not support the video tag.
-      </video>
-      <div class="main-video-info">
-        <p class="main-video-title">${video.name}</p>
-      </div>
-    `;
-
-    updateNavButtons();
-  }
-
-  // Update counter and nav buttons
-  function updateCounter() {
-    videoCount.textContent = videos.length;
-    videoCounter.textContent = `${currentVideoIndex + 1} / ${videos.length}`;
-    updateNavButtons();
-  }
-
-  function updateNavButtons() {
-    prevBtn.disabled = currentVideoIndex === 0;
-    nextBtn.disabled = currentVideoIndex === videos.length - 1;
-  }
-
-  // Navigation
-  prevBtn.addEventListener('click', function() {
-    if (currentVideoIndex > 0) {
-      currentVideoIndex--;
-      displayMainVideo(currentVideoIndex);
-      updateCounter();
-    }
-  });
-
-  nextBtn.addEventListener('click', function() {
-    if (currentVideoIndex < videos.length - 1) {
-      currentVideoIndex++;
-      displayMainVideo(currentVideoIndex);
-      updateCounter();
-    }
-  });
-
-  // Load videos from localStorage on page load
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
-    if (key.startsWith('video_')) {
-      const videoData = localStorage.getItem(key);
-      videos.push({
-        id: key,
-        name: `Video ${videos.length + 1}`,
-        data: videoData
+      // Play video on thumbnail click
+      videoItem.addEventListener('click', () => {
+        currentVideoIndex = index;
+        mainVideoDisplay.src = video.data;
+        mainVideoDisplay.play();
+        updateCounter();
       });
-    }
+
+      // Delete button
+      const deleteBtn = document.createElement('button');
+      deleteBtn.textContent = '✕';
+      deleteBtn.style.cssText = `
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        background: #BF0A30;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        font-size: 12px;
+      `;
+      deleteBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        videoArray.splice(index, 1);
+        renderVideos();
+        updateCounter();
+      });
+      videoItem.appendChild(deleteBtn);
+      videoContainer.appendChild(videoItem);
+    });
   }
 
-  // Display all videos
-  videos.forEach((video) => {
-    displayVideo(video.id, video.name, video.data);
+  // Update counter
+  function updateCounter() {
+    const total = videoArray.length;
+    const current = total > 0 ? currentVideoIndex + 1 : 0;
+    videoCounter.textContent = `${current} / ${total}`;
+  }
+
+  // Play All button
+  playAllBtn.addEventListener('click', () => {
+    playAllMode = !playAllMode;
+    playAllBtn.textContent = playAllMode ? 'Playing All ⏸' : 'Play All';
+    playAllBtn.style.background = playAllMode 
+      ? 'linear-gradient(135deg, #FFB81C, #002868)' 
+      : 'linear-gradient(135deg, #BF0A30, #002868)';
+    
+    if (playAllMode && videoArray.length > 0) {
+      currentVideoIndex = 0;
+      mainVideoDisplay.src = videoArray[0].data;
+      mainVideoDisplay.play();
+      updateCounter();
+    }
   });
 
-  updateCounter();
-  if (videos.length > 0) {
-    displayMainVideo(0);
-  } else {
-    mainVideoDisplay.innerHTML = '<p style="text-align: center; padding: 2rem; color: #002868;">No videos uploaded yet</p>';
-  }
+  // Auto-advance on video end (continuous playback)
+  mainVideoDisplay.addEventListener('ended', () => {
+    if (playAllMode && videoArray.length > 0) {
+      currentVideoIndex = (currentVideoIndex + 1) % videoArray.length;
+      mainVideoDisplay.src = videoArray[currentVideoIndex].data;
+      mainVideoDisplay.play();
+      updateCounter();
+    }
+  });
+
+  // Navigation buttons
+  prevVideoBtn.addEventListener('click', () => {
+    if (videoArray.length > 0) {
+      currentVideoIndex = (currentVideoIndex - 1 + videoArray.length) % videoArray.length;
+      mainVideoDisplay.src = videoArray[currentVideoIndex].data;
+      mainVideoDisplay.play();
+      updateCounter();
+    }
+  });
+
+  nextVideoBtn.addEventListener('click', () => {
+    if (videoArray.length > 0) {
+      currentVideoIndex = (currentVideoIndex + 1) % videoArray.length;
+      mainVideoDisplay.src = videoArray[currentVideoIndex].data;
+      mainVideoDisplay.play();
+      updateCounter();
+    }
+  });
 });
