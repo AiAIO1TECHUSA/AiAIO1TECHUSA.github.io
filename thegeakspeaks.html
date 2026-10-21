@@ -6,6 +6,7 @@
   <meta name="robots" content="max-image-preview:large">
   <link rel="stylesheet" href="terabox-videos.css">
   <link rel="stylesheet" href="slideshow.css">
+  <link rel="stylesheet" href="video-upload.css">		 
   <style type="text/css">
 <style>
 figure {
@@ -465,37 +466,28 @@ Bellagio Fountains Your Amazing! Alexandara Daddario Ya I Know!</font></p>
 </font>
 </article>
  
-<!-- Video AI Agent Section -->
-	
-<section class="slideshow-container" id="video-player-section">
-	<h2 id="video-upload">🔊 #ConcertLoLo #PlayMeSUM › 🤖 Video AI Agent</h2>
+<!-- Video Player Section -->
+<section class="video-player-section" id="video-player-section">
+  <h2 class="entry-title-veterans">Video Tributes</h2>
   
-  <!-- Video Upload Section -->
-<div class="video-upload-area" id="video-upload">
-  <input type="file" id="fileInput" accept="video/mp4" multiple hidden />
-  <button id="uploadButton" onclick="document.getElementById('fileInput').click()">
-    📤 Drag videos here or click to select
-  </button>
-  <p>Compressed MP4 format recommended</p>
-  <p>Videos loaded: <span id="videoCount">0</span></p>
-</div>
+  <!-- Video Upload Area -->
+  <div class="video-upload-area">
+    <input type="file" id="fileInput" accept="video/mp4" multiple hidden />
+    <button id="uploadButton" class="upload-btn">
+      📤 Upload Video Tribute
+    </button>
+    <p class="upload-info">Drag videos here or click to select | MP4 format recommended</p>
+    <p class="upload-count">Videos loaded: <span id="videoCount">0</span></p>
+  </div>
 
-<script>
-document.getElementById('fileInput').addEventListener('change', function(e) {
-  const files = e.target.files;
-  document.getElementById('videoCount').textContent = files.length;
-  
-  // Store videos in localStorage
-  Array.from(files).forEach((file, index) => {
-    const reader = new FileReader();
-    reader.onload = function(event) {
-      localStorage.setItem(`video_${index}`, event.target.result);
-    };
-    reader.readAsDataURL(file);
-  });
-});
-</script>
+  <!-- Video Display Area -->
+  <div id="videoContainer" class="video-container">
+    <!-- Videos will be displayed here -->
+  </div>
+</section>
 
+
+<script src="video-upload.js"></script>
 
 </body>
 </html>
