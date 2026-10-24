@@ -137,6 +137,10 @@ function initYouTubeIntegration() {
   `;
 }
 
+// Call on page load
+document.addEventListener('DOMContentLoaded', initYouTubeIntegration);
+
+
 // ========== Initialize All Systems ==========
 document.addEventListener('DOMContentLoaded', () => {
   // Load default playlist (Vol. 1)
