@@ -74,13 +74,31 @@ const playlistsData = {
   ]
 };
 
+// ========== Parse Song Title & Artist ==========
+function parseSongData(songString) {
+  // Split by " – " or " - " to separate title from artist
+  const parts = songString.split(/\s+–\s+|\s+-\s+/);
+  
+  if (parts.length >= 2) {
+    return {
+      title: parts[0].trim(),
+      artist: parts.slice(1).join(' – ').trim()
+    };
+  }
+  
+  return {
+    title: songString,
+    artist: 'Unknown Artist'
+  };
+}
+
 // ========== Play Song on Spotify ==========
 function playSongSpotify(songName) {
   const spotifySearchUrl = `https://open.spotify.com/search/${encodeURIComponent(songName)}`;
   window.open(spotifySearchUrl, '_blank');
 }
 
-// ========== Load Playlist ==========
+// ========== Load Playlist with Jukebox Style ==========
 function loadPlaylist(volumeKey) {
   const playlistDisplay = document.querySelector('[data-playlist-display]');
   const songs = playlistsData[volumeKey] || [];
@@ -88,11 +106,17 @@ function loadPlaylist(volumeKey) {
   playlistDisplay.innerHTML = '';
   
   songs.forEach((song, index) => {
+    const { title, artist } = parseSongData(song);
+    
     const item = document.createElement('div');
     item.className = 'playlist-item';
     item.innerHTML = `
-      <span class="playlist-item-title">${index + 1}. ${song}</span>
-      <button class="play-btn" onclick="playSongSpotify('${song.replace(/'/g, "\\'")}')">🎵 Play</button>
+      <div class="song-info">
+        <div class="song-number">#${index + 1}</div>
+        <div class="song-title">${title}</div>
+        <div class="song-artist">${artist}</div>
+      </div>
+      <button class="play-btn" onclick="playSongSpotify('${song.replace(/'/g, "\\'")}')"></button>
     `;
     playlistDisplay.appendChild(item);
   });
@@ -122,7 +146,7 @@ function initYouTubeIntegration() {
   }
   
   youtubeSection.innerHTML = `
-    <div style="margin: 20px 0;">
+    <div class="youtube-container">
       <a href="https://www.youtube.com/@AiAiO1TECHUSA?sub_confirmation=1" 
          class="youtube-subscribe-btn" 
          target="_blank">
@@ -130,7 +154,6 @@ function initYouTubeIntegration() {
       </a>
       
       <iframe 
-        style="margin-top: 20px; display: block;"
         width="100%" 
         height="315" 
         src="https://www.youtube.com/embed/SvXfIarbGJs" 
@@ -142,10 +165,6 @@ function initYouTubeIntegration() {
     </div>
   `;
 }
-
-// Call on page load
-document.addEventListener('DOMContentLoaded', initYouTubeIntegration);
-
 
 // ========== Initialize All Systems ==========
 document.addEventListener('DOMContentLoaded', () => {
