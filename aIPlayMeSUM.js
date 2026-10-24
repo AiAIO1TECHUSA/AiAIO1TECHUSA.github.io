@@ -116,24 +116,30 @@ function initTickerAnimation() {
 // ========== Initialize YouTube Integration ==========
 function initYouTubeIntegration() {
   const youtubeSection = document.querySelector('[data-youtube-section]');
-  if (!youtubeSection) return;
+  if (!youtubeSection) {
+    console.error('YouTube section not found');
+    return;
+  }
   
   youtubeSection.innerHTML = `
-    <a href="https://www.youtube.com/@AiAiO1TECHUSA?sub_confirmation=1" 
-       class="youtube-subscribe-btn" 
-       target="_blank">
-      Subscribe on YouTube → @AiAiO1TECHUSA
-    </a>
-    
-    <iframe 
-      width="100%" 
-      height="315" 
-      src="https://www.youtube.com/embed/SvXfIarbGJs" 
-      title="YouTube video player" 
-      frameborder="0" 
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-      allowfullscreen>
-    </iframe>
+    <div style="margin: 20px 0;">
+      <a href="https://www.youtube.com/@AiAiO1TECHUSA?sub_confirmation=1" 
+         class="youtube-subscribe-btn" 
+         target="_blank">
+        Subscribe on YouTube → @AiAiO1TECHUSA
+      </a>
+      
+      <iframe 
+        style="margin-top: 20px; display: block;"
+        width="100%" 
+        height="315" 
+        src="https://www.youtube.com/embed/SvXfIarbGJs" 
+        title="YouTube video player" 
+        frameborder="0" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+        allowfullscreen>
+      </iframe>
+    </div>
   `;
 }
 
