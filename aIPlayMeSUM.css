@@ -208,4 +208,157 @@
     width: 100%;
   }
   }
-  
+  /* ========== CENTER TITLES & MARGINS ========== */
+.playmesum-section h2,
+.playmesum-subtitle {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  width: 100%;
+}
+
+.playmesum-subtitle {
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+  margin: 10px auto 30px;
+}
+
+/* ========== 60'S JUKEBOX SONG BUTTONS ========== */
+.playlist-item {
+  background: linear-gradient(135deg, rgba(191, 10, 48, 0.25) 0%, rgba(0, 40, 104, 0.25) 100%);
+  border: 3px solid #FFB81C;
+  border-radius: 12px;
+  padding: 15px 18px;
+  margin: 12px auto;
+  max-width: 95%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.playlist-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.playlist-item:hover::before {
+  left: 100%;
+}
+
+.playlist-item:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 8px 25px rgba(191, 10, 48, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  background: linear-gradient(135deg, rgba(191, 10, 48, 0.4) 0%, rgba(0, 40, 104, 0.4) 100%);
+  border-color: #FFFFFF;
+}
+
+.playlist-item:active {
+  transform: translateY(-1px) scale(0.98);
+  box-shadow: 0 4px 12px rgba(191, 10, 48, 0.4), inset 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Song Title & Artist */
+.song-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.song-title {
+  font-weight: bold;
+  font-size: 1rem;
+  color: #FFFFFF;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  letter-spacing: 0.5px;
+}
+
+.song-artist {
+  font-size: 0.85rem;
+  color: #FFB81C;
+  font-style: italic;
+  opacity: 0.9;
+}
+
+/* Play Button (Jukebox Style) */
+.play-btn {
+  background: radial-gradient(circle at 30% 30%, #FFD700, #FFB81C 40%, #FF6B00);
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  min-width: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.5rem;
+  margin-left: 15px;
+  box-shadow: 
+    0 8px 15px rgba(255, 107, 0, 0.4),
+    inset -2px -2px 5px rgba(0, 0, 0, 0.3),
+    inset 2px 2px 5px rgba(255, 255, 255, 0.3);
+  transition: all 0.2s ease;
+  position: relative;
+  transform-style: preserve-3d;
+}
+
+.play-btn::before {
+  content: '▶';
+  position: absolute;
+  color: #FFFFFF;
+  font-size: 1.2rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.play-btn:hover {
+  transform: scale(1.1) translateY(-2px);
+  box-shadow: 
+    0 12px 25px rgba(255, 107, 0, 0.6),
+    inset -2px -2px 5px rgba(0, 0, 0, 0.3),
+    inset 2px 2px 8px rgba(255, 255, 255, 0.4);
+}
+
+.play-btn:active {
+  transform: scale(0.95) translateY(1px);
+  box-shadow: 
+    0 4px 10px rgba(255, 107, 0, 0.3),
+    inset -3px -3px 8px rgba(0, 0, 0, 0.4),
+    inset 2px 2px 3px rgba(255, 255, 255, 0.2);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .playlist-item {
+    padding: 12px 15px;
+    margin: 10px auto;
+  }
+
+  .play-btn {
+    width: 45px;
+    height: 45px;
+    min-width: 45px;
+    margin-left: 10px;
+  }
+
+  .song-title {
+    font-size: 0.95rem;
+  }
+
+  .song-artist {
+    font-size: 0.80rem;
+  }
+}
+
