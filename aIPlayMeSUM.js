@@ -71,6 +71,28 @@ const playlistsData = {
     "Bruno Mars – Grenade",
     "Bruno Mars – Locked out of Heaven",
     "Bruno Mars – Just the Way You Are"
+  ],
+  vol6: [
+    "Tate McRae – Housewife",
+    "KAROL G – BbY WOW ft. Judeline, rusowsky",
+    "ADÉLA – Nicole Kidman",
+    "ADÉLA – Ain't In LA",
+    "Olivia Rodrigo – expectations ft. Chappell Roan",
+    "Olivia Rodrigo – the cure",
+    "Ashe – Stop The Wedding!",
+    "Malcolm Todd – Earrings",
+    "The Weeknd – Blinding Lights",
+    "Ed Sheeran – Shape of You",
+    "The Neighbourhood – Sweater Weather",
+    "The Weeknd – Starboy",
+    "Taylor Swift – As It Was",
+    "Billie Eilish & Khalid – Lovely",
+    "Dua Lipa – Levitating",
+    "Tones and I – Dance Monkey",
+    "Don Omar & Lucenzo – Danza Kuduro",
+    "Lady Gaga & Bruno Mars – Die With A Smile",
+    "Post Malone ft. 21 Savage – Rockstar",
+    "Miley Cyrus – Flowers"
   ]
 };
 
