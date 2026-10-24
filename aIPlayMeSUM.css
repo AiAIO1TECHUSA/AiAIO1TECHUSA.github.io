@@ -361,4 +361,62 @@
     font-size: 0.80rem;
   }
 }
+/* ========== YouTube Integration Styles ========== */
+.youtube-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin: 40px 0;
+  padding: 0 20px;
+}
+
+.youtube-subscribe-btn {
+  display: inline-block;
+  padding: 14px 28px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  color: #FFFFFF;
+  background: linear-gradient(135deg, #BF0A30 0%, #002868 100%);
+  border: 3px solid #FFB81C;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  align-self: center;
+  max-width: 400px;
+}
+
+.youtube-subscribe-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(255, 184, 28, 0.4),
+              0 0 20px rgba(255, 184, 28, 0.3);
+}
+
+.youtube-subscribe-btn:active {
+  transform: scale(0.98);
+}
+
+/* YouTube iframe container */
+.youtube-container iframe {
+  max-width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .youtube-container {
+    gap: 16px;
+    margin: 24px 0;
+  }
+
+  .youtube-subscribe-btn {
+    padding: 12px 20px;
+    font-size: 14px;
+  }
+}
 
