@@ -158,23 +158,23 @@ function initTickerAnimation() {
   const clone = tickerContent.cloneNode(true);
   tickerContent.parentElement.appendChild(clone);
 }
-
 // ========== Initialize YouTube Integration ==========
 function initYouTubeIntegration() {
   const youtubeSection = document.querySelector('[data-youtube-section]');
+  
   if (!youtubeSection) {
     console.error('YouTube section not found');
     return;
   }
-  
+
   youtubeSection.innerHTML = `
     <div class="youtube-container">
       <a href="https://www.youtube.com/@AiAiO1TECHUSA?sub_confirmation=1" 
          class="youtube-subscribe-btn" 
-         target="_blank">
+         target="_blank" 
+         rel="noopener noreferrer">
         Subscribe on YouTube → @AiAiO1TECHUSA
       </a>
-      
       <iframe 
         width="100%" 
         height="315" 
@@ -192,14 +192,14 @@ function initYouTubeIntegration() {
 document.addEventListener('DOMContentLoaded', () => {
   // Load default playlist (Vol. 1)
   loadPlaylist('vol1');
-  
+
   // Setup playlist tabs
   document.querySelectorAll('.playlist-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       loadPlaylist(e.target.dataset.volume);
     });
   });
-  
+
   // Initialize animations & integrations
   initTickerAnimation();
   initYouTubeIntegration();
