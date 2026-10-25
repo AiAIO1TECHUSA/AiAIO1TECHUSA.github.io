@@ -476,22 +476,28 @@ class UIController {
     }
 
     checkAPIKey() {
-        const apiKey = localStorage.getItem('HUGGINGFACE_API_KEY');
+    // Load API key from injected config file
+    const apiKey = window.HUGGINGFACE_API_KEY;
 
-        if (apiKey) {
-            this.apiWarning.classList.add('success');
-            this.apiWarning.innerHTML = `
-                <strong>✅ HuggingFace API Configured</strong>
-                <p>Your API key is ready. Click "Initiate AI Wager Scan" to begin analysis.</p>
-            `;
-            this.hfClient = new HuggingFaceClient(apiKey);
+    if (apiKey) {
+        this.apiWarning.style.display = 'none'; // Hide the warning div entirely
+        this.hfClient = new HuggingFaceClient(apiKey);
+        this.agent = new SportsPickAgent(this.hfClient);
+        this.submitBtn.disabled = false;
+    } else {
+        // Fallback: Check localStorage (for local development)
+        const localApiKey = localStorage.getItem('HUGGINGFACE_API_KEY');
+        if (localApiKey) {
+            this.apiWarning.style.display = 'none';
+            this.hfClient = new HuggingFaceClient(localApiKey);
             this.agent = new SportsPickAgent(this.hfClient);
             this.submitBtn.disabled = false;
         } else {
-            this.apiWarning.classList.remove('success');
+            this.apiWarning.style.display = 'block';
             this.submitBtn.disabled = true;
         }
     }
+}
 
     async handleSubmit(e) {
         e.preventDefault
