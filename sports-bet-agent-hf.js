@@ -463,7 +463,8 @@ class UIController {
         this.resultsSection = document.getElementById('resultsSection');
         this.resultsContainer = document.getElementById('resultsContainer');
         this.errorSection = document.getElementById('errorSection');
-        this.apiWarning = document.getElementById('apiWarning');
+        // Remove this line since the div no longer exists:
+        // this.apiWarning = document.getElementById('apiWarning');
         this.hfClient = null;
         this.agent = null;
 
@@ -475,12 +476,12 @@ class UIController {
         this.form.addEventListener('submit', (e) => this.handleSubmit(e));
     }
 
+
     checkAPIKey() {
     // Load API key from injected config file
     const apiKey = window.HUGGINGFACE_API_KEY;
 
     if (apiKey) {
-        this.apiWarning.style.display = 'none'; // Hide the warning div entirely
         this.hfClient = new HuggingFaceClient(apiKey);
         this.agent = new SportsPickAgent(this.hfClient);
         this.submitBtn.disabled = false;
@@ -488,12 +489,11 @@ class UIController {
         // Fallback: Check localStorage (for local development)
         const localApiKey = localStorage.getItem('HUGGINGFACE_API_KEY');
         if (localApiKey) {
-            this.apiWarning.style.display = 'none';
             this.hfClient = new HuggingFaceClient(localApiKey);
             this.agent = new SportsPickAgent(this.hfClient);
             this.submitBtn.disabled = false;
         } else {
-            this.apiWarning.style.display = 'block';
+            console.warn('No API key found. Configure HUGGINGFACE_API_KEY.');
             this.submitBtn.disabled = true;
         }
     }
