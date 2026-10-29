@@ -141,8 +141,25 @@
         </div>
     </div>
 
-    <script src="sports-bet-agent-config.js"></script>
+ <!-- Load main app only -->
 <script src="sports-bet-agent-hf.js"></script>
+
+<!-- PROMPT for API key if not stored -->
+<script>
+    if (!localStorage.getItem('HUGGINGFACE_API_KEY')) {
+        const apiKey = prompt('Enter your HuggingFace API key:');
+        if (apiKey) {
+            localStorage.setItem('HUGGINGFACE_API_KEY', apiKey);
+            alert('✓ API key saved to localStorage');
+        } else {
+            alert('ERROR: No API key provided. App will not work.');
+        }
+    } else {
+        alert('✓ API key already stored');
+    }
+</script>
+
+<!-- Initialize the app -->
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         alert('DOMContentLoaded fired');
@@ -154,43 +171,13 @@
         alert('✓ UIController class found');
 
         try {
-            alert('About to instantiate UIController...');
             window.controller = new UIController();
             alert('✓ UIController instantiated successfully');
         } catch (e) {
-            alert('ERROR in UIController constructor: ' + e.message);
-            alert('Stack: ' + e.stack);
-            return;
+            alert('ERROR: ' + e.message);
         }
     });
 </script>
-    <script>
-    const form = document.getElementById('wagerForm');
-    if (form) {
-        form.addEventListener('submit', (e) => {
-            alert('Form submit triggered');
-            
-            // Check each input
-            const homeTeam = document.getElementById('homeTeam');
-            const awayTeam = document.getElementById('awayTeam');
-            const sport = document.getElementById('sport');
-            const wagerType = document.getElementById('wagerType');
-            const oddsLine = document.getElementById('oddsLine');
-            const gameDate = document.getElementById('gameDate');
-            
-            alert('homeTeam: ' + (homeTeam ? homeTeam.value : 'NOT FOUND'));
-            alert('awayTeam: ' + (awayTeam ? awayTeam.value : 'NOT FOUND'));
-            alert('sport: ' + (sport ? sport.value : 'NOT FOUND'));
-            alert('wagerType: ' + (wagerType ? wagerType.value : 'NOT FOUND'));
-            alert('oddsLine: ' + (oddsLine ? oddsLine.value : 'NOT FOUND'));
-            alert('gameDate: ' + (gameDate ? gameDate.value : 'NOT FOUND'));
-        });
-    }
-</script>
-    <script>
-    alert('API Key stored: ' + localStorage.getItem('HUGGINGFACE_API_KEY'));
-    </script>
+
 </body>
-
-
 </html>
