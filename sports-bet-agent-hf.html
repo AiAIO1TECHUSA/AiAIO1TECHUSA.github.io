@@ -10,7 +10,7 @@
     
     <!-- Load API key config FIRST -->
     <script src="sports-bet-agent-config.js"></script>
-    <script>alert('Script loaded in HEAD');</script>
+    
     <style>
         /* Your CSS here */
     </style>
@@ -123,37 +123,23 @@
 <script src="sports-bet-agent-hf.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // Test 1: Check if UIController exists
+        alert('DOMContentLoaded fired');
+        
         if (typeof UIController === 'undefined') {
-            alert('ERROR: UIController class not found in sports-bet-agent-hf.js');
+            alert('ERROR: UIController class not found');
             return;
         }
         alert('✓ UIController class found');
 
-        // Test 2: Try to instantiate
         try {
+            alert('About to instantiate UIController...');
             window.controller = new UIController();
-            alert('✓ UIController instantiated');
+            alert('✓ UIController instantiated successfully');
         } catch (e) {
-            alert('ERROR instantiating UIController: ' + e.message);
+            alert('ERROR in UIController constructor: ' + e.message);
+            alert('Stack: ' + e.stack);
             return;
         }
-
-        // Test 3: Check if form exists
-        const form = document.getElementById('wagerForm');
-        if (!form) {
-            alert('ERROR: wagerForm not found in HTML');
-            return;
-        }
-        alert('✓ wagerForm found');
-
-        // Test 4: Check if submitBtn exists
-        const btn = document.getElementById('submitBtn');
-        if (!btn) {
-            alert('ERROR: submitBtn not found in HTML');
-            return;
-        }
-        alert('✓ submitBtn found. Is it enabled? ' + !btn.disabled);
     });
 </script>
 </body>
