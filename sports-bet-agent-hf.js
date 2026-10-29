@@ -201,7 +201,7 @@ class SportsDataLayer {
     }
 }
 
-// ============================================================================
+/// ============================================================================
 // HUGGINGFACE INFERENCE CLIENT
 // ============================================================================
 
@@ -217,6 +217,10 @@ class HuggingFaceClient {
         }
 
         try {
+            console.log('🔍 Starting fetch to:', this.endpoint);
+            console.log('🔑 API Key length:', this.apiKey.length);
+            console.log('📝 Prompt:', prompt);
+
             const response = await fetch(this.endpoint, {
                 method: 'POST',
                 headers: {
@@ -233,8 +237,10 @@ class HuggingFaceClient {
                         return_full_text: false
                     }
                 }),
-                signal: AbortSignal.timeout(30000)  // 30 second timeout
+                signal: AbortSignal.timeout(30000)
             });
+
+            console.log('✅ Fetch succeeded, status:', response.status);
 
             if (!response.ok) {
                 const error = await response.json();
@@ -242,19 +248,19 @@ class HuggingFaceClient {
             }
 
             const data = await response.json();
-
-            // Handle both array and object responses
             const text = Array.isArray(data)
                 ? data[0].generated_text
                 : data.generated_text || '';
 
             return text.trim();
         } catch (error) {
-            console.error('HuggingFace API Error:', error);
+            console.error('❌ HuggingFace API Error:', error.message);
+            console.error('Error type:', error.name);
             throw error;
         }
     }
 }
+
 
 // ============================================================================
 // SPORTS PICK AGENT
