@@ -201,7 +201,7 @@ class SportsDataLayer {
     }
 }
 
-/// ============================================================================
+// ============================================================================
 // HUGGINGFACE INFERENCE CLIENT
 // ============================================================================
 
@@ -217,9 +217,7 @@ class HuggingFaceClient {
         }
 
         try {
-            console.log('🔍 Starting fetch to:', this.endpoint);
-            console.log('🔑 API Key length:', this.apiKey.length);
-            console.log('📝 Prompt:', prompt);
+            alert('Step 1: About to fetch\nEndpoint: ' + this.endpoint + '\nAPI Key length: ' + this.apiKey.length);
 
             const response = await fetch(this.endpoint, {
                 method: 'POST',
@@ -240,7 +238,7 @@ class HuggingFaceClient {
                 signal: AbortSignal.timeout(30000)
             });
 
-            console.log('✅ Fetch succeeded, status:', response.status);
+            alert('Step 2: Fetch completed\nStatus: ' + response.status);
 
             if (!response.ok) {
                 const error = await response.json();
@@ -248,14 +246,15 @@ class HuggingFaceClient {
             }
 
             const data = await response.json();
+            alert('Step 3: Got response data');
+
             const text = Array.isArray(data)
                 ? data[0].generated_text
                 : data.generated_text || '';
 
             return text.trim();
         } catch (error) {
-            console.error('❌ HuggingFace API Error:', error.message);
-            console.error('Error type:', error.name);
+            alert('❌ ERROR:\nType: ' + error.name + '\nMessage: ' + error.message);
             throw error;
         }
     }
