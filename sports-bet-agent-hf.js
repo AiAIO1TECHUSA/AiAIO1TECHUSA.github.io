@@ -299,6 +299,23 @@ class SportsPickAgent {
         }
     }
 
+    // ✅ NEW METHOD - This is what UIController calls
+    async analyzeWager(prompt) {
+        try {
+            console.log('📤 Calling HuggingFace with prompt:', prompt);
+            
+            // Call HuggingFace API directly with the prompt
+            const response = await this.hfClient.generatePick(prompt);
+            
+            console.log('✅ Response received:', response);
+            return response;
+            
+        } catch (error) {
+            console.error('❌ Error in analyzeWager:', error);
+            throw error;
+        }
+    }
+
     buildPrompt(gameData, adapter) {
         const { homeTeam, awayTeam, sport, wagerType, oddsLine, gameDate, additionalContext } = gameData;
 
