@@ -463,8 +463,8 @@ class UIController {
         this.resultsSection = document.getElementById('resultsSection');
         this.resultsContainer = document.getElementById('resultsContainer');
         this.errorSection = document.getElementById('errorSection');
-        // Remove this line since the div no longer exists:
-        // this.apiWarning = document.getElementById('apiWarning');
+        this.errorTitle = document.getElementById('errorTitle');
+        this.errorMessage = document.getElementById('errorMessage');
         this.hfClient = null;
         this.agent = null;
 
@@ -474,30 +474,117 @@ class UIController {
     init() {
         this.checkAPIKey();
         this.form.addEventListener('submit', (e) => this.handleSubmit(e));
+        
+        // The reset button already clears the form by default (type="reset")
+        // But we can add extra cleanup if needed:
+        this.form.addEventListener('reset', () => this.onFormReset());
     }
 
-
     checkAPIKey() {
-    // Load API key from injected config file
-    const apiKey = window.HUGGINGFACE_API_KEY;
+        // Load API key from injected config file
+        const apiKey = window.HUGGINGFACE_API_KEY;
 
-    if (apiKey) {
-        this.hfClient = new HuggingFaceClient(apiKey);
-        this.agent = new SportsPickAgent(this.hfClient);
-        this.submitBtn.disabled = false;
-    } else {
-        // Fallback: Check localStorage (for local development)
-        const localApiKey = localStorage.getItem('HUGGINGFACE_API_KEY');
-        if (localApiKey) {
-            this.hfClient = new HuggingFaceClient(localApiKey);
+        if (apiKey) {
+            this.hfClient = new HuggingFaceClient(apiKey);
             this.agent = new SportsPickAgent(this.hfClient);
             this.submitBtn.disabled = false;
+            console.log('API key loaded from environment.');
         } else {
-            console.warn('No API key found. Configure HUGGINGFACE_API_KEY.');
-            this.submitBtn.disabled = true;
+            // Fallback: Check localStorage (for local development)
+            const localApiKey = localStorage.getItem('HUGGINGFACE_API_KEY');
+            if (localApiKey) {
+                this.hfClient = new HuggingFaceClient(localApiKey);
+                this.agent = new SportsPickAgent(this.hfClient);
+                this.submitBtn.disabled = false;
+                console.log('API key loaded from localStorage.');
+            } else {
+                console.warn('No API key found. Configure HUGGINGFACE_API_KEY.');
+                this.submitBtn.disabled = true;
+                this.showError('API key not configured. Please set HUGGINGFACE_API_KEY in GitHub Secrets.');
+            }
         }
+    }
+
+    async handleSubmit(e) {
+        e.preventDefault(); // FIXED: Added parentheses
+
+        // Validate form inputs
+        const homeTeam = document.getElementById('homeTeam').value.trim();
+        const awayTeam = document.getElementById('awayTeam').value.trim();
+        const sport = document.getElementById('sport').value;
+        const wagerType = document.getElementById('wagerType').value;
+        const odds = document.getElementById('odds').value.trim();
+        const gameDate = document.getElementById('gameDate').value;
+        const context = document.getElementById('additionalContext').value.trim();
+
+        if (!homeTeam || !awayTeam || !sport || !wagerType || !odds || !gameDate) {
+            this.showError('Please fill in all required fields.');
+            return;
+        }
+
+        // Validate API client is ready
+        if (!this.agent) {
+            this.showError('AI agent not initialized. Please configure your API key.');
+            return;
+        }
+
+        // Show loading state
+        this.loading.style.display = 'block';
+        this.resultsSection.style.display = 'none';
+        this.errorSection.style.display = 'none';
+
+        try {
+            // Build prompt for agent
+            const prompt = `Analyze this sports wager:
+Home Team: ${homeTeam}
+Away Team: ${awayTeam}
+Sport: ${sport}
+Wager Type: ${wagerType}
+Odds: ${odds}
+Game Date: ${gameDate}
+Context: ${context || 'None provided'}
+
+Provide analysis on the wager's value.`;
+
+            console.log('Sending analysis request...');
+            
+            // Call agent
+            const response = await this.agent.analyzeWager(prompt);
+
+            // Display results
+            this.displayResults(response);
+            this.resultsSection.style.display = 'block';
+        } catch (error) {
+            console.error('Error analyzing wager:', error);
+            this.showError(`Error analyzing wager: ${error.message}`);
+        } finally {
+            this.loading.style.display = 'none';
+        }
+    }
+
+    onFormReset() {
+        // Clear results when user clicks reset button
+        this.resultsSection.style.display = 'none';
+        this.errorSection.style.display = 'none';
+        console.log('Form reset.');
+    }
+
+    displayResults(response) {
+        this.resultsContainer.innerHTML = `
+            <div class="result-card">
+                <p>${response}</p>
+            </div>
+        `;
+        this.resultsSection.style.display = 'block';
+    }
+
+    showError(message) {
+        this.errorMessage.textContent = message;
+        this.errorSection.style.display = 'block';
     }
 }
 
-    async handleSubmit(e) {
-        e.preventDefault
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    new UIController();
+});
