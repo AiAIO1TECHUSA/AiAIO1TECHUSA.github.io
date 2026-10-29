@@ -273,23 +273,16 @@ class SportsPickAgent {
 
     async generatePick(gameData) {
         try {
-            // Validate input
             if (!gameData.homeTeam || !gameData.awayTeam || !gameData.sport) {
                 throw new Error('Missing required game data: homeTeam, awayTeam, sport');
             }
 
-            // Get adapter for sport
             const adapter = this.sportAdapters[gameData.sport] || this.createGenericAdapter();
-
-            // Build analysis prompt
             const prompt = this.buildPrompt(gameData, adapter);
 
             console.log('Sending prompt to HuggingFace:', prompt);
 
-            // Call HuggingFace API
             const response = await this.hfClient.generatePick(prompt);
-
-            // Parse response
             const pick = this.parseResponse(response, gameData);
 
             return pick;
@@ -299,17 +292,15 @@ class SportsPickAgent {
         }
     }
 
-    // ✅ NEW METHOD - This is what UIController calls
     async analyzeWager(prompt) {
         try {
+            console.log('Agent object:', this); // ← STEP 2
+            console.log('analyzeWager method:', this.analyzeWager); // ← STEP 2
+            
             console.log('📤 Calling HuggingFace with prompt:', prompt);
-            
-            // Call HuggingFace API directly with the prompt
             const response = await this.hfClient.generatePick(prompt);
-            
             console.log('✅ Response received:', response);
             return response;
-            
         } catch (error) {
             console.error('❌ Error in analyzeWager:', error);
             throw error;
