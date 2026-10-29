@@ -208,7 +208,7 @@ class SportsDataLayer {
 class HuggingFaceClient {
     constructor(apiKey) {
         this.apiKey = apiKey;
-        this.endpoint = CONFIG.HF_API_ENDPOINT;
+        this.endpoint = 'https://api-inference.huggingface.co/models/meta-llama/Llama-2-7b-chat-hf';
     }
 
     async generatePick(prompt) {
@@ -233,7 +233,7 @@ class HuggingFaceClient {
                         return_full_text: false
                     }
                 }),
-                signal: AbortSignal.timeout(CONFIG.TIMEOUT)
+                signal: AbortSignal.timeout(30000)  // 30 second timeout
             });
 
             if (!response.ok) {
