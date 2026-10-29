@@ -155,6 +155,29 @@
         }
     });
 </script>
+    <script>
+    const form = document.getElementById('wagerForm');
+    if (form) {
+        form.addEventListener('submit', (e) => {
+            alert('Form submit triggered');
+            
+            // Check each input
+            const homeTeam = document.getElementById('homeTeam');
+            const awayTeam = document.getElementById('awayTeam');
+            const sport = document.getElementById('sport');
+            const wagerType = document.getElementById('wagerType');
+            const oddsLine = document.getElementById('oddsLine');
+            const gameDate = document.getElementById('gameDate');
+            
+            alert('homeTeam: ' + (homeTeam ? homeTeam.value : 'NOT FOUND'));
+            alert('awayTeam: ' + (awayTeam ? awayTeam.value : 'NOT FOUND'));
+            alert('sport: ' + (sport ? sport.value : 'NOT FOUND'));
+            alert('wagerType: ' + (wagerType ? wagerType.value : 'NOT FOUND'));
+            alert('oddsLine: ' + (oddsLine ? oddsLine.value : 'NOT FOUND'));
+            alert('gameDate: ' + (gameDate ? gameDate.value : 'NOT FOUND'));
+        });
+    }
+</script>
 </body>
 
 
