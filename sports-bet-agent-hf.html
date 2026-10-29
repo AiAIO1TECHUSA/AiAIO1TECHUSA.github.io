@@ -7,7 +7,16 @@
     <link rel="preconnect" href="https://api-inference.huggingface.co">
     <link rel="preconnect" href="https://www.thesportsdb.com">
     <link rel="stylesheet" href="sports-bet-agent-hf.css">
-    
+    <script>
+    // Set API key in localStorage (one-time)
+    if (!localStorage.getItem('HUGGINGFACE_API_KEY')) {
+        const apiKey = prompt('Enter your HuggingFace API key:');
+        if (apiKey) {
+            localStorage.setItem('HUGGINGFACE_API_KEY', apiKey);
+            alert('API key saved');
+        }
+    }
+    </script>
     <!-- Load API key config FIRST -->
     <script src="sports-bet-agent-config.js"></script>
     
