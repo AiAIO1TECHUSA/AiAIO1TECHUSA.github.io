@@ -450,7 +450,6 @@ Be concise and actionable. Focus on data-driven analysis, not emotion.`;
         };
     }
 }
-
 // ============================================================================
 // UI CONTROLLER
 // ============================================================================
@@ -476,7 +475,7 @@ class UIController {
         this.form.addEventListener('submit', (e) => this.handleSubmit(e));
         
         // The reset button already clears the form by default (type="reset")
-        // But we can add extra cleanup if needed:
+        // But we add extra cleanup:
         this.form.addEventListener('reset', () => this.onFormReset());
     }
 
@@ -488,7 +487,7 @@ class UIController {
             this.hfClient = new HuggingFaceClient(apiKey);
             this.agent = new SportsPickAgent(this.hfClient);
             this.submitBtn.disabled = false;
-            console.log('API key loaded from environment.');
+            console.log('✅ API key loaded from environment.');
         } else {
             // Fallback: Check localStorage (for local development)
             const localApiKey = localStorage.getItem('HUGGINGFACE_API_KEY');
@@ -496,9 +495,9 @@ class UIController {
                 this.hfClient = new HuggingFaceClient(localApiKey);
                 this.agent = new SportsPickAgent(this.hfClient);
                 this.submitBtn.disabled = false;
-                console.log('API key loaded from localStorage.');
+                console.log('✅ API key loaded from localStorage.');
             } else {
-                console.warn('No API key found. Configure HUGGINGFACE_API_KEY.');
+                console.warn('❌ No API key found. Configure HUGGINGFACE_API_KEY.');
                 this.submitBtn.disabled = true;
                 this.showError('API key not configured. Please set HUGGINGFACE_API_KEY in GitHub Secrets.');
             }
@@ -513,11 +512,11 @@ class UIController {
         const awayTeam = document.getElementById('awayTeam').value.trim();
         const sport = document.getElementById('sport').value;
         const wagerType = document.getElementById('wagerType').value;
-        const odds = document.getElementById('odds').value.trim();
+        const oddsLine = document.getElementById('oddsLine').value.trim(); // FIXED: oddsLine, not odds
         const gameDate = document.getElementById('gameDate').value;
         const context = document.getElementById('additionalContext').value.trim();
 
-        if (!homeTeam || !awayTeam || !sport || !wagerType || !odds || !gameDate) {
+        if (!homeTeam || !awayTeam || !sport || !wagerType || !oddsLine || !gameDate) {
             this.showError('Please fill in all required fields.');
             return;
         }
@@ -540,22 +539,24 @@ Home Team: ${homeTeam}
 Away Team: ${awayTeam}
 Sport: ${sport}
 Wager Type: ${wagerType}
-Odds: ${odds}
+Odds/Line: ${oddsLine}
 Game Date: ${gameDate}
-Context: ${context || 'None provided'}
+Additional Context: ${context || 'None provided'}
 
-Provide analysis on the wager's value.`;
+Provide a detailed analysis on the wager's value and risk factors.`;
 
-            console.log('Sending analysis request...');
+            console.log('📤 Sending analysis request to HuggingFace...');
             
             // Call agent
             const response = await this.agent.analyzeWager(prompt);
 
+            console.log('✅ Received response from AI.');
+            
             // Display results
             this.displayResults(response);
             this.resultsSection.style.display = 'block';
         } catch (error) {
-            console.error('Error analyzing wager:', error);
+            console.error('❌ Error analyzing wager:', error);
             this.showError(`Error analyzing wager: ${error.message}`);
         } finally {
             this.loading.style.display = 'none';
@@ -566,7 +567,7 @@ Provide analysis on the wager's value.`;
         // Clear results when user clicks reset button
         this.resultsSection.style.display = 'none';
         this.errorSection.style.display = 'none';
-        console.log('Form reset.');
+        console.log('🧹 Form cleared.');
     }
 
     displayResults(response) {
