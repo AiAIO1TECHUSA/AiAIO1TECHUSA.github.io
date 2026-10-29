@@ -84,6 +84,19 @@
 
                 <div class="button-group">
                     <button type="submit" class="btn-primary" id="submitBtn">🔍 Initiate AI Wager Scan</button>
+                    <button type="button" id="testBtn">Test Submit Handler</button>
+
+<script>
+    document.getElementById('testBtn').addEventListener('click', () => {
+        alert('Test button clicked');
+        const form = document.getElementById('wagerForm');
+        if (form) {
+            alert('wagerForm exists. Triggering submit...');
+            form.dispatchEvent(new Event('submit'));
+        }
+    });
+</script>
+                    
                     <button type="reset" class="btn-secondary">Clear Form</button>
                 </div>
             </form>
