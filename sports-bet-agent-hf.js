@@ -615,4 +615,16 @@ if (document.readyState === 'loading') {
     // DOM is already loaded, initialize now
     new UIController();
 }
+// At the very end of sports-bet-agent-hf.js, after everything else:
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        new UIController();
+    });
+} else {
+    new UIController();
+}
+
+// ADD THIS LINE HERE:
+alert('typeof UIController = ' + typeof UIController);
 
