@@ -545,7 +545,7 @@ class UIController {
             this.showError('AI agent not initialized. Please configure your API key.');
             return;
         }
-
+alert('STEP 0: All validations passed. Agent exists.');
         // Show loading state
         this.loading.style.display = 'block';
         this.resultsSection.style.display = 'none';
