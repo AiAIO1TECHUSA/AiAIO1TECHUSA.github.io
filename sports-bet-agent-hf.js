@@ -499,6 +499,8 @@ class UIController {
     }
 
     checkAPIKey() {
+    alert('DEBUG: window.HUGGINGFACE_API_KEY = ' + window.HUGGINGFACE_API_KEY);
+    alert('DEBUG: localStorage key = ' + localStorage.getItem('HUGGINGFACE_API_KEY'));
         // Load API key from injected config file
         const apiKey = window.HUGGINGFACE_API_KEY;
 
