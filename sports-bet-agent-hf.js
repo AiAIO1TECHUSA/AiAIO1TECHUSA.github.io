@@ -215,7 +215,13 @@ class HuggingFaceClient {
         if (!this.apiKey) {
             throw new Error('HuggingFace API key not configured. Please set HUGGINGFACE_API_KEY in localStorage.');
         }
-
+// ADD THIS:
+    console.log('API Key first 10 chars:', this.apiKey.substring(0, 10));
+    console.log('API Key last 10 chars:', this.apiKey.substring(this.apiKey.length - 10));
+    console.log('API Key total length:', this.apiKey.length);
+    
+    try {
+        alert('Step 1: About to fetch\nEndpoint: ' + this.endpoint + '\nAPI Key length: ' + this.apiKey.length);
         try {
             alert('Step 1: About to fetch\nEndpoint: ' + this.endpoint + '\nAPI Key length: ' + this.apiKey.length);
 
