@@ -606,7 +606,13 @@ Provide a detailed analysis on the wager's value and risk factors.`;
     }
 }
 
-// Initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
+// Initialize immediately if DOM is already loaded, or wait for DOMContentLoaded
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        new UIController();
+    });
+} else {
+    // DOM is already loaded, initialize now
     new UIController();
-});
+}
+
