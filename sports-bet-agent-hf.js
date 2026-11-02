@@ -11,10 +11,10 @@
 const CONFIG = {
     HF_API_ENDPOINT: 'https://api-inference.huggingface.co/models/meta-llama/Llama-2-7b-chat-hf',
     THESPORTSDB_ENDPOINT: 'https://www.thesportsdb.com/api/v1/json/1',
-    CACHE_TTL: 3600000, // 1 hour in milliseconds
+    CACHE_TTL: 3600000,
     CACHE_MAX_SIZE: 500,
     MODEL_NAME: 'Llama-2-7b-chat-hf',
-    TIMEOUT: 30000 // 30 seconds
+    TIMEOUT: 30000
 };
 
 // ============================================================================
@@ -32,10 +32,8 @@ class CacheManager {
         const now = Date.now();
         const expiry = now + ttl;
 
-        // Clean up expired entries
         this.prune();
 
-        // If cache is full, remove oldest entry
         if (this.cache.size >= this.maxSize) {
             const firstKey = this.cache.keys().next().value;
             this.cache.delete(firstKey);
@@ -54,7 +52,6 @@ class CacheManager {
         const entry = this.cache.get(key);
         if (!entry) return null;
 
-        // Check if expired
         if (Date.now() > entry.expiry) {
             this.cache.delete(key);
             this.saveToStorage();
@@ -115,7 +112,6 @@ class SportsDataLayer {
         if (cached) return cached;
 
         try {
-            // Search for team in TheSportsDB
             const response = await fetch(
                 `${CONFIG.THESPORTSDB_ENDPOINT}/search_all_teams.php?l=${this.encodeLeague(sport)}`,
                 { signal: AbortSignal.timeout(CONFIG.TIMEOUT) }
@@ -126,7 +122,6 @@ class SportsDataLayer {
 
             if (!data.teams) return null;
 
-            // Find matching team (case-insensitive, partial match)
             const team = data.teams.find(t =>
                 t.strTeam.toLowerCase().includes(teamName.toLowerCase()) ||
                 teamName.toLowerCase().includes(t.strTeam.toLowerCase())
@@ -206,29 +201,28 @@ class SportsDataLayer {
 // ============================================================================
 
 class HuggingFaceClient {
-    constructor(apiKey) {
+    constructor(apiKey = null) {
         this.apiKey = apiKey;
-        this.endpoint = 'https://api-inference.huggingface.co/models/meta-llama/Llama-2-7b-chat-hf';
+        this.endpoint = CONFIG.HF_API_ENDPOINT;
     }
 
     async generatePick(prompt) {
-        if (!this.apiKey) {
-            throw new Error('HuggingFace API key not configured. Please set HUGGINGFACE_API_KEY in localStorage.');
+        if (!this.apiKey && !this.endpoint) {
+            throw new Error('HuggingFace model endpoint is not configured.');
         }
-// ADD THIS:
-    console.log('API Key first 10 chars:', this.apiKey.substring(0, 10));
-    console.log('API Key last 10 chars:', this.apiKey.substring(this.apiKey.length - 10));
-    console.log('API Key total length:', this.apiKey.length);
-    
-    try {
-    alert('Step 1: About to fetch\nEndpoint: ' + this.endpoint + '\nAPI Key length: ' + this.apiKey.length);
 
-    const response = await fetch(this.endpoint, {
-        method: 'POST',
-        headers: {
-            'Authorization': `Bearer ${this.apiKey}`,
+        const headers = {
             'Content-Type': 'application/json'
-        },
+        };
+
+        if (this.apiKey) {
+            headers.Authorization = `Bearer ${this.apiKey}`;
+        }
+
+        try {
+            const response = await fetch(this.endpoint, {
+                method: 'POST',
+                headers,
                 body: JSON.stringify({
                     inputs: prompt,
                     parameters: {
@@ -239,31 +233,48 @@ class HuggingFaceClient {
                         return_full_text: false
                     }
                 }),
-                signal: AbortSignal.timeout(30000)
+                signal: AbortSignal.timeout(CONFIG.TIMEOUT)
             });
 
-            alert('Step 2: Fetch completed\nStatus: ' + response.status);
-
             if (!response.ok) {
-                const error = await response.json();
-                throw new Error(`HuggingFace API Error: ${error.error || response.statusText}`);
+                let errorBody = null;
+                try {
+                    errorBody = await response.json();
+                } catch (e) {
+                    errorBody = await response.text();
+                }
+
+                const errorMessage = errorBody?.error || errorBody?.message || response.statusText || 'Unknown error';
+
+                if (response.status === 401 || response.status === 403) {
+                    throw new Error('HuggingFace API access failed. Check your HF token and model permissions.');
+                }
+
+                if (response.status === 503) {
+                    throw new Error('HuggingFace model is still loading or unavailable. Try again in a moment.');
+                }
+
+                throw new Error(`HuggingFace API Error: ${errorMessage}`);
             }
 
             const data = await response.json();
-            alert('Step 3: Got response data');
-
             const text = Array.isArray(data)
-                ? data[0].generated_text
+                ? data[0]?.generated_text || ''
                 : data.generated_text || '';
+
+            if (!text.trim()) {
+                throw new Error('HuggingFace returned an empty response.');
+            }
 
             return text.trim();
         } catch (error) {
-            alert('❌ ERROR:\nType: ' + error.name + '\nMessage: ' + error.message);
+            if (error instanceof TypeError) {
+                throw new Error('Failed to fetch from HuggingFace. This is usually caused by CORS, a blocked model, or a network issue.');
+            }
             throw error;
         }
     }
 }
-
 
 // ============================================================================
 // SPORTS PICK AGENT
@@ -288,7 +299,6 @@ class SportsPickAgent {
 
             const adapter = this.sportAdapters[gameData.sport] || this.createGenericAdapter();
             const prompt = this.buildPrompt(gameData, adapter);
-
             console.log('Sending prompt to HuggingFace:', prompt);
 
             const response = await this.hfClient.generatePick(prompt);
@@ -303,15 +313,10 @@ class SportsPickAgent {
 
     async analyzeWager(prompt) {
         try {
-            console.log('Agent object:', this); // ← STEP 2
-            console.log('analyzeWager method:', this.analyzeWager); // ← STEP 2
-            
-            console.log('📤 Calling HuggingFace with prompt:', prompt);
             const response = await this.hfClient.generatePick(prompt);
-            console.log('✅ Response received:', response);
             return response;
         } catch (error) {
-            console.error('❌ Error in analyzeWager:', error);
+            console.error('Error in analyzeWager:', error);
             throw error;
         }
     }
@@ -344,10 +349,8 @@ Be concise and actionable. Focus on data-driven analysis, not emotion.`;
     }
 
     parseResponse(response, gameData) {
-        // Extract pick information from response
         const lines = response.split('\n').filter(line => line.trim());
 
-        // Default values
         let pick = gameData.homeTeam;
         let confidence = 50;
         let reasoning = '';
@@ -355,7 +358,6 @@ Be concise and actionable. Focus on data-driven analysis, not emotion.`;
         let contrarian = '';
         let pickType = gameData.wagerType;
 
-        // Parse response text
         let currentSection = '';
         for (const line of lines) {
             const lowerLine = line.toLowerCase();
@@ -467,6 +469,7 @@ Be concise and actionable. Focus on data-driven analysis, not emotion.`;
         };
     }
 }
+
 // ============================================================================
 // UI CONTROLLER
 // ============================================================================
@@ -488,50 +491,48 @@ class UIController {
     }
 
     init() {
+        if (!this.form) {
+            console.warn('Wager form not found on this page.');
+            return;
+        }
+
         this.checkAPIKey();
         this.form.addEventListener('submit', (e) => this.handleSubmit(e));
-        
-        // The reset button already clears the form by default (type="reset")
-        // But we add extra cleanup:
         this.form.addEventListener('reset', () => this.onFormReset());
     }
 
+    resolveApiKey() {
+        const windowKey = window.HUGGINGFACE_API_KEY || null;
+        if (windowKey) return windowKey;
+
+        const localKey = localStorage.getItem('HUGGINGFACE_API_KEY');
+        return localKey || null;
+    }
+
     checkAPIKey() {
-    alert('DEBUG: window.HUGGINGFACE_API_KEY = ' + window.HUGGINGFACE_API_KEY);
-    alert('DEBUG: localStorage key = ' + localStorage.getItem('HUGGINGFACE_API_KEY'));
-        // Load API key from injected config file
-        const apiKey = window.HUGGINGFACE_API_KEY;
+        const apiKey = this.resolveApiKey();
 
         if (apiKey) {
             this.hfClient = new HuggingFaceClient(apiKey);
             this.agent = new SportsPickAgent(this.hfClient);
             this.submitBtn.disabled = false;
-            console.log('✅ API key loaded from environment.');
+            console.log('✅ API key loaded successfully.');
         } else {
-            // Fallback: Check localStorage (for local development)
-            const localApiKey = localStorage.getItem('HUGGINGFACE_API_KEY');
-            if (localApiKey) {
-                this.hfClient = new HuggingFaceClient(localApiKey);
-                this.agent = new SportsPickAgent(this.hfClient);
-                this.submitBtn.disabled = false;
-                console.log('✅ API key loaded from localStorage.');
-            } else {
-                console.warn('❌ No API key found. Configure HUGGINGFACE_API_KEY.');
-                this.submitBtn.disabled = true;
-                this.showError('API key not configured. Please set HUGGINGFACE_API_KEY in GitHub Secrets.');
-            }
+            this.hfClient = new HuggingFaceClient(null);
+            this.agent = new SportsPickAgent(this.hfClient);
+            this.submitBtn.disabled = false;
+            console.warn('⚠️ No HuggingFace API key found. Public models may still work; gated models require a valid token.');
         }
     }
 
     async handleSubmit(e) {
-        e.preventDefault(); // FIXED: Added parentheses
+        e.preventDefault();
 
-        // Validate form inputs
         const homeTeam = document.getElementById('homeTeam').value.trim();
         const awayTeam = document.getElementById('awayTeam').value.trim();
         const sport = document.getElementById('sport').value;
         const wagerType = document.getElementById('wagerType').value;
-        const oddsLine = document.getElementById('oddsLine').value.trim(); // FIXED: oddsLine, not odds
+        const oddsLine = document.getElementById('oddsLine').value.trim();
         const gameDate = document.getElementById('gameDate').value;
         const context = document.getElementById('additionalContext').value.trim();
 
@@ -540,19 +541,16 @@ class UIController {
             return;
         }
 
-        // Validate API client is ready
         if (!this.agent) {
-            this.showError('AI agent not initialized. Please configure your API key.');
+            this.showError('AI agent not initialized. Please configure your API key or use a public model.');
             return;
         }
-alert('STEP 0: All validations passed. Agent exists.');
-        // Show loading state
+
         this.loading.style.display = 'block';
         this.resultsSection.style.display = 'none';
         this.errorSection.style.display = 'none';
 
         try {
-            // Build prompt for agent
             const prompt = `Analyze this sports wager:
 Home Team: ${homeTeam}
 Away Team: ${awayTeam}
@@ -565,13 +563,9 @@ Additional Context: ${context || 'None provided'}
 Provide a detailed analysis on the wager's value and risk factors.`;
 
             console.log('📤 Sending analysis request to HuggingFace...');
-            
-            // Call agent
             const response = await this.agent.analyzeWager(prompt);
-
             console.log('✅ Received response from AI.');
-            
-            // Display results
+
             this.displayResults(response);
             this.resultsSection.style.display = 'block';
         } catch (error) {
@@ -583,7 +577,6 @@ Provide a detailed analysis on the wager's value and risk factors.`;
     }
 
     onFormReset() {
-        // Clear results when user clicks reset button
         this.resultsSection.style.display = 'none';
         this.errorSection.style.display = 'none';
         console.log('🧹 Form cleared.');
@@ -604,17 +597,7 @@ Provide a detailed analysis on the wager's value and risk factors.`;
     }
 }
 
-// Initialize immediately if DOM is already loaded, or wait for DOMContentLoaded
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-        new UIController();
-    });
-} else {
-    // DOM is already loaded, initialize now
-    new UIController();
-}
-// At the very end of sports-bet-agent-hf.js, after everything else:
-
+// Initialize once when the DOM is ready.
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
         new UIController();
@@ -622,7 +605,3 @@ if (document.readyState === 'loading') {
 } else {
     new UIController();
 }
-
-// ADD THIS LINE HERE:
-alert('typeof UIController = ' + typeof UIController);
-
