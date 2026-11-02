@@ -221,16 +221,14 @@ class HuggingFaceClient {
     console.log('API Key total length:', this.apiKey.length);
     
     try {
-        alert('Step 1: About to fetch\nEndpoint: ' + this.endpoint + '\nAPI Key length: ' + this.apiKey.length);
-        try {
-            alert('Step 1: About to fetch\nEndpoint: ' + this.endpoint + '\nAPI Key length: ' + this.apiKey.length);
+    alert('Step 1: About to fetch\nEndpoint: ' + this.endpoint + '\nAPI Key length: ' + this.apiKey.length);
 
-            const response = await fetch(this.endpoint, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${this.apiKey}`,
-                    'Content-Type': 'application/json'
-                },
+    const response = await fetch(this.endpoint, {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${this.apiKey}`,
+            'Content-Type': 'application/json'
+        },
                 body: JSON.stringify({
                     inputs: prompt,
                     parameters: {
