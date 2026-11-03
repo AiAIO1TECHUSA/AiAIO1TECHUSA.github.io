@@ -1,478 +1,75 @@
-/**
- * Sports Wager Agent - HuggingFace Inference API Edition
- * Integrates Llama 2 chat model for sports pick analysis
- * No backend required - client-side only
+/* Sports Wager Agent — serverless front-end client.
+ * The Hugging Face credential must stay in the serverless function's environment;
+ * this browser code only calls the function endpoint.
  */
 
-// ============================================================================
-// CONFIGURATION & CONSTANTS
-// ============================================================================
-
-const CONFIG = {
-    HF_API_ENDPOINT: 'https://api-inference.huggingface.co/models/meta-llama/Llama-2-7b-chat-hf',
-    THESPORTSDB_ENDPOINT: 'https://www.thesportsdb.com/api/v1/json/1',
-    CACHE_TTL: 3600000,
-    CACHE_MAX_SIZE: 500,
-    MODEL_NAME: 'Llama-2-7b-chat-hf',
+const CONFIG = Object.freeze({
+    PREDICT_ENDPOINT: window.SPORTS_BET_PREDICT_ENDPOINT || '/.netlify/functions/predict',
     TIMEOUT: 30000
-};
-
-// ============================================================================
-// CACHE MANAGER
-// ============================================================================
-
-class CacheManager {
-    constructor(maxSize = CONFIG.CACHE_MAX_SIZE) {
-        this.cache = new Map();
-        this.maxSize = maxSize;
-        this.loadFromStorage();
-    }
-
-    set(key, value, ttl = CONFIG.CACHE_TTL) {
-        const now = Date.now();
-        const expiry = now + ttl;
-
-        this.prune();
-
-        if (this.cache.size >= this.maxSize) {
-            const firstKey = this.cache.keys().next().value;
-            this.cache.delete(firstKey);
-        }
-
-        this.cache.set(key, {
-            value,
-            expiry,
-            created: now
-        });
-
-        this.saveToStorage();
-    }
-
-    get(key) {
-        const entry = this.cache.get(key);
-        if (!entry) return null;
-
-        if (Date.now() > entry.expiry) {
-            this.cache.delete(key);
-            this.saveToStorage();
-            return null;
-        }
-
-        return entry.value;
-    }
-
-    prune() {
-        const now = Date.now();
-        for (const [key, entry] of this.cache.entries()) {
-            if (now > entry.expiry) {
-                this.cache.delete(key);
-            }
-        }
-        this.saveToStorage();
-    }
-
-    clear() {
-        this.cache.clear();
-        localStorage.removeItem('sportsBetAgentCache');
-    }
-
-    saveToStorage() {
-        try {
-            const cacheData = Array.from(this.cache.entries());
-            localStorage.setItem('sportsBetAgentCache', JSON.stringify(cacheData));
-        } catch (e) {
-            console.warn('Failed to save cache to localStorage:', e);
-        }
-    }
-
-    loadFromStorage() {
-        try {
-            const stored = localStorage.getItem('sportsBetAgentCache');
-            if (stored) {
-                const cacheData = JSON.parse(stored);
-                this.cache = new Map(cacheData);
-                this.prune();
-            }
-        } catch (e) {
-            console.warn('Failed to load cache from localStorage:', e);
-        }
-    }
-}
-
-const cacheManager = new CacheManager();
-
-// ============================================================================
-// SPORTS DATA LAYER
-// ============================================================================
-
-class SportsDataLayer {
-    static async getTeamData(teamName, sport) {
-        const cacheKey = `team_${teamName}_${sport}`;
-        const cached = cacheManager.get(cacheKey);
-        if (cached) return cached;
-
-        try {
-            const response = await fetch(
-                `${CONFIG.THESPORTSDB_ENDPOINT}/search_all_teams.php?l=${this.encodeLeague(sport)}`,
-                { signal: AbortSignal.timeout(CONFIG.TIMEOUT) }
-            );
-
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
-            const data = await response.json();
-
-            if (!data.teams) return null;
-
-            const team = data.teams.find(t =>
-                t.strTeam.toLowerCase().includes(teamName.toLowerCase()) ||
-                teamName.toLowerCase().includes(t.strTeam.toLowerCase())
-            );
-
-            if (team) {
-                const teamData = {
-                    id: team.idTeam,
-                    name: team.strTeam,
-                    logo: team.strTeamBadge,
-                    founded: team.intFormedYear,
-                    stadium: team.strStadium,
-                    description: team.strDescriptionEN
-                };
-                cacheManager.set(cacheKey, teamData);
-                return teamData;
-            }
-
-            return null;
-        } catch (error) {
-            console.error(`Error fetching team data for ${teamName}:`, error);
-            return null;
-        }
-    }
-
-    static async getLeagueStandings(sport) {
-        const cacheKey = `standings_${sport}`;
-        const cached = cacheManager.get(cacheKey);
-        if (cached) return cached;
-
-        try {
-            const leagueId = this.getSportLeagueId(sport);
-            if (!leagueId) return null;
-
-            const response = await fetch(
-                `${CONFIG.THESPORTSDB_ENDPOINT}/eventslast.php?id=${leagueId}`,
-                { signal: AbortSignal.timeout(CONFIG.TIMEOUT) }
-            );
-
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
-            const data = await response.json();
-
-            cacheManager.set(cacheKey, data.results || []);
-            return data.results || [];
-        } catch (error) {
-            console.error(`Error fetching standings for ${sport}:`, error);
-            return [];
-        }
-    }
-
-    static encodeLeague(sport) {
-        const leagues = {
-            'NFL': 'NFL',
-            'NBA': 'NBA',
-            'MLB': 'MLB',
-            'NHL': 'NHL',
-            'College Football': 'American_Football',
-            'College Basketball': 'Basketball',
-            'Soccer': 'English Premier League'
-        };
-        return encodeURIComponent(leagues[sport] || sport);
-    }
-
-    static getSportLeagueId(sport) {
-        const leagueIds = {
-            'NFL': '133602',
-            'NBA': '133603',
-            'MLB': '133602',
-            'NHL': '133604'
-        };
-        return leagueIds[sport] || null;
-    }
-}
-
-// ============================================================================
-// HUGGINGFACE INFERENCE CLIENT
-// ============================================================================
+});
 
 class HuggingFaceClient {
-    constructor(apiKey = null) {
-        this.apiKey = apiKey;
-        this.endpoint = CONFIG.HF_API_ENDPOINT;
+    constructor(endpoint = CONFIG.PREDICT_ENDPOINT) {
+        this.endpoint = endpoint;
     }
 
     async generatePick(prompt) {
-        if (!this.apiKey && !this.endpoint) {
-            throw new Error('HuggingFace model endpoint is not configured.');
-        }
-
-        const headers = {
-            'Content-Type': 'application/json'
-        };
-
-        if (this.apiKey) {
-            headers.Authorization = `Bearer ${this.apiKey}`;
-        }
+        const controller = new AbortController();
+        const timeoutId = window.setTimeout(() => controller.abort(), CONFIG.TIMEOUT);
 
         try {
             const response = await fetch(this.endpoint, {
                 method: 'POST',
-                headers,
-                body: JSON.stringify({
-                    inputs: prompt,
-                    parameters: {
-                        max_new_tokens: 1024,
-                        temperature: 0.7,
-                        top_p: 0.95,
-                        do_sample: true,
-                        return_full_text: false
-                    }
-                }),
-                signal: AbortSignal.timeout(CONFIG.TIMEOUT)
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt }),
+                signal: controller.signal
             });
 
+            const body = await response.json().catch(() => null);
             if (!response.ok) {
-                let errorBody = null;
-                try {
-                    errorBody = await response.json();
-                } catch (e) {
-                    errorBody = await response.text();
-                }
-
-                const errorMessage = errorBody?.error || errorBody?.message || response.statusText || 'Unknown error';
-
-                if (response.status === 401 || response.status === 403) {
-                    throw new Error('HuggingFace API access failed. Check your HF token and model permissions.');
-                }
-
-                if (response.status === 503) {
-                    throw new Error('HuggingFace model is still loading or unavailable. Try again in a moment.');
-                }
-
-                throw new Error(`HuggingFace API Error: ${errorMessage}`);
+                const detail = body?.error || body?.message || `HTTP ${response.status}`;
+                throw new Error(detail);
+            }
+            if (body?.error) {
+                throw new Error(typeof body.error === 'string' ? body.error : 'The inference service returned an error.');
             }
 
-            const data = await response.json();
-            const text = Array.isArray(data)
-                ? data[0]?.generated_text || ''
-                : data.generated_text || '';
+            const generated = typeof body?.text === 'string'
+                ? body.text
+                : Array.isArray(body)
+                    ? body[0]?.generated_text
+                    : body?.generated_text;
 
-            if (!text.trim()) {
-                throw new Error('HuggingFace returned an empty response.');
+            if (typeof generated !== 'string' || !generated.trim()) {
+                throw new Error('The serverless inference service returned an empty response.');
             }
-
-            return text.trim();
+            return generated.trim();
         } catch (error) {
+            if (error.name === 'AbortError') {
+                throw new Error('The analysis request timed out. Please try again.');
+            }
             if (error instanceof TypeError) {
-                throw new Error('Failed to fetch from HuggingFace. This is usually caused by CORS, a blocked model, or a network issue.');
+                throw new Error('Could not reach the serverless prediction function. Confirm it is deployed at ' + this.endpoint + '.');
             }
             throw error;
+        } finally {
+            window.clearTimeout(timeoutId);
         }
     }
 }
-
-// ============================================================================
-// SPORTS PICK AGENT
-// ============================================================================
 
 class SportsPickAgent {
-    constructor(hfClient) {
-        this.hfClient = hfClient;
-        this.sportAdapters = {
-            'NFL': this.createNFLAdapter(),
-            'NBA': this.createNBAAdapter(),
-            'MLB': this.createMLBAdapter(),
-            'NHL': this.createNHLAdapter()
-        };
+    constructor(client) {
+        this.client = client;
     }
 
-    async generatePick(gameData) {
-        try {
-            if (!gameData.homeTeam || !gameData.awayTeam || !gameData.sport) {
-                throw new Error('Missing required game data: homeTeam, awayTeam, sport');
-            }
-
-            const adapter = this.sportAdapters[gameData.sport] || this.createGenericAdapter();
-            const prompt = this.buildPrompt(gameData, adapter);
-            console.log('Sending prompt to HuggingFace:', prompt);
-
-            const response = await this.hfClient.generatePick(prompt);
-            const pick = this.parseResponse(response, gameData);
-
-            return pick;
-        } catch (error) {
-            console.error('Error generating pick:', error);
-            throw error;
-        }
-    }
-
-    async analyzeWager(prompt) {
-        try {
-            const response = await this.hfClient.generatePick(prompt);
-            return response;
-        } catch (error) {
-            console.error('Error in analyzeWager:', error);
-            throw error;
-        }
-    }
-
-    buildPrompt(gameData, adapter) {
-        const { homeTeam, awayTeam, sport, wagerType, oddsLine, gameDate, additionalContext } = gameData;
-
-        return `You are a professional sports analyst. Analyze this matchup and provide a single sports pick.
-
-MATCHUP:
-- Home Team: ${homeTeam}
-- Away Team: ${awayTeam}
-- Sport: ${sport}
-- Wager Type: ${wagerType}
-- Line/Odds: ${oddsLine}
-- Game Time: ${gameDate || 'TBD'}
-${additionalContext ? `- Context: ${additionalContext}` : ''}
-
-SPORT-SPECIFIC FACTORS TO CONSIDER:
-${adapter.factors.join('\n')}
-
-REQUIRED ANALYSIS FORMAT:
-1. **Pick**: State your pick clearly (e.g., "Take Home Team" or "Under")
-2. **Confidence**: Rate 0-100 (e.g., "Confidence: 72%")
-3. **Reasoning**: 2-3 sentences explaining your pick
-4. **Risk Factors**: List 2-3 key risks
-5. **Contrarian Angle**: Explain the opposite take
-
-Be concise and actionable. Focus on data-driven analysis, not emotion.`;
-    }
-
-    parseResponse(response, gameData) {
-        const lines = response.split('\n').filter(line => line.trim());
-
-        let pick = gameData.homeTeam;
-        let confidence = 50;
-        let reasoning = '';
-        let riskFactors = [];
-        let contrarian = '';
-        let pickType = gameData.wagerType;
-
-        let currentSection = '';
-        for (const line of lines) {
-            const lowerLine = line.toLowerCase();
-
-            if (lowerLine.includes('pick:')) {
-                currentSection = 'pick';
-                const pickText = line.split(':')[1]?.trim() || '';
-                if (pickText.includes(gameData.awayTeam) || pickText.includes('away') || pickText.includes('under')) {
-                    pick = gameData.awayTeam;
-                }
-            } else if (lowerLine.includes('confidence:')) {
-                currentSection = 'confidence';
-                const confText = line.match(/\d+/);
-                if (confText) confidence = parseInt(confText[0]);
-            } else if (lowerLine.includes('reasoning:')) {
-                currentSection = 'reasoning';
-                reasoning = line.split(':')[1]?.trim() || '';
-            } else if (lowerLine.includes('risk')) {
-                currentSection = 'risk';
-            } else if (lowerLine.includes('contrarian')) {
-                currentSection = 'contrarian';
-            } else if (currentSection === 'reasoning' && reasoning.length < 500) {
-                reasoning += ' ' + line.trim();
-            } else if (currentSection === 'risk' && line.trim()) {
-                riskFactors.push(line.replace(/^[-•*]\s*/, '').trim());
-            } else if (currentSection === 'contrarian' && line.trim()) {
-                contrarian += ' ' + line.trim();
-            }
-        }
-
-        return {
-            gameId: `${gameData.homeTeam}_vs_${gameData.awayTeam}_${Date.now()}`,
-            league: gameData.sport,
-            pick: pick,
-            confidence: Math.min(100, Math.max(0, confidence)),
-            pickType: pickType,
-            reasoning: reasoning.trim() || 'Pick generated from AI analysis',
-            riskFactors: riskFactors.length > 0 ? riskFactors : ['Limited historical data', 'Market volatility'],
-            contrarian: contrarian.trim() || 'Consider the opposite bet if line value is favorable',
-            homeTeam: gameData.homeTeam,
-            awayTeam: gameData.awayTeam,
-            oddsLine: gameData.oddsLine,
-            timestamp: new Date().toISOString()
-        };
-    }
-
-    createNFLAdapter() {
-        return {
-            factors: [
-                '- Home field advantage: ~3 points',
-                '- Quarterback health and performance trends',
-                '- Weather conditions (wind, rain impact on passing)',
-                '- Recent offensive/defensive line injuries',
-                '- Divisional rivalry implications',
-                '- Rest days and travel fatigue'
-            ]
-        };
-    }
-
-    createNBAAdapter() {
-        return {
-            factors: [
-                '- Home court advantage: ~3 points',
-                '- Star player availability and rest management',
-                '- Bench depth and role player contributions',
-                '- Pace of play and defensive efficiency',
-                '- Back-to-back game fatigue',
-                '- Three-point shooting trends'
-            ]
-        };
-    }
-
-    createMLBAdapter() {
-        return {
-            factors: [
-                '- Pitcher quality and health (era, recent form)',
-                '- Altitude effects (Denver/Arizona parks)',
-                '- Weather: temperature, wind direction/speed',
-                '- Home run factors and ballpark dimensions',
-                '- Bullpen depth and recent usage',
-                '- Day game vs. night game performance'
-            ]
-        };
-    }
-
-    createNHLAdapter() {
-        return {
-            factors: [
-                '- Home ice advantage: ~1.5 points',
-                '- Goalie matchup and recent save percentage',
-                '- Travel fatigue and time zone changes',
-                '- Back-to-back games and rest days',
-                '- Injury status of key defensemen',
-                '- Power play and penalty kill efficiency'
-            ]
-        };
-    }
-
-    createGenericAdapter() {
-        return {
-            factors: [
-                '- Home team advantage',
-                '- Recent form and momentum',
-                '- Head-to-head historical matchups',
-                '- Player injuries and roster health',
-                '- Playoff/championship implications',
-                '- Public perception vs. sharp money'
-            ]
-        };
+    async analyzeWager(game) {
+        const prompt = `You are an assistant providing educational sports-wager analysis, not a guarantee or financial advice. Do not invent current statistics, injuries, odds, or other facts. Clearly say when information is missing. Analyze the wager and its risks, and avoid encouraging the user to bet more than they can afford.\n\n` +
+            `MATCHUP\nHome team: ${game.homeTeam}\nAway team: ${game.awayTeam}\nSport: ${game.sport}\nWager type: ${game.wagerType}\nOdds/line: ${game.oddsLine}\nGame date/time: ${game.gameDate || 'Not provided'}\nAdditional context: ${game.context || 'None provided'}\n\n` +
+            `Respond with: 1) what the wager means, 2) potential value and assumptions, 3) key risks and missing information, 4) a plausible opposing view. Do not present a confidence percentage as a measured probability.`;
+        return this.client.generatePick(prompt);
     }
 }
-
-// ============================================================================
-// UI CONTROLLER
-// ============================================================================
 
 class UIController {
     constructor() {
@@ -482,126 +79,100 @@ class UIController {
         this.resultsSection = document.getElementById('resultsSection');
         this.resultsContainer = document.getElementById('resultsContainer');
         this.errorSection = document.getElementById('errorSection');
-        this.errorTitle = document.getElementById('errorTitle');
         this.errorMessage = document.getElementById('errorMessage');
-        this.hfClient = null;
-        this.agent = null;
+        this.agent = new SportsPickAgent(new HuggingFaceClient());
 
-        this.init();
-    }
-
-    init() {
         if (!this.form) {
             console.warn('Wager form not found on this page.');
             return;
         }
 
-        this.checkAPIKey();
-        this.form.addEventListener('submit', (e) => this.handleSubmit(e));
-        this.form.addEventListener('reset', () => this.onFormReset());
+        this.form.addEventListener('submit', (event) => this.handleSubmit(event));
+        this.form.addEventListener('reset', () => {
+            this.hide(this.resultsSection);
+            this.hide(this.errorSection);
+        });
     }
 
-    resolveApiKey() {
-        const windowKey = window.HUGGINGFACE_API_KEY || null;
-        if (windowKey) return windowKey;
-
-        const localKey = localStorage.getItem('HUGGINGFACE_API_KEY');
-        return localKey || null;
+    getValue(id) {
+        return document.getElementById(id)?.value?.trim() || '';
     }
 
-    checkAPIKey() {
-        const apiKey = this.resolveApiKey();
+    async handleSubmit(event) {
+        event.preventDefault();
+        this.hide(this.errorSection);
+        this.hide(this.resultsSection);
 
-        if (apiKey) {
-            this.hfClient = new HuggingFaceClient(apiKey);
-            this.agent = new SportsPickAgent(this.hfClient);
-            this.submitBtn.disabled = false;
-            console.log('✅ API key loaded successfully.');
-        } else {
-            this.hfClient = new HuggingFaceClient(null);
-            this.agent = new SportsPickAgent(this.hfClient);
-            this.submitBtn.disabled = false;
-            console.warn('⚠️ No HuggingFace API key found. Public models may still work; gated models require a valid token.');
-        }
-    }
+        if (!this.form.reportValidity()) return;
 
-    async handleSubmit(e) {
-        e.preventDefault();
+        const game = {
+            homeTeam: this.getValue('homeTeam'),
+            awayTeam: this.getValue('awayTeam'),
+            sport: this.getValue('sport'),
+            wagerType: this.getValue('wagerType'),
+            oddsLine: this.getValue('oddsLine'),
+            gameDate: this.getValue('gameDate'),
+            context: this.getValue('additionalContext')
+        };
 
-        const homeTeam = document.getElementById('homeTeam').value.trim();
-        const awayTeam = document.getElementById('awayTeam').value.trim();
-        const sport = document.getElementById('sport').value;
-        const wagerType = document.getElementById('wagerType').value;
-        const oddsLine = document.getElementById('oddsLine').value.trim();
-        const gameDate = document.getElementById('gameDate').value;
-        const context = document.getElementById('additionalContext').value.trim();
-
-        if (!homeTeam || !awayTeam || !sport || !wagerType || !oddsLine || !gameDate) {
-            this.showError('Please fill in all required fields.');
+        if (!game.homeTeam || !game.awayTeam || !game.sport || !game.wagerType || !game.oddsLine) {
+            this.showError('Please complete all required fields.');
             return;
         }
 
-        if (!this.agent) {
-            this.showError('AI agent not initialized. Please configure your API key or use a public model.');
-            return;
-        }
-
-        this.loading.style.display = 'block';
-        this.resultsSection.style.display = 'none';
-        this.errorSection.style.display = 'none';
-
+        this.setBusy(true);
+        this.show(this.loading);
         try {
-            const prompt = `Analyze this sports wager:
-Home Team: ${homeTeam}
-Away Team: ${awayTeam}
-Sport: ${sport}
-Wager Type: ${wagerType}
-Odds/Line: ${oddsLine}
-Game Date: ${gameDate}
-Additional Context: ${context || 'None provided'}
-
-Provide a detailed analysis on the wager's value and risk factors.`;
-
-            console.log('📤 Sending analysis request to HuggingFace...');
-            const response = await this.agent.analyzeWager(prompt);
-            console.log('✅ Received response from AI.');
-
-            this.displayResults(response);
-            this.resultsSection.style.display = 'block';
+            const analysis = await this.agent.analyzeWager(game);
+            this.displayResults(analysis);
+            this.show(this.resultsSection);
         } catch (error) {
-            console.error('❌ Error analyzing wager:', error);
-            this.showError(`Error analyzing wager: ${error.message}`);
+            console.error('Wager analysis request failed:', error);
+            this.showError(error.message || 'Analysis failed. Please try again.');
         } finally {
-            this.loading.style.display = 'none';
+            this.hide(this.loading);
+            this.setBusy(false);
         }
     }
 
-    onFormReset() {
-        this.resultsSection.style.display = 'none';
-        this.errorSection.style.display = 'none';
-        console.log('🧹 Form cleared.');
-    }
-
-    displayResults(response) {
-        this.resultsContainer.innerHTML = `
-            <div class="result-card">
-                <p>${response}</p>
-            </div>
-        `;
-        this.resultsSection.style.display = 'block';
+    displayResults(text) {
+        if (!this.resultsContainer) return;
+        const card = document.createElement('div');
+        card.className = 'result-card';
+        const paragraph = document.createElement('p');
+        paragraph.textContent = text;
+        paragraph.style.whiteSpace = 'pre-wrap';
+        card.appendChild(paragraph);
+        this.resultsContainer.replaceChildren(card);
     }
 
     showError(message) {
-        this.errorMessage.textContent = message;
-        this.errorSection.style.display = 'block';
+        if (this.errorMessage) this.errorMessage.textContent = message;
+        this.show(this.errorSection);
+    }
+
+    setBusy(busy) {
+        if (this.submitBtn) this.submitBtn.disabled = busy;
+        if (this.form) this.form.setAttribute('aria-busy', String(busy));
+    }
+
+    show(element) {
+        if (element) element.style.display = 'block';
+    }
+
+    hide(element) {
+        if (element) element.style.display = 'none';
     }
 }
 
-// Initialize once when the DOM is ready.
+function initializeSportsWagerUI() {
+    if (!window.sportsWagerUIController) {
+        window.sportsWagerUIController = new UIController();
+    }
+}
+
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-        new UIController();
-    });
+    document.addEventListener('DOMContentLoaded', initializeSportsWagerUI, { once: true });
 } else {
-    new UIController();
+    initializeSportsWagerUI();
 }

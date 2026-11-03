@@ -5,36 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sports Wager Agent - HuggingFace Edition</title>
     <link rel="preconnect" href="https://api-inference.huggingface.co">
-    <link rel="preconnect" href="https://www.thesportsdb.com">
     <link rel="stylesheet" href="sports-bet-agent-hf.css">
-    <script>
-    // Set API key in localStorage (one-time)
-    if (!localStorage.getItem('HUGGINGFACE_API_KEY')) {
-        const apiKey = prompt('Enter your HuggingFace API key:');
-        if (apiKey) {
-            localStorage.setItem('HUGGINGFACE_API_KEY', apiKey);
-            alert('API key saved');
-        }
-    }
-    </script>
-    <!-- Load API key config FIRST -->
-    <script src="sports-bet-agent-config.js"></script>
-    
-    <style>
-        /* Your CSS here */
-    </style>
 </head>
-
 <body>
     <div class="container">
-        <div class="header">
+        <header class="header">
             <h1>🏆 Sports Wager Agent</h1>
             <p>AI-Powered Sports Pick Analysis</p>
-            <span class="badge">HuggingFace Inference API Edition</span>
-        </div>
+            <span class="badge">Serverless Inference Edition</span>
+        </header>
 
-        <div class="content">
-            <!-- Form Section -->
+        <main class="content">
             <form id="wagerForm">
                 <div class="form-section">
                     <div class="form-group">
@@ -79,7 +60,7 @@
                         <input type="text" id="oddsLine" name="oddsLine" placeholder="e.g., -110, +200, -3.5" required>
                     </div>
                     <div class="form-group">
-                        <label for="gameDate">Game Date/Time</label>
+                        <label for="gameDate">Game Date/Time (Optional)</label>
                         <input type="datetime-local" id="gameDate" name="gameDate">
                     </div>
                 </div>
@@ -93,91 +74,36 @@
 
                 <div class="button-group">
                     <button type="submit" class="btn-primary" id="submitBtn">🔍 Initiate AI Wager Scan</button>
-                    <button type="button" id="testBtn">Test Submit Handler</button>
-
-<script>
-    document.getElementById('testBtn').addEventListener('click', () => {
-        alert('Test button clicked');
-        const form = document.getElementById('wagerForm');
-        if (form) {
-            alert('wagerForm exists. Triggering submit...');
-            form.dispatchEvent(new Event('submit'));
-        }
-    });
-</script>
-                    
                     <button type="reset" class="btn-secondary">Clear Form</button>
                 </div>
             </form>
 
-            <!-- Loading Indicator -->
-            <div id="loading" class="loading">
+            <div id="loading" class="loading" role="status" aria-live="polite">
                 <div class="spinner"></div>
                 <p>AI is analyzing the matchup...</p>
             </div>
 
-            <!-- Results Section -->
-            <div id="resultsSection" class="results-section">
+            <section id="resultsSection" class="results-section" aria-live="polite">
                 <h2 style="margin-bottom: 25px; color: #333;">📊 AI Analysis Results</h2>
                 <div id="resultsContainer"></div>
-            </div>
+            </section>
 
-            <!-- Error Section -->
-            <div id="errorSection" class="error" style="display: none;">
+            <div id="errorSection" class="error" role="alert" style="display: none;">
                 <strong id="errorTitle">Error</strong>
                 <p id="errorMessage"></p>
             </div>
-        </div>
+        </main>
 
-        <div class="footer">
+        <footer class="footer">
             <p>
-                Built with <strong>HuggingFace Inference API</strong> | 
-                <a href="https://huggingface.co/meta-llama/Llama-2-7b-chat-hf" target="_blank">Powered by Llama 2</a> |
-                <a href="https://www.thesportsdb.com" target="_blank">Sports Data by TheSportsDB</a>
+                Built with <strong>HuggingFace Inference API</strong> |
+                <a href="https://huggingface.co/meta-llama/Llama-2-7b-chat-hf" target="_blank" rel="noopener noreferrer">Powered by Llama 2</a>
             </p>
             <p style="margin-top: 10px; font-size: 0.85em;">
-                ⚠️ For educational purposes only. Always do your own research before wagering.
+                ⚠️ For educational purposes only. AI analysis may be inaccurate; always do your own research.
             </p>
-        </div>
+        </footer>
     </div>
-
- <!-- Load main app only -->
-<script src="sports-bet-agent-hf.js"></script>
-
-<!-- PROMPT for API key if not stored -->
-<script>
-    if (!localStorage.getItem('HUGGINGFACE_API_KEY')) {
-        const apiKey = prompt('Enter your HuggingFace API key:');
-        if (apiKey) {
-            localStorage.setItem('HUGGINGFACE_API_KEY', apiKey);
-            alert('✓ API key saved to localStorage');
-        } else {
-            alert('ERROR: No API key provided. App will not work.');
-        }
-    } else {
-        alert('✓ API key already stored');
-    }
-</script>
-
-<!-- Initialize the app -->
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        alert('DOMContentLoaded fired');
-        
-        if (typeof UIController === 'undefined') {
-            alert('ERROR: UIController class not found');
-            return;
-        }
-        alert('✓ UIController class found');
-
-        try {
-            window.controller = new UIController();
-            alert('✓ UIController instantiated successfully');
-        } catch (e) {
-            alert('ERROR: ' + e.message);
-        }
-    });
-</script>
-
+    <script src="sports-bet-agent-hf.js" defer></script>
 </body>
 </html>
