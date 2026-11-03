@@ -4,7 +4,12 @@
  */
 
 const CONFIG = Object.freeze({
-    PREDICT_ENDPOINT: window.SPORTS_BET_PREDICT_ENDPOINT || '/.netlify/functions/predict',
+    // GitHub Pages can't run functions (POSTs there return 405), so call the
+    // Netlify-hosted function by absolute URL unless already on Netlify.
+    PREDICT_ENDPOINT: window.SPORTS_BET_PREDICT_ENDPOINT ||
+        (window.location.hostname.endsWith('netlify.app') || window.location.hostname === 'localhost'
+            ? '/.netlify/functions/predict'
+            : 'https://inspiring-licorice-2c7129.netlify.app/.netlify/functions/predict'),
     TIMEOUT: 30000
 });
 
