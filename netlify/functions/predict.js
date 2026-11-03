@@ -4,12 +4,20 @@ const DEFAULT_MODEL = 'meta-llama/Llama-2-7b-chat-hf';
 const MAX_PROMPT_LENGTH = 20000;
 const REQUEST_TIMEOUT_MS = 25000;
 
-function jsonResponse(statusCode, payload) {
+function jsonResponse(statusCode, payload, headers = {}) {
   return {
     statusCode,
-    headers: { 'Content-Type': 'application/json; charset=utf-8' },
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+      ...headers
+    },
     body: JSON.stringify(payload)
   };
+}
+
+function getMethod(event) {
+  // Netlify's v1 event uses httpMethod; v2 uses requestContext.http.method.
+  return event?.httpMethod || event?.requestContext?.http?.method || '';
 }
 
 function log(level, message, metadata = {}) {
@@ -22,9 +30,29 @@ function log(level, message, metadata = {}) {
 
 exports.handler = async (event, context) => {
   const requestId = context?.awsRequestId || event?.headers?.['x-nf-request-id'] || 'unknown';
+  const method = getMethod(event).toUpperCase();
 
-  if (event.httpMethod !== 'POST') {
-    return jsonResponse(405, { error: 'Method Not Allowed' });
+  // OPTIONS may be sent by browsers before a cross-origin JSON POST.
+  if (method === 'OPTIONS') {
+    return {
+      statusCode: 204,
+      headers: {
+        'Access-Control-Allow-Origin': event?.headers?.origin || '*',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type',
+        'Access-Control-Max-Age': '86400'
+      },
+      body: ''
+    };
+  }
+
+  if (method !== 'POST') {
+    log('warn', 'Request rejected: unsupported method', {
+      requestId,
+      method: method || 'unknown',
+      eventVersion: event?.version || 'v1'
+    });
+    return jsonResponse(405, { error: 'Method Not Allowed', receivedMethod: method || 'unknown' }, { Allow: 'POST, OPTIONS' });
   }
 
   let body;
@@ -49,7 +77,7 @@ exports.handler = async (event, context) => {
   const token = process.env.HUGGINGFACE_API_KEY;
   if (!token) {
     log('error', 'HUGGINGFACE_API_KEY is not configured', { requestId });
-    return jsonResponse(500, { error: 'The prediction service is not configured. Set HUGGINGFACE_API_KEY in Netlify environment variables.' });
+    return jsonResponse(500, { error: 'The prediction service is not configured. Set HUGGINGFACE_API_KEY in the deployment environment.' });
   }
 
   const model = process.env.HUGGINGFACE_MODEL || DEFAULT_MODEL;
@@ -66,10 +94,7 @@ exports.handler = async (event, context) => {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        inputs: prompt,
-        parameters: { max_new_tokens: 1024 }
-      }),
+      body: JSON.stringify({ inputs: prompt, parameters: { max_new_tokens: 1024 } }),
       signal: controller.signal
     });
 
@@ -86,13 +111,7 @@ exports.handler = async (event, context) => {
       const detail = typeof data.error === 'string'
         ? data.error.slice(0, 1000)
         : `Hugging Face returned HTTP ${response.status}.`;
-      log('error', 'Inference provider returned an error', {
-        requestId,
-        model,
-        statusCode: response.status,
-        durationMs,
-        detail
-      });
+      log('error', 'Inference provider returned an error', { requestId, model, statusCode: response.status, durationMs, detail });
       return jsonResponse(502, { error: 'The inference provider rejected the request.', detail });
     }
 
