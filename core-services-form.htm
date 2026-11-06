@@ -341,5 +341,22 @@
      
 </main>    
         
-</div> <!-- /.page-container --></body>
+</div>
+ <script>
+  const checkboxes = document.querySelectorAll('.svc');
+  const totalSpan = document.getElementById('totalPrice');
+
+  checkboxes.forEach(box => {
+    box.addEventListener('change', () => {
+      let total = 0;
+      checkboxes.forEach(item => {
+        if (item.checked) {
+          total += Number(item.dataset.price);
+        }
+      });
+      totalSpan.textContent = total.toFixed(2);
+    });
+  });
+</script>
+ </body>
 </html>
