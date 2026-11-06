@@ -1,4 +1,252 @@
-    <!-- ===========================
+ <!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>AI-AIO-1TECHUSA-Paralegal-IT-Core Services</title>
+
+<link rel="stylesheet" href="newsletter-1.css">
+<link rel="modulepreload" href="aes.js">
+
+    <style>
+    /* Responsive payment styles added inline so the payment section works without additional CSS edits */
+    .payment-methods, .payment-section {
+        padding: 1rem;
+        background: #f9f9f9;
+        border-radius: 8px;
+        margin: 1rem 0;
+    }
+    .payment-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 1rem;
+        align-items: center;
+    }
+    .pay-option {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.75rem;
+        background: #fff;
+        border-radius: 8px;
+        text-align: center;
+        text-decoration: none;
+        color: inherit;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        border: 1px solid rgba(0,0,0,0.05);
+        transition: transform 160ms ease, box-shadow 160ms ease;
+    }
+    .pay-option:hover { transform: translateY(-4px); box-shadow: 0 6px 18px rgba(0,0,0,0.12); }
+    .pay-icon { width: 48px; height: auto; display: block; }
+
+    .payment-title { margin: 0 0 0.5rem 0; font-size: 1.25rem; }
+    .payment-description { margin: 0 0 0.75rem 0; color: #333; }
+
+    /* Simple visible banner for the payment placeholders */
+    .payment-banner {
+        font-size: 1.25rem;
+        font-weight: 700;
+        text-align: center;
+        background: #fff3cd; /* soft yellow */
+        color: #856404; /* dark yellow/brown for contrast */
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        margin-bottom: 0.75rem;
+        border: 1px solid #ffeeba;
+    }
+
+    .chime-button {
+        display: inline-block;
+        padding: 0.65rem 1rem;
+        background: #00a86b;
+        color: #fff;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .qr-wrapper { display: flex; align-items: center; gap: 1rem; margin-top: 0.75rem; flex-wrap: wrap; }
+    .qr-image { max-width: 160px; height: auto; border: 1px solid #ddd; border-radius: 6px; }
+
+    /* Payment logos container - displayed at top */
+    .payment-logos {
+        display: flex;
+        justify-content: center;
+        gap: 25px;
+        margin: 15px 0 25px 0;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+    
+    .pay-logo {
+        height: 40px;
+        width: auto;
+        opacity: 0.95;
+        transition: opacity 0.3s ease, transform 0.2s ease;
+    }
+    
+    .pay-logo:hover {
+        opacity: 1;
+        transform: translateY(-3px);
+    }
+
+    /* larger mastercard in footer */
+    .mastercard-large { height: 56px; }
+
+    /* Visa white background option so the logo shows on any background */
+    .visa-white {
+        background: #ffffff; /* white background */
+        padding: 6px 10px;
+        border-radius: 6px;
+        display: inline-block;
+    }
+
+    /* Product card footer visual tweaks */
+    .product-card-footer {
+        background: #ffffff; /* ensure white background in footer */
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        margin-top: 0.75rem;
+    }
+
+    /* Make payment logos inside product footer match the main payment grid spacing/layout */
+    .product-card-footer .payment-logos {
+        gap: 20px;
+        justify-content: center;
+        margin: 10px 0 0 0;
+    }
+
+    /* Small screen tweaks */
+    @media (max-width: 480px) {
+        .hero-title { font-size: 1.25rem; }
+        .pay-icon { width: 40px; }
+        .qr-image { max-width: 120px; }
+        .payment-methods, .payment-section { padding: 0.75rem; }
+        .pay-logo { height: 32px; }
+        .mastercard-large { height: 44px; }
+    }
+     /* HERO WARRIOR SECTION */
+.hero-warrior {
+  position: relative;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  padding: 60px 20px;
+  min-height: 100vh;
+  color: #fff;
+  overflow: hidden;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,...') /* military pattern */;
+  opacity: 0.1;
+  pointer-events: none;
+}
+
+.hero-container {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.hero-header {
+  text-align: center;
+  margin-bottom: 60px;
+  animation: fadeInDown 0.8s ease;
+}
+
+.hero-header h1 {
+  font-size: 3.5rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.hero-subtitle {
+  font-size: 1.3rem;
+  color: #ccc;
+  font-weight: 300;
+}
+
+/* IFRAME WRAPPERS */
+.iframe-wrapper {
+  margin-bottom: 80px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 30px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  animation: fadeInUp 0.8s ease;
+}
+
+.iframe-wrapper h2 {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 2px solid #ff6b6b;
+  padding-bottom: 10px;
+}
+
+.iframe-wrapper iframe {
+  border-radius: 4px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 768px) {
+  .hero-header h1 {
+    font-size: 2rem;
+  }
+  
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+  
+  .iframe-wrapper {
+    padding: 20px;
+  }
+  
+  .iframe-wrapper iframe {
+    height: 600px !important;
+  }
+}
+
+/* ANIMATIONS */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+     }
+    </style>
+</head>
+<body>
+<main>
+
+<!-- ===========================
          IMAGE GRID + SERVICES + PAYMENTS
     ============================ -->
     <section class="text-with-images">
@@ -89,4 +337,9 @@
 </ul>
 
     </article>
-</section>
+</section> 
+     
+</main>    
+        
+</div> <!-- /.page-container --></body>
+</html>
