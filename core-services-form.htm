@@ -1,71 +1,99 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Core Services Form</title>
-<style>
-  body { font-family: Arial, sans-serif; max-width: 760px; margin: 40px auto; padding: 0 20px; color: #222; }
-  h1 { font-size: 1.6rem; }
-  .group { margin: 24px 0 8px; font-weight: bold; border-bottom: 1px solid #ccc; padding-bottom: 4px; }
-  .item { display: flex; align-items: center; padding: 6px 0; }
-  .item input { margin-right: 10px; }
-  .item span.price { margin-left: auto; color: #555; }
-  .total-box { margin-top: 28px; padding: 16px; background: #f4f6f8; border-radius: 6px; font-size: 1.2rem; }
-  .btn { display: inline-block; margin-top: 16px; padding: 12px 20px; background: #1a73e8; color: #fff; text-decoration: none; border-radius: 5px; border: none; font-size: 1rem; cursor: pointer; }
-  .btn:hover { background: #155bb5; }
-  .note { font-size: 0.85rem; color: #666; margin-top: 8px; }
-</style>
-</head>
-<body>
-
-<h1>Core Services</h1>
-<p>Last updated: <span id="publish-date"></span></p>
-
-<div class="group">Hardware and Infrastructure</div>
-<label class="item"><input type="checkbox" class="svc" data-price="900"> Windows Server License <span class="price">$900</span></label>
-<label class="item"><input type="checkbox" class="svc" data-price="1500"> Server Hardware <span class="price">$1,500</span></label>
-<label class="item"><input type="checkbox" class="svc" data-price="250"> Business Router/Firewall <span class="price">$250</span></label>
-<label class="item"><input type="checkbox" class="svc" data-price="200"> UPS Backup Power <span class="price">$200</span></label>
-<label class="item"><input type="checkbox" class="svc" data-price="600"> Install &amp; Config <span class="price">$600</span></label>
-<label class="item"><input type="checkbox" class="svc" data-price="150"> Monthly Maintenance <span class="price">$150</span></label>
-
-<div class="group">Hourly Services</div>
-<label class="item"><input type="checkbox" class="svc" data-price="30"> Personal Injury Chronology <span class="price">$30/hr</span></label>
-<label class="item"><input type="checkbox" class="svc" data-price="20"> Web 3.0 Layout <span class="price">$20/hr</span></label>
-<label class="item"><input type="checkbox" class="svc" data-price="50"> JavaScript AI Workflow <span class="price">$50/hr</span></label>
-
-<div class="group">Security</div>
-<label class="item"><input type="checkbox" class="svc" data-price="100"> Cyber Security Update <span class="price">$100</span></label>
-
-<div class="total-box">
-  Total: $<span id="totalPrice">0</span>
-  <div class="note">Hourly services are estimated per hour. Final pricing is confirmed after consultation.</div>
-</div>
-
-<a class="btn" href="YOUR-BOOKING-LINK" target="_blank" rel="noopener">Schedule Appointment</a>
+<!-- Paste before </body> in IT2026.htm -->
+<section id="solution-agent" style="max-width:760px;margin:2rem auto;padding:0 1rem;font-family:system-ui,sans-serif;">
+  <h2>Find Your Solution</h2>
+  <p>Describe the problem you're facing and the agent will match it to the right solution.</p>
+  <input id="agent-input" type="text" placeholder="e.g. my laptop is slow, phishing emails, backups" style="width:100%;padding:10px;box-sizing:border-box;">
+  <button id="agent-btn" style="margin-top:8px;padding:8px 16px;cursor:pointer;">Find Solution</button>
+  <div id="agent-status" style="color:#555;margin-top:8px;"></div>
+  <div id="agent-output" style="margin-top:16px;"></div>
+</section>
 
 <script>
-  // Set today's date
-  document.getElementById('publish-date').textContent = new Date().toLocaleDateString('en-US', {
-    year: 'numeric', month: 'long', day: 'numeric'
-  });
+"use strict";
 
-  // Recalculate total whenever a checkbox changes
-  const checkboxes = document.querySelectorAll('.svc');
-  const totalEl = document.getElementById('totalPrice');
+/* Edit these entries to match your real solutions */
+const SOLUTIONS = [
+  {
+    name: "Managed Security",
+    keywords: ["security", "phishing", "malware", "virus", "hack", "hacked", "password", "firewall", "threat"],
+    problem: "Threats, phishing, and unpatched systems put your business at risk.",
+    fix: "We monitor, patch, and defend your endpoints and email around the clock.",
+    outcome: "Fewer incidents, documented protection, and a team that sleeps better.",
+  },
+  {
+    name: "Cloud Backup & Recovery",
+    keywords: ["backup", "backups", "recovery", "restore", "deleted", "ransomware", "disaster", "data"],
+    problem: "One failed drive or ransomware attack can erase months of work.",
+    fix: "Automated, encrypted backups with tested restore procedures.",
+    outcome: "Recover files and systems in hours instead of weeks.",
+  },
+  {
+    name: "Workstation Support",
+    keywords: ["slow", "laptop", "computer", "printer", "device", "crash", "freeze", "driver", "hardware"],
+    problem: "Slow or failing equipment drains productivity every day.",
+    fix: "Proactive maintenance, updates, and fast hands-on repair.",
+    outcome: "Reliable devices and fewer interruptions for your staff.",
+  },
+  {
+    name: "Cloud & Network Setup",
+    keywords: ["cloud", "network", "wifi", "internet", "vpn", "remote", "server", "hosting", "office"],
+    problem: "Remote work and growing teams need a network that keeps up.",
+    fix: "Secure cloud, VPN, and network design built around how you work.",
+    outcome: "Staff connect safely from anywhere with consistent performance.",
+  },
+];
 
-  function updateTotal() {
-    let total = 0;
-    checkboxes.forEach(cb => {
-      if (cb.checked) total += Number(cb.dataset.price);
-    });
-    totalEl.textContent = total.toLocaleString('en-US');
+const CALENDLY = "https://calendly.com/patlucero2026/30min";
+
+const STOP = new Set(["a","an","and","are","as","at","be","by","for","from","i","in","is","it","my","of","on","or","the","to","we","with","our","when","how","do","help"]);
+
+function tokenize(text) {
+  return (text.toLowerCase().match(/[a-z0-9]+/g) || []).filter(w => !STOP.has(w));
+}
+
+function rankSolutions(query) {
+  const words = new Set(tokenize(query));
+  return SOLUTIONS
+    .map(sol => ({ sol, score: sol.keywords.filter(k => words.has(k)).length }))
+    .filter(r => r.score > 0)
+    .sort((a, b) => b.score - a.score);
+}
+
+function escapeHtml(s) {
+  return s.replace(/[&<>"']/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
+}
+
+function card(sol, expanded) {
+  return `
+    <div style="border:1px solid #ddd;border-left:4px solid #3a7d44;border-radius:6px;padding:14px;margin-bottom:12px;">
+      <h3 style="margin:0 0 6px;">${escapeHtml(sol.name)}</h3>
+      ${expanded ? `
+        <p><strong>The problem:</strong> ${escapeHtml(sol.problem)}</p>
+        <p><strong>How we fix it:</strong> ${escapeHtml(sol.fix)}</p>
+        <p><strong>What you get:</strong> ${escapeHtml(sol.outcome)}</p>
+        <p><a href="${CALENDLY}" target="_blank" rel="noopener" style="font-weight:bold;">Book a 30-minute consultation</a></p>
+      ` : `<p>${escapeHtml(sol.problem)}</p>`}
+    </div>`;
+}
+
+document.getElementById("agent-btn").addEventListener("click", runAgent);
+document.getElementById("agent-input").addEventListener("keydown", e => { if (e.key === "Enter") runAgent(); });
+
+function runAgent() {
+  const query = document.getElementById("agent-input").value.trim();
+  const status = document.getElementById("agent-status");
+  const out = document.getElementById("agent-output");
+
+  if (!query) { status.textContent = "Type a problem to search."; out.innerHTML = ""; return; }
+
+  const matches = rankSolutions(query);
+  if (matches.length === 0) {
+    status.textContent = "No direct match. Here are our core solutions:";
+    out.innerHTML = SOLUTIONS.map(s => card(s, false)).join("");
+    return;
   }
 
-  checkboxes.forEach(cb => cb.addEventListener('change', updateTotal));
-  updateTotal();
+  status.textContent = `Found ${matches.length} matching solution${matches.length > 1 ? "s" : ""}.`;
+  out.innerHTML = matches.map((m, i) => card(m.sol, i === 0)).join("");
+}
 </script>
-
-</body>
-</html>
