@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#1TechUSA Core Services</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; color: #222; line-height: 1.5; }
+        h1 { font-size: 1.6rem; }
+        h2 { font-size: 1.3rem; margin-top: 32px; }
+        .list-subtitle { font-weight: bold; }
+        .lists { padding-left: 0; list-style: none; }
+        .lists li { margin-bottom: 14px; }
+        .calendar-button, .btn { display: inline-block; margin: 12px 0; padding: 12px 20px; background: #1a73e8; color: #fff; text-decoration: none; border-radius: 5px; border: none; font-size: 1rem; cursor: pointer; }
+        .calendar-button:hover, .btn:hover { background: #155bb5; }
+        .group { margin: 24px 0 8px; font-weight: bold; border-bottom: 1px solid #ccc; padding-bottom: 4px; }
+        .item { display: flex; align-items: center; padding: 6px 0; cursor: pointer; }
+        .item input { margin-right: 10px; }
+        .item span.price { margin-left: auto; color: #555; }
+        .total-box { margin-top: 28px; padding: 16px; background: #f4f6f8; border-radius: 6px; font-size: 1.2rem; }
+        .note { font-size: 0.85rem; color: #666; margin-top: 8px; }
+    </style>
+</head>
+<body>
+
+    <h1>#1TechUSA Presents a Strategic Suite of Services</h1>
+
+    <section id="core-services">
+        <h2>Small Business Network &amp; Server Package</h2>
+        <a href="#core-services-form" class="calendar-button">Build Your Service Package</a>
+    </section>
+
+    <ul class="lists">
+        <li>
+            <p>
+                <span class="list-subtitle">Internet Network Speed Optimization</span><br>
+                Tailored solutions for Windows 11 and Android...
+            </p>
+        </li>
+        <li>
+            <p>
+                <span class="list-subtitle">Tech Insights &amp; Tips</span><br>
+                Curated updates and expert guidance...
+            </p>
+        </li>
+        <li>
+            <p>
+                <span class="list-subtitle">SEM Campaigns &amp; SEO Customization</span><br>
+                Launch targeted Search Engine Marketing campaigns...
+            </p>
+        </li>
+        <li>
+            <p>
+                <span class="list-subtitle">Responsive Web Development (Coming Soon)</span><br>
+                Future-proof your online presence...
+            </p>
+        </li>
+    </ul>
+
+    <p>
+        <strong>Business-Centric Approach</strong><br>
+        Each proposal is customized to your business.
+    </p>
+
+    <!-- =========================== SERVICES AND PLANS ============================ -->
+    <section class="text-with-images">
+        <article class="brief-history">
+            <h3 class="list-title">Services and Plans</h3>
+            <p>Descriptions and prices</p>
+
+            <ul class="lists">
+                <li>
+                    <h4 class="list-subtitle">Personal Injury Medical Chronology...</h4>
+                    <p>Issue: Microsoft Office integration...</p>
+                    <hr>
+                    <p>Costs = $30 per billable hour</p>
+                </li>
+
+                <li>
+                    <h4 class="list-subtitle">Web 3.0 Magazine Layout...</h4>
+                    <p>Issue: Lack of effective use of technology...</p>
+                    <hr>
+                    <p>Costs = $20 per billable hour</p>
+                </li>
+
+                <li>
+                    <h4 class="list-subtitle">JavaScript AI Workflow</h4>
+                    <p>Issue: Lack of client communications...</p>
+                    <hr>
+                    <p>Costs = $50 per hour</p>
+                </li>
+
+                <li>
+                    <h4 class="list-subtitle">Cyber Security &amp; Performance Updates</h4>
+                    <hr>
+                    <p>$100 — includes 2 devices</p>
+                    <p>#1 Security and Speed/Performance service...</p>
+                </li>
+            </ul>
+        </article>
+    </section>
+
+    <!-- =========================== PRICE CALCULATOR ============================ -->
+    <section id="core-services-form">
+        <h2>Build Your Package</h2>
+        <p>Last updated: <span id="publish-date"></span></p>
+
+        <div class="group">Hardware and Infrastructure</div>
+        <label class="item"><input type="checkbox" class="svc" data-price="900"> Windows Server License <span class="price">$900</span></label>
+        <label class="item"><input type="checkbox" class="svc" data-price="1500"> Server Hardware <span class="price">$1,500</span></label>
+        <label class="item"><input type="checkbox" class="svc" data-price="250"> Business Router/Firewall <span class="price">$250</span></label>
+        <label class="item"><input type="checkbox" class="svc" data-price="200"> UPS Backup Power <span class="price">$200</span></label>
+        <label class="item"><input type="checkbox" class="svc" data-price="600"> Install &amp; Config <span class="price">$600</span></label>
+        <label class="item"><input type="checkbox" class="svc" data-price="150"> Monthly Maintenance <span class="price">$150</span></label>
+
+        <div class="group">Hourly Services</div>
+        <label class="item"><input type="checkbox" class="svc" data-price="30"> Personal Injury Chronology <span class="price">$30/hr</span></label>
+        <label class="item"><input type="checkbox" class="svc" data-price="20"> Web 3.0 Layout <span class="price">$20/hr</span></label>
+        <label class="item"><input type="checkbox" class="svc" data-price="50"> JavaScript AI Workflow <span class="price">$50/hr</span></label>
+
+        <div class="group">Security</div>
+        <label class="item"><input type="checkbox" class="svc" data-price="100"> Cyber Security Update <span class="price">$100</span></label>
+
+        <div class="total-box">
+            Total: $<span id="totalPrice">0</span>
+            <div class="note">Hourly services are estimated per hour. Final pricing is confirmed after consultation.</div>
+        </div>
+
+        <a class="btn" href="YOUR-BOOKING-LINK" target="_blank" rel="noopener">Schedule Appointment</a>
+    </section>
+
+    <script>
+        document.getElementById('publish-date').textContent = new Date().toLocaleDateString('en-US', {
+            year: 'numeric', month: 'long', day: 'numeric'
+        });
+
+        const checkboxes = document.querySelectorAll('.svc');
+        const totalEl = document.getElementById('totalPrice');
+
+        function updateTotal() {
+            let total = 0;
+            checkboxes.forEach(cb => {
+                if (cb.checked) total += Number(cb.dataset.price);
+            });
+            totalEl.textContent = total.toLocaleString('en-US');
+        }
+
+        checkboxes.forEach(cb => cb.addEventListener('change', updateTotal));
+        updateTotal();
+    </script>
+
+</body>
+</html>
