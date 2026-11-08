@@ -239,12 +239,13 @@
         <!-- Navigation Menu Sidebar -->
 <nav class="site-nav-sidebar">
     <h3>Navigation</h3>
-    <div class="core-services-embed">
-        <iframe src="https://aiaio1techusa.github.io/core-services-form.htm"
-                title="Core Services"
-                width="100%"
-                height="600"
-                loading="lazy"></iframe>
+    <div class="solution-finder-embed">
+        <form id="solution-form" novalidate>
+            <label for="solution-query">What do you need help with?</label>
+            <textarea id="solution-query" name="query" rows="4" placeholder="For example: my website is slow on phones"></textarea>
+            <button type="submit">Find my solution</button>
+        </form>
+        <section id="solution-output" aria-live="polite"></section>
     </div>
     <ul id="navList">
         <li><a href="#intro">Introduction</a></li>
@@ -256,8 +257,6 @@
         <li><a href="#restore">Restore Without Disk</a></li>
     </ul>
 </nav>
-
-
 
         <!-- Main Content Area -->
         <main>
@@ -421,6 +420,6 @@ Add-PublicFolderClientPermission "folder_name" -User Default -AccessRights Owner
     <footer>
         <p>&copy; 2026 IT AI - Information Technology 103. All rights reserved. | Powered by #1TECHUSA</p>
     </footer>
-
+<script src="solution-finder.js" defer></script>    
 </body>
 </html>
