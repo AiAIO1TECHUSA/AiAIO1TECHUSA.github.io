@@ -4,58 +4,128 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Find Your Solution</title>
+    <meta name="description" content="Tell us what you need help with and get a matched service recommendation.">
     <style>
+        :root {
+            --accent: #1d4ed8;
+            --text: #1f2937;
+            --muted: #6b7280;
+            --border: #d1d5db;
+            --card: #f9fafb;
+        }
+
+        * { box-sizing: border-box; }
+
         body {
+            margin: 0;
             font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-            max-width: 720px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-            color: #222;
-            line-height: 1.5;
+            color: var(--text);
+            background: #ffffff;
+            line-height: 1.6;
         }
-        form {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
+
+        main {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 2rem 1.25rem 4rem;
         }
-        input[type="text"] {
-            flex: 1;
-            padding: 0.6rem;
-            font-size: 1rem;
-            border: 1px solid #aaa;
-            border-radius: 4px;
+
+        h1 {
+            font-size: clamp(1.6rem, 4vw, 2.2rem);
+            margin-bottom: 0.25rem;
         }
+
+        .intro {
+            color: var(--muted);
+            margin-top: 0;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 110px;
+            padding: 0.75rem;
+            font: inherit;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            resize: vertical;
+        }
+
+        textarea:focus {
+            outline: 2px solid var(--accent);
+            outline-offset: 1px;
+        }
+
         button {
-            padding: 0.6rem 1.2rem;
-            font-size: 1rem;
+            margin-top: 0.75rem;
+            padding: 0.7rem 1.4rem;
+            font: inherit;
+            font-weight: 600;
+            color: #ffffff;
+            background: var(--accent);
+            border: none;
+            border-radius: 8px;
             cursor: pointer;
         }
-        .solution {
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            padding: 1rem;
-            margin-bottom: 1rem;
+
+        button:hover { opacity: 0.92; }
+
+        #solution-output {
+            margin-top: 2rem;
         }
-        .solution--expanded {
-            border-color: #2a6fdb;
+
+        #solution-output:empty { display: none; }
+
+        .solution-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--accent);
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            margin: 1rem 0;
         }
+
+        .solution-card h3 {
+            margin: 0 0 0.4rem;
+            font-size: 1.15rem;
+        }
+
+        .solution-card p { margin: 0.4rem 0; }
+
+        .match-reason {
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+
         a {
-            color: #2a6fdb;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        @media (max-width: 480px) {
+            main { padding: 1.25rem 1rem 3rem; }
+            button { width: 100%; }
         }
     </style>
 </head>
 <body>
+    <main>
+        <h1>Find Your Solution</h1>
+        <p class="intro">Describe what you need help with, such as a slow website, a security concern, backups, or computer problems. We will point you to the right service.</p>
 
-    <h1>Find Your Solution</h1>
-    <p>Describe what you need, for example "my site loads slowly on phones."</p>
+        <form id="solution-form" novalidate>
+            <label for="solution-query">What do you need help with?</label>
+            <textarea id="solution-query" name="query" placeholder="For example: my website is slow on phones and I want better Google rankings"></textarea>
+            <button type="submit">Find my solution</button>
+        </form>
 
-    <form id="solution-form">
-        <input type="text" id="solution-query" name="query"
-               placeholder="Describe your problem" autocomplete="off" required>
-        <button type="submit">Search</button>
-    </form>
-
-    <div id="solution-output" aria-live="polite"></div>
+        <section id="solution-output" aria-live="polite"></section>
+    </main>
 
     <script src="solution-finder.js" defer></script>
 </body>
