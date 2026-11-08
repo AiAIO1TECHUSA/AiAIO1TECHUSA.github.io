@@ -1,128 +1,299 @@
 "use strict";
 
-/* Edit these entries to match your real solutions */
-const SOLUTIONS = [
-  {
-    name: "Website Upgrade: Responsive, HTML5 & JavaScript",
-    keywords: ["website", "site", "web", "responsive", "mobile", "phone", "tablet", "screen", "layout",
-               "html", "css", "javascript", "interactive", "upgrade", "modern", "accessible",
-               "accessibility", "navigation", "menu", "form", "animation", "broken"],
-    problem: "Sites that don't adapt to phones and tablets lose visitors, and outdated code limits what you can offer.",
-    fix: "We modernize your site with responsive design, semantic HTML5, and lightweight JavaScript for interactive features like menus, forms, and dynamic content.",
-    outcome: "A site that looks right on every screen, loads faster, and meets accessibility standards.",
-  },
-  {
-    name: "Managed Security",
-    keywords: ["security", "phishing", "malware", "virus", "hack", "password", "firewall", "threat"],
-    problem: "Threats, phishing, and unpatched systems put your business at risk.",
-    fix: "We monitor, patch, and defend your endpoints and email around the clock.",
-    outcome: "Fewer incidents, documented protection, and a team that sleeps better.",
-  },
-  {
-    name: "Cloud Backup & Recovery",
-    keywords: ["backup", "recovery", "restore", "deleted", "ransomware", "disaster", "lost"],
-    problem: "One failed drive or ransomware attack can erase months of work.",
-    fix: "Automated, encrypted backups with tested restore procedures.",
-    outcome: "Recover files and systems in hours instead of weeks.",
-  },
-  {
-    name: "Workstation Support",
-    keywords: ["laptop", "computer", "printer", "device", "crash", "freeze", "driver", "hardware", "slow"],
-    problem: "Slow or failing equipment drains productivity every day.",
-    fix: "Proactive maintenance, updates, and fast hands-on repair.",
-    outcome: "Reliable devices and fewer interruptions for your staff.",
-  },
-  {
-    name: "Cloud & Network Setup",
-    keywords: ["cloud", "network", "wifi", "internet", "vpn", "remote", "server", "hosting"],
-    problem: "Remote work and growing teams need a network that keeps up.",
-    fix: "Secure cloud, VPN, and network design built around how you work.",
-    outcome: "Staff connect safely from anywhere with consistent performance.",
-  },
-];
+/* ---------- Configuration ---------- */
 
-const CALENDLY = "https://calendly.com/patlucero2026/30min";
+const BOOKING_URL = "https://calendly.com/patlucero2026/30min";
+const MIN_SCORE = 2;          // a path needs at least one combination or two concepts
+const CLOSE_RATIO = 0.6;      // secondary paths must reach 60% of the best score
+const COMBINED_MIN = 3;       // a second solution must score this high to form a combined route
 
-/* Stricter matching: minimum score to count, and only close runners-up are shown */
-const MIN_SCORE = 1;
-const CLOSE_RATIO = 0.6;   // other matches must score at least 60% of the top score
+const STOP = new Set([
+    "a", "an", "the", "and", "or", "of", "to", "for", "with", "my", "our",
+    "your", "i", "we", "you", "is", "are", "need", "want", "help", "can",
+    "how", "what", "do", "it", "in", "on", "be", "some", "any", "please",
+    "still", "keeps", "keep", "really", "very", "so", "not", "because"
+]);
 
-const STOP = new Set(["a","an","and","are","as","at","be","by","for","from","i","in","is","it","my","of","on","or",
-  "the","to","we","with","our","when","how","do","help","doesn't","dont","not","work","works","make","need","want",
-  "can","cant","get","this","that"]);
-
+/* Informal words mapped to canonical concepts. */
 const SYNONYMS = {
-  webpage: "website", webpages: "website", websites: "website", sites: "site",
-  phones: "phone", smartphone: "phone", mobiles: "mobile", tablets: "tablet", ipad: "tablet",
-  html5: "html", js: "javascript", redesign: "upgrade", redesigned: "upgrade", upgrading: "upgrade",
-  interactivity: "interactive", laptops: "laptop", computers: "computer", viruses: "virus",
-  wireless: "wifi", hacks: "hack", backups: "backup",
+    site: "website", webpage: "website", web: "website",
+    seo: "search", ranking: "search", rank: "search", google: "search",
+    speed: "performance", fast: "performance", slow: "performance",
+    loads: "performance", loading: "performance", lag: "performance",
+    phone: "mobile", phones: "mobile", tablet: "mobile", responsive: "mobile",
+    hack: "security", hacked: "security", virus: "security",
+    malware: "security", breach: "security",
+    backups: "backup", restore: "recovery", recover: "recovery",
+    wifi: "network", router: "network", internet: "network",
+    printer: "workstation", computer: "workstation", laptop: "workstation",
+    pc: "workstation", cloud: "cloud"
 };
 
-function normalize(word) {
-  let w = word.toLowerCase();
-  if (SYNONYMS[w]) return SYNONYMS[w];
-  if (w.length > 4 && w.endsWith("s") && !w.endsWith("ss")) w = w.slice(0, -1);
-  return SYNONYMS[w] || w;
+/*
+ * Each solution has:
+ *  - keywords: single concepts (weight 1 each)
+ *  - paths: combinations of concepts; every concept in "needs" must be present.
+ *    Higher weight means a more specific route.
+ */
+const SOLUTIONS = [
+    {
+        id: "website-upgrade",
+        title: "Website Upgrade: Responsive, HTML5 & JavaScript",
+        summary: "Modern, mobile-friendly pages with clean markup and faster load times.",
+        details: "We audit and upgrade markup, page speed, and responsive layout so your site works well on phones and ranks better in search.",
+        keywords: ["website", "design", "html", "javascript", "markup"],
+        paths: [
+            { needs: ["website", "performance"], weight: 4 },
+            { needs: ["website", "mobile"], weight: 4 },
+            { needs: ["mobile", "performance"], weight: 3 },
+            { needs: ["website", "search"], weight: 3 }
+        ]
+    },
+    {
+        id: "managed-security",
+        title: "Managed Security",
+        summary: "Ongoing protection against threats and unauthorized access.",
+        details: "Continuous monitoring, patching, and hardening to keep your systems and data protected.",
+        keywords: ["security", "protection", "threat", "monitoring", "firewall"],
+        paths: [
+            { needs: ["security", "website"], weight: 4 },
+            { needs: ["security", "network"], weight: 3 }
+        ]
+    },
+    {
+        id: "cloud-backup",
+        title: "Cloud Backup & Recovery",
+        summary: "Automatic backups with tested recovery when something goes wrong.",
+        details: "Scheduled cloud backups and documented recovery steps so you can restore files and systems quickly.",
+        keywords: ["backup", "recovery", "disaster", "data"],
+        paths: [
+            { needs: ["backup", "cloud"], weight: 4 },
+            { needs: ["backup", "recovery"], weight: 3 }
+        ]
+    },
+    {
+        id: "workstation-support",
+        title: "Workstation Support",
+        summary: "Help with computers, software, and everyday IT problems.",
+        details: "Setup, troubleshooting, and maintenance for desktops, laptops, and business software.",
+        keywords: ["workstation", "software", "troubleshooting", "setup"],
+        paths: [
+            { needs: ["workstation", "setup"], weight: 3 },
+            { needs: ["workstation", "performance"], weight: 3 }
+        ]
+    },
+    {
+        id: "cloud-network",
+        title: "Cloud & Network Setup",
+        summary: "Reliable networks and cloud services configured for your business.",
+        details: "Network design, Wi-Fi and router configuration, and cloud account setup.",
+        keywords: ["network", "cloud", "setup", "server"],
+        paths: [
+            { needs: ["network", "setup"], weight: 3 },
+            { needs: ["cloud", "network"], weight: 4 }
+        ]
+    }
+];
+
+/* ---------- Text processing ---------- */
+
+function normalize(text) {
+    return String(text || "")
+        .toLowerCase()
+        .split(/[^a-z0-9]+/)
+        .filter(Boolean);
 }
 
-function tokenize(text) {
-  return (text.toLowerCase().match(/[a-z0-9]+(?:'[a-z]+)?/g) || [])
-    .filter(w => !STOP.has(w))
-    .map(normalize);
+/* Returns the set of canonical concepts present in the query. */
+function extractConcepts(query) {
+    const concepts = new Set();
+    for (const token of normalize(query)) {
+        if (STOP.has(token)) continue;
+        concepts.add(SYNONYMS[token] || token);
+    }
+    return concepts;
 }
 
-function rankSolutions(query) {
-  const words = new Set(tokenize(query));
-  const scored = SOLUTIONS
-    .map(sol => {
-      const kw = new Set(sol.keywords.map(normalize));
-      let score = 0;
-      words.forEach(w => { if (kw.has(w)) score++; });
-      return { sol, score };
-    })
-    .filter(r => r.score >= MIN_SCORE)
-    .sort((a, b) => b.score - a.score);
-
-  if (scored.length === 0) return [];
-  const top = scored[0].score;
-  return scored.filter(r => r.score >= top * CLOSE_RATIO);
+/* Levenshtein distance, used only for one-edit typos. */
+function editDistance(a, b) {
+    const dp = Array.from({ length: a.length + 1 }, (_, i) => [i]);
+    for (let j = 1; j <= b.length; j++) dp[0][j] = j;
+    for (let i = 1; i <= a.length; i++) {
+        for (let j = 1; j <= b.length; j++) {
+            const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+            dp[i][j] = Math.min(dp[i - 1][j] + 1, dp[i][j - 1] + 1, dp[i - 1][j - 1] + cost);
+        }
+    }
+    return dp[a.length][b.length];
 }
 
-function escapeHtml(s) {
-  return s.replace(/[&<>"']/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
+/* Fixes one-letter typos in longer words by snapping them to a known concept. */
+function snapTypos(concepts, vocabulary) {
+    const fixed = new Set();
+    for (const concept of concepts) {
+        if (vocabulary.has(concept) || concept.length < 5) {
+            fixed.add(concept);
+            continue;
+        }
+        const match = [...vocabulary].find(
+            word => word.length >= 5 && editDistance(concept, word) === 1
+        );
+        fixed.add(match || concept);
+    }
+    return fixed;
 }
 
-function card(sol, expanded) {
-  return `
-    <div class="card">
-      <h3>${escapeHtml(sol.name)}</h3>
-      ${expanded ? `
-        <p><strong>The problem:</strong> ${escapeHtml(sol.problem)}</p>
-        <p><strong>How we fix it:</strong> ${escapeHtml(sol.fix)}</p>
-        <p><strong>What you get:</strong> ${escapeHtml(sol.outcome)}</p>
-        <p><a href="${CALENDLY}" target="_blank" rel="noopener"><strong>Book a 30-minute consultation</strong></a></p>
-      ` : `<p>${escapeHtml(sol.problem)}</p>`}
-    </div>`;
+function buildVocabulary() {
+    const vocab = new Set(Object.values(SYNONYMS));
+    for (const solution of SOLUTIONS) {
+        solution.keywords.forEach(k => vocab.add(k));
+        solution.paths.forEach(p => p.needs.forEach(n => vocab.add(n)));
+    }
+    return vocab;
 }
 
-function runAgent() {
-  const query = document.getElementById("agent-input").value.trim();
-  const status = document.getElementById("agent-status");
-  const out = document.getElementById("agent-output");
+const VOCABULARY = buildVocabulary();
 
-  if (!query) { status.textContent = "Type a problem to search."; out.innerHTML = ""; return; }
+/* ---------- Path scoring ---------- */
 
-  const matches = rankSolutions(query);
-  if (matches.length === 0) {
-    status.textContent = "No direct match. Here are our core solutions:";
-    out.innerHTML = SOLUTIONS.map(s => card(s, false)).join("");
-    return;
-  }
+/* A path matches only when every concept it needs is present. */
+function scorePaths(concepts, solution) {
+    let best = { weight: 0, needs: [] };
 
-  status.textContent = `Found ${matches.length} matching solution${matches.length > 1 ? "s" : ""}.`;
-  out.innerHTML = matches.map((m, i) => card(m.sol, i === 0)).join("");
+    for (const path of solution.paths) {
+        const allPresent = path.needs.every(n => concepts.has(n));
+        if (allPresent && path.weight > best.weight) {
+            best = path;
+        }
+    }
+
+    const singles = solution.keywords.filter(k => concepts.has(k)).length;
+
+    return {
+        solution,
+        score: best.weight + singles,
+        path: best.weight ? best.needs : [],
+        singles
+    };
 }
 
-document.getElementById("agent-btn").addEventListener("click", runAgent);
-document.getElementById("agent-input").addEventListener("keydown", e => { if (e.key === "Enter") runAgent(); });
+/* ---------- Routing ---------- */
+
+function routeQuery(query) {
+    const raw = extractConcepts(query);
+
+    if (raw.size === 0) {
+        return { status: "empty", results: [] };
+    }
+
+    const concepts = snapTypos(raw, VOCABULARY);
+
+    const scored = SOLUTIONS
+        .map(solution => scorePaths(concepts, solution))
+        .filter(result => result.score >= MIN_SCORE)
+        .sort((a, b) => b.score - a.score);
+
+    if (scored.length === 0) {
+        return { status: "no-match", results: [] };
+    }
+
+    const best = scored[0];
+    const close = scored.filter(r => r.score >= best.score * CLOSE_RATIO);
+
+    /* If two solutions both score strongly, offer a combined route. */
+    const combined =
+        scored.length >= 2 &&
+        scored[0].score >= COMBINED_MIN &&
+        scored[1].score >= COMBINED_MIN
+            ? [scored[0].solution, scored[1].solution]
+            : null;
+
+    return {
+        status: "ok",
+        results: close,
+        combined
+    };
+}
+
+/* ---------- Rendering ---------- */
+
+function escapeHtml(value) {
+    return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+function renderOutput(output, query) {
+    const { status, results, combined } = routeQuery(query);
+
+    if (status === "empty") {
+        output.innerHTML =
+            `<p>Describe the problem you are facing, for example "my site loads slowly on phones."</p>`;
+        return;
+    }
+
+    if (status === "no-match") {
+        output.innerHTML =
+            `<p>I could not match that to one of our services. ` +
+            `<a href="${BOOKING_URL}" target="_blank" rel="noopener">Book a 30-minute consultation</a> ` +
+            `and we can talk it through.</p>`;
+        return;
+    }
+
+    const best = results[0];
+    const top = best.solution;
+    const pathLabel = best.path.length
+        ? ` (matched: ${best.path.map(escapeHtml).join(" + ")})`
+        : "";
+
+    let html =
+        `<p>The best path for your request is <strong>${escapeHtml(top.title)}</strong>${pathLabel}.</p>` +
+        `<article class="solution solution--expanded">` +
+        `<h3>${escapeHtml(top.title)}</h3>` +
+        `<p>${escapeHtml(top.details)}</p>` +
+        `<a href="${BOOKING_URL}" target="_blank" rel="noopener">Book a 30-minute consultation</a>` +
+        `</article>`;
+
+    if (combined) {
+        const names = combined.map(s => escapeHtml(s.title)).join(" and ");
+        html +=
+            `<p>Your request touches more than one area. A combined plan covering ${names} ` +
+            `is likely the best route. <a href="${BOOKING_URL}" target="_blank" rel="noopener">Book a consultation</a> to scope it.</p>`;
+    }
+
+    const others = results.slice(1).map(({ solution }) =>
+        `<article class="solution"><h4>${escapeHtml(solution.title)}</h4>` +
+        `<p>${escapeHtml(solution.summary)}</p></article>`
+    ).join("");
+
+    output.innerHTML = html + others;
+}
+
+/* ---------- Startup ---------- */
+
+function initSolutionFinder() {
+    const form = document.getElementById("solution-form");
+    const input = document.getElementById("solution-query");
+    const output = document.getElementById("solution-output");
+
+    if (!form || !input || !output) {
+        console.warn("Solution finder: required elements not found.");
+        return;
+    }
+
+    form.addEventListener("submit", event => {
+        event.preventDefault();
+        try {
+            renderOutput(output, input.value);
+        } catch (error) {
+            console.error("Solution finder error:", error);
+            output.innerHTML =
+                `<p>Something went wrong. Please <a href="${BOOKING_URL}" target="_blank" rel="noopener">book a consultation</a> instead.</p>`;
+        }
+    });
+}
+
+document.addEventListener("DOMContentLoaded", initSolutionFinder);
