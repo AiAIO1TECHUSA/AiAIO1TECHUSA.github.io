@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Find Your Solution</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 760px; margin: 2rem auto; padding: 0 1rem; color: #222; }
+    input[type="text"] { width: 100%; padding: 10px; box-sizing: border-box; }
+    button { margin-top: 8px; padding: 8px 16px; cursor: pointer; }
+    #status { color: #555; margin-top: 8px; }
+    #output { margin-top: 16px; }
+    .card { border: 1px solid #ddd; border-left: 4px solid #3a7d44; border-radius: 6px; padding: 14px; margin-bottom: 12px; }
+    .card h3 { margin: 0 0 6px; }
+  </style>
+</head>
+<body>
+  <section id="solution-agent">
+    <h1>Find Your Solution</h1>
+    <p>Describe the problem you're facing and the agent will match it to the right solution.</p>
+    <input id="agent-input" type="text" placeholder="e.g. my site doesn't work on phones, my laptop is slow, phishing emails, backups">
+    <button id="agent-btn" type="button">Find Solution</button>
+    <div id="agent-status" aria-live="polite"></div>
+    <div id="agent-output"></div>
+  </section>
+  <script src="solution-finder.js"></script>
+</body>
+</html>
