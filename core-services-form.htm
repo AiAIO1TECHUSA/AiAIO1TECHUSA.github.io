@@ -1,10 +1,10 @@
-<!-- Paste before </body> in IT2026.htm -->
+<!-- Paste before </body> -->
 <section id="solution-agent" style="max-width:760px;margin:2rem auto;padding:0 1rem;font-family:system-ui,sans-serif;">
   <h2>Find Your Solution</h2>
   <p>Describe the problem you're facing and the agent will match it to the right solution.</p>
-  <input id="agent-input" type="text" placeholder="e.g. my laptop is slow, phishing emails, backups" style="width:100%;padding:10px;box-sizing:border-box;">
-  <button id="agent-btn" style="margin-top:8px;padding:8px 16px;cursor:pointer;">Find Solution</button>
-  <div id="agent-status" style="color:#555;margin-top:8px;"></div>
+  <input id="agent-input" type="text" placeholder="e.g. my site doesn't work on phones, my laptop is slow, phishing emails, backups" style="width:100%;padding:10px;box-sizing:border-box;">
+  <button id="agent-btn" type="button" style="margin-top:8px;padding:8px 16px;cursor:pointer;">Find Solution</button>
+  <div id="agent-status" style="color:#555;margin-top:8px;" aria-live="polite"></div>
   <div id="agent-output" style="margin-top:16px;"></div>
 </section>
 
@@ -14,29 +14,38 @@
 /* Edit these entries to match your real solutions */
 const SOLUTIONS = [
   {
+    name: "Website Upgrade: Responsive, HTML5 & JavaScript",
+    keywords: ["website", "site", "web", "responsive", "mobile", "phone", "tablet", "screen", "layout",
+               "html", "css", "javascript", "interactive", "upgrade", "modern", "accessible",
+               "accessibility", "navigation", "menu", "form", "animation", "broken"],
+    problem: "Sites that don't adapt to phones and tablets lose visitors, and outdated code limits what you can offer.",
+    fix: "We modernize your site with responsive design, semantic HTML5, and lightweight JavaScript for interactive features like menus, forms, and dynamic content.",
+    outcome: "A site that looks right on every screen, loads faster, and meets accessibility standards.",
+  },
+  {
     name: "Managed Security",
-    keywords: ["security", "phishing", "malware", "virus", "hack", "hacked", "password", "firewall", "threat"],
+    keywords: ["security", "phishing", "malware", "virus", "hack", "password", "firewall", "threat"],
     problem: "Threats, phishing, and unpatched systems put your business at risk.",
     fix: "We monitor, patch, and defend your endpoints and email around the clock.",
     outcome: "Fewer incidents, documented protection, and a team that sleeps better.",
   },
   {
     name: "Cloud Backup & Recovery",
-    keywords: ["backup", "backups", "recovery", "restore", "deleted", "ransomware", "disaster", "data"],
+    keywords: ["backup", "recovery", "restore", "deleted", "ransomware", "disaster", "lost"],
     problem: "One failed drive or ransomware attack can erase months of work.",
     fix: "Automated, encrypted backups with tested restore procedures.",
     outcome: "Recover files and systems in hours instead of weeks.",
   },
   {
     name: "Workstation Support",
-    keywords: ["slow", "laptop", "computer", "printer", "device", "crash", "freeze", "driver", "hardware"],
+    keywords: ["laptop", "computer", "printer", "device", "crash", "freeze", "driver", "hardware", "slow"],
     problem: "Slow or failing equipment drains productivity every day.",
     fix: "Proactive maintenance, updates, and fast hands-on repair.",
     outcome: "Reliable devices and fewer interruptions for your staff.",
   },
   {
     name: "Cloud & Network Setup",
-    keywords: ["cloud", "network", "wifi", "internet", "vpn", "remote", "server", "hosting", "office"],
+    keywords: ["cloud", "network", "wifi", "internet", "vpn", "remote", "server", "hosting"],
     problem: "Remote work and growing teams need a network that keeps up.",
     fix: "Secure cloud, VPN, and network design built around how you work.",
     outcome: "Staff connect safely from anywhere with consistent performance.",
@@ -45,16 +54,41 @@ const SOLUTIONS = [
 
 const CALENDLY = "https://calendly.com/patlucero2026/30min";
 
-const STOP = new Set(["a","an","and","are","as","at","be","by","for","from","i","in","is","it","my","of","on","or","the","to","we","with","our","when","how","do","help"]);
+const STOP = new Set(["a","an","and","are","as","at","be","by","for","from","i","in","is","it","my","of","on","or",
+  "the","to","we","with","our","when","how","do","help","doesn't","dont","not","work","works","make","need","want",
+  "can","cant","get","this","that"]);
+
+/* Map common phrasing to the keyword the catalog uses */
+const SYNONYMS = {
+  webpage: "website", webpages: "website", websites: "website", sites: "site",
+  phones: "phone", smartphone: "phone", mobiles: "mobile", tablets: "tablet", ipad: "tablet",
+  html5: "html", js: "javascript", redesign: "upgrade", redesigned: "upgrade", upgrading: "upgrade",
+  interactivity: "interactive", laptops: "laptop", computers: "computer", viruses: "virus",
+  wireless: "wifi", hacks: "hack", backups: "backup",
+};
+
+function normalize(word) {
+  let w = word.toLowerCase();
+  if (SYNONYMS[w]) return SYNONYMS[w];
+  if (w.length > 4 && w.endsWith("s") && !w.endsWith("ss")) w = w.slice(0, -1);
+  return SYNONYMS[w] || w;
+}
 
 function tokenize(text) {
-  return (text.toLowerCase().match(/[a-z0-9]+/g) || []).filter(w => !STOP.has(w));
+  return (text.toLowerCase().match(/[a-z0-9]+(?:'[a-z]+)?/g) || [])
+    .filter(w => !STOP.has(w))
+    .map(normalize);
 }
 
 function rankSolutions(query) {
   const words = new Set(tokenize(query));
   return SOLUTIONS
-    .map(sol => ({ sol, score: sol.keywords.filter(k => words.has(k)).length }))
+    .map(sol => {
+      const kw = new Set(sol.keywords.map(normalize));
+      let score = 0;
+      words.forEach(w => { if (kw.has(w)) score++; });
+      return { sol, score };
+    })
     .filter(r => r.score > 0)
     .sort((a, b) => b.score - a.score);
 }
