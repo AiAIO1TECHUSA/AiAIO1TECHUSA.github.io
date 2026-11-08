@@ -261,23 +261,3 @@ document.addEventListener("DOMContentLoaded", () => {
         form.addEventListener("submit", handleSubmit);
     }
 });
-ion-output");
-
-    if (!form || !input || !output) {
-        console.warn("Solution finder: required elements not found.");
-        return;
-    }
-
-    form.addEventListener("submit", event => {
-        event.preventDefault();
-        try {
-            renderOutput(output, input.value);
-        } catch (error) {
-            console.error("Solution finder error:", error);
-            output.innerHTML =
-                `<p>Something went wrong. Please <a href="${BOOKING_URL}" target="_blank" rel="noopener">book a consultation</a> instead.</p>`;
-        }
-    });
-}
-
-document.addEventListener("DOMContentLoaded", initSolutionFinder);
