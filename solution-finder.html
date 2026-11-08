@@ -71,47 +71,114 @@
             border: none;
             border-radius: 8px;
             cursor: pointer;
-        }
+<style>
+    :root {
+        --accent: #60a5fa;
+        --text: #e5e7eb;
+        --muted: #9ca3af;
+        --border: #374151;
+        --card: #111827;
+        --bg: #000000;
+    }
 
-        button:hover { opacity: 0.92; }
+    * { box-sizing: border-box; }
 
-        #solution-output {
-            margin-top: 2rem;
-        }
+    body {
+        margin: 0;
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        color: var(--text);
+        background: var(--bg);
+        line-height: 1.6;
+    }
 
-        #solution-output:empty { display: none; }
+    main {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 2rem 1.25rem 4rem;
+    }
 
-        .solution-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-left: 4px solid var(--accent);
-            border-radius: 8px;
-            padding: 1rem 1.25rem;
-            margin: 1rem 0;
-        }
+    h1 {
+        font-size: clamp(1.6rem, 4vw, 2.2rem);
+        margin-bottom: 0.25rem;
+    }
 
-        .solution-card h3 {
-            margin: 0 0 0.4rem;
-            font-size: 1.15rem;
-        }
+    .intro {
+        color: var(--muted);
+        margin-top: 0;
+    }
 
-        .solution-card p { margin: 0.4rem 0; }
+    label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
 
-        .match-reason {
-            font-size: 0.9rem;
-            color: var(--muted);
-        }
+    textarea {
+        width: 100%;
+        min-height: 110px;
+        padding: 0.75rem;
+        font: inherit;
+        color: var(--text);
+        background: #111827;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        resize: vertical;
+    }
 
-        a {
-            color: var(--accent);
-            font-weight: 600;
-        }
+    textarea:focus {
+        outline: 2px solid var(--accent);
+        outline-offset: 1px;
+    }
 
-        @media (max-width: 480px) {
-            main { padding: 1.25rem 1rem 3rem; }
-            button { width: 100%; }
-        }
-    </style>
+    button {
+        margin-top: 0.75rem;
+        padding: 0.7rem 1.4rem;
+        font: inherit;
+        font-weight: 600;
+        color: #000000;
+        background: var(--accent);
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+
+    button:hover { opacity: 0.92; }
+
+    #solution-output { margin-top: 2rem; }
+    #solution-output:empty { display: none; }
+
+    .solution-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-left: 4px solid var(--accent);
+        border-radius: 8px;
+        padding: 1rem 1.25rem;
+        margin: 1rem 0;
+    }
+
+    .solution-card h3 {
+        margin: 0 0 0.4rem;
+        font-size: 1.15rem;
+    }
+
+    .solution-card p { margin: 0.4rem 0; }
+
+    .match-reason {
+        font-size: 0.9rem;
+        color: var(--muted);
+    }
+
+    a {
+        color: var(--accent);
+        font-weight: 600;
+    }
+
+    @media (max-width: 480px) {
+        main { padding: 1.25rem 1rem 3rem; }
+        button { width: 100%; }
+    }
+</style>
+
 </head>
 <body>
     <main>
