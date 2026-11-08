@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IT AI - Information Technology 103</title>
-    <style>
+<style>
         /* Modern Reset and Variables */
         * {
             box-sizing: border-box;
@@ -57,52 +57,133 @@
         }
 
         /* Black background, light text for the navigation */
-.site-nav-sidebar {
-    background-color: #000000;
-    color: #ffffff;
-    padding: 1rem;
-    border-radius: 8px;
-}
+        .site-nav-sidebar {
+            background-color: #000000;
+            color: #ffffff;
+            padding: 1rem;
+            border-radius: 8px;
+        }
 
-.site-nav-sidebar h3 {
-    color: #ffffff;
-    margin-top: 0;
-    border-bottom: 1px solid #444444;
-    padding-bottom: 0.5rem;
-}
+        .site-nav-sidebar h3 {
+            color: #ffffff;
+            margin-top: 0;
+            border-bottom: 1px solid #444444;
+            padding-bottom: 0.5rem;
+        }
 
-.site-nav-sidebar ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
+        .site-nav-sidebar ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
 
-.site-nav-sidebar li {
-    margin-bottom: 0.6rem;
-}
+        .site-nav-sidebar li {
+            margin-bottom: 0.6rem;
+        }
 
-.site-nav-sidebar a {
-    color: #4da6ff;          /* bright blue, readable on black */
-    text-decoration: none;
-}
+        .site-nav-sidebar a {
+            color: #4da6ff;
+            text-decoration: none;
+        }
 
-.site-nav-sidebar a:hover,
-.site-nav-sidebar a:focus {
-    color: #ffffff;
-    text-decoration: underline;
-}
+        .site-nav-sidebar a:hover,
+        .site-nav-sidebar a:focus {
+            color: #ffffff;
+            text-decoration: underline;
+        }
 
-/* Frame around the embedded Core Services form */
-.core-services-embed {
-    margin-bottom: 1rem;
-}
+        /* Solution finder embedded in the sidebar (dark theme) */
+        .solution-finder-embed {
+            margin-bottom: 1.25rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #444444;
+        }
 
-.core-services-embed iframe {
-    width: 100%;
-    border: 1px solid #444444;
-    border-radius: 6px;
-    background-color: #ffffff; /* the form's own background stays white */
-}
+        .solution-finder-embed label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+            color: #ffffff;
+        }
+
+        .solution-finder-embed textarea {
+            width: 100%;
+            min-height: 90px;
+            padding: 0.6rem;
+            font: inherit;
+            font-size: 0.95rem;
+            color: #e5e7eb;
+            background: #111827;
+            border: 1px solid #374151;
+            border-radius: 6px;
+            resize: vertical;
+        }
+
+        .solution-finder-embed textarea:focus {
+            outline: 2px solid #4da6ff;
+            outline-offset: 1px;
+        }
+
+        .solution-finder-embed button {
+            display: block;
+            width: 100%;
+            margin-top: 0.6rem;
+            padding: 0.6rem 1rem;
+            font: inherit;
+            font-weight: 600;
+            color: #000000;
+            background: #4da6ff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .solution-finder-embed button:hover {
+            opacity: 0.92;
+        }
+
+        #solution-output {
+            margin-top: 1rem;
+            text-align: left;
+        }
+
+        #solution-output:empty {
+            display: none;
+        }
+
+        #solution-output .solution-card {
+            background: #111827;
+            border: 1px solid #374151;
+            border-left: 4px solid #4da6ff;
+            border-radius: 6px;
+            padding: 0.8rem 1rem;
+            margin: 0.8rem 0;
+            color: #e5e7eb;
+            text-align: left;
+        }
+
+        #solution-output .solution-card h3 {
+            margin: 0 0 0.4rem;
+            font-size: 1rem;
+            color: #ffffff;
+            border: none;
+            padding: 0;
+        }
+
+        #solution-output .solution-card p {
+            margin: 0.4rem 0;
+            text-align: left;
+        }
+
+        #solution-output .match-reason {
+            font-size: 0.85rem;
+            color: #9ca3af;
+        }
+
+        #solution-output .solution-card a {
+            color: #4da6ff;
+            font-weight: 600;
+        }
 
         /* Main Content Container */
         main {
@@ -224,6 +305,7 @@
             }
         }
     </style>
+
 </head>
 <body>
 
