@@ -3,14 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="IT AI - Information Technology 103: Windows 11 troubleshooting, network commands, PowerShell, Active Directory, secure disk wiping with cipher /w, and responsive web design guidance.">
+    <meta name="keywords" content="cipher /w, wipe free space, Windows 11, ping test, PowerShell ISE, Active Directory, IT help, responsive web design">
+    <meta name="author" content="#1TECHUSA">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="IT AI - Information Technology 103">
+    <meta property="og:description" content="Windows 11 IT solutions, network commands, PowerShell, Active Directory, and secure disk wiping with cipher /w.">
+    <meta property="og:type" content="website">
     <title>IT AI - Information Technology 103</title>
-<style>
+    <style>
         /* Modern Reset and Variables */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         :root {
             --primary-color: #007acc;
             --secondary-color: #1e1e24;
@@ -19,7 +22,6 @@
             --text-light: #fff;
             --accent-color: #ff9900;
         }
-
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
@@ -29,7 +31,6 @@
             flex-direction: column;
             min-height: 100vh;
         }
-
         /* Header Style */
         header {
             background-color: var(--primary-color);
@@ -38,15 +39,8 @@
             text-align: center;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
-        header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 5px;
-        }
-        header p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-
+        header h1 { font-size: 2.5rem; margin-bottom: 5px; }
+        header p { font-size: 1.1rem; opacity: 0.9; }
         /* Layout Container */
         .wrapper {
             display: flex;
@@ -55,7 +49,6 @@
             width: 100%;
             margin: 0 auto;
         }
-
         /* Black background, light text for the navigation */
         .site-nav-sidebar {
             background-color: #000000;
@@ -63,49 +56,28 @@
             padding: 1rem;
             border-radius: 8px;
         }
-
         .site-nav-sidebar h3 {
             color: #ffffff;
             margin-top: 0;
             border-bottom: 1px solid #444444;
             padding-bottom: 0.5rem;
         }
-
-        .site-nav-sidebar ul {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
-
-        .site-nav-sidebar li {
-            margin-bottom: 0.6rem;
-        }
-
-        .site-nav-sidebar a {
-            color: #4da6ff;
-            text-decoration: none;
-        }
-
-        .site-nav-sidebar a:hover,
-        .site-nav-sidebar a:focus {
-            color: #ffffff;
-            text-decoration: underline;
-        }
-
+        .site-nav-sidebar ul { list-style: none; margin: 0; padding: 0; }
+        .site-nav-sidebar li { margin-bottom: 0.6rem; }
+        .site-nav-sidebar a { color: #4da6ff; text-decoration: none; }
+        .site-nav-sidebar a:hover, .site-nav-sidebar a:focus { color: #ffffff; text-decoration: underline; }
         /* Solution finder embedded in the sidebar (dark theme) */
         .solution-finder-embed {
             margin-bottom: 1.25rem;
             padding-bottom: 1rem;
             border-bottom: 1px solid #444444;
         }
-
         .solution-finder-embed label {
             display: block;
             font-weight: 600;
             margin-bottom: 0.4rem;
             color: #ffffff;
         }
-
         .solution-finder-embed textarea {
             width: 100%;
             min-height: 90px;
@@ -118,12 +90,7 @@
             border-radius: 6px;
             resize: vertical;
         }
-
-        .solution-finder-embed textarea:focus {
-            outline: 2px solid #4da6ff;
-            outline-offset: 1px;
-        }
-
+        .solution-finder-embed textarea:focus { outline: 2px solid #4da6ff; outline-offset: 1px; }
         .solution-finder-embed button {
             display: block;
             width: 100%;
@@ -137,20 +104,9 @@
             border-radius: 6px;
             cursor: pointer;
         }
-
-        .solution-finder-embed button:hover {
-            opacity: 0.92;
-        }
-
-        #solution-output {
-            margin-top: 1rem;
-            text-align: left;
-        }
-
-        #solution-output:empty {
-            display: none;
-        }
-
+        .solution-finder-embed button:hover { opacity: 0.92; }
+        #solution-output { margin-top: 1rem; text-align: left; }
+        #solution-output:empty { display: none; }
         #solution-output .solution-card {
             background: #111827;
             border: 1px solid #374151;
@@ -161,7 +117,6 @@
             color: #e5e7eb;
             text-align: left;
         }
-
         #solution-output .solution-card h3 {
             margin: 0 0 0.4rem;
             font-size: 1rem;
@@ -169,48 +124,24 @@
             border: none;
             padding: 0;
         }
-
-        #solution-output .solution-card p {
-            margin: 0.4rem 0;
-            text-align: left;
-        }
-
-        #solution-output .match-reason {
-            font-size: 0.85rem;
-            color: #9ca3af;
-        }
-
-        #solution-output .solution-card a {
-            color: #4da6ff;
-            font-weight: 600;
-        }
-
+        #solution-output .solution-card p { margin: 0.4rem 0; text-align: left; }
+        #solution-output .match-reason { font-size: 0.85rem; color: #9ca3af; }
+        #solution-output .solution-card a { color: #4da6ff; font-weight: 600; }
         /* Main Content Container */
         main {
             flex: 1;
             padding: 30px;
             background-color: #ffffff;
         }
-
         /* Content Sections */
         section {
             margin-bottom: 40px;
             padding-bottom: 25px;
             border-bottom: 1px solid #e0e0e0;
         }
-        section:last-child {
-            border-bottom: none;
-        }
-        h2 {
-            color: var(--primary-color);
-            margin-bottom: 15px;
-            font-size: 1.8rem;
-        }
-        p {
-            margin-bottom: 15px;
-            text-align: justify;
-        }
-
+        section:last-child { border-bottom: none; }
+        h2 { color: var(--primary-color); margin-bottom: 15px; font-size: 1.8rem; }
+        p { margin-bottom: 15px; text-align: justify; }
         /* Highlights & Alerts */
         .highlight-box {
             background-color: #eef7ff;
@@ -226,12 +157,8 @@
             border-radius: 6px;
             margin: 20px 0;
         }
-
         /* Code Block Container with Copy Feature */
-        .code-container {
-            position: relative;
-            margin: 15px 0;
-        }
+        .code-container { position: relative; margin: 15px 0; }
         .copy-btn {
             position: absolute;
             top: 10px;
@@ -245,32 +172,21 @@
             cursor: pointer;
             transition: background 0.2s;
         }
-        .copy-btn:hover {
-            background-color: #005999;
-        }
+        .copy-btn:hover { background-color: #005999; }
         code, pre {
             background-color: #272822;
             color: #f8f8f2;
             font-family: 'Consolas', 'Courier New', Courier, monospace;
             border-radius: 4px;
         }
-        pre {
-            padding: 20px 15px 15px 15px;
-            overflow-x: auto;
-            font-size: 0.9rem;
-        }
+        pre { padding: 20px 15px 15px 15px; overflow-x: auto; font-size: 0.9rem; }
         code {
             padding: 2px 6px;
             font-size: 0.9em;
             background-color: #eaedad;
             color: #c7254e;
         }
-        pre code {
-            padding: 0;
-            background-color: transparent;
-            color: inherit;
-        }
-
+        pre code { padding: 0; background-color: transparent; color: inherit; }
         /* Footer */
         footer {
             background-color: var(--secondary-color);
@@ -281,31 +197,19 @@
             margin-top: auto;
             border-top: 3px solid var(--primary-color);
         }
-
         /* Responsive Breakpoints (RWD) */
         @media (max-width: 900px) {
-            .wrapper {
-                flex-direction: column;
-            }
-            nav {
-                width: 100%;
-                padding: 15px;
-            }
-            .search-box {
-                width: 100%;
-                margin-bottom: 15px;
-            }
+            .wrapper { flex-direction: column; }
+            nav { width: 100%; padding: 15px; }
+            .search-box { width: 100%; margin-bottom: 15px; }
             nav ul {
                 display: grid;
                 grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
                 gap: 5px;
             }
-            main {
-                padding: 20px;
-            }
+            main { padding: 20px; }
         }
     </style>
-
 </head>
 <body>
 
@@ -317,45 +221,49 @@
 
     <!-- Main Flex Layout Setup -->
     <div class="wrapper">
-        
+
         <!-- Navigation Menu Sidebar -->
-<nav class="site-nav-sidebar">
-    <h3>Navigation</h3>
-    <div class="solution-finder-embed">
-        <form id="solution-form" novalidate>
-            <label for="solution-query">What do you need help with?</label>
-            <textarea id="solution-query" name="query" rows="4" placeholder="For example: my website is slow on phones"></textarea>
-            <button type="submit">Find my solution</button>
-        </form>
-        <section id="solution-output" aria-live="polite"></section>
-    </div>
-    <ul id="navList">
-        <li><a href="#intro">Introduction</a></li>
-        <li><a href="#know">What You Should Know</a></li>
-        <li><a href="#performance">PC & Performance</a></li>
-        <li><a href="#network">Network World</a></li>
-        <li><a href="#ping">Ping Test</a></li>
-        <li><a href="#virus">Virus Scan</a></li>
-        <li><a href="#restore">Restore Without Disk</a></li>
-    </ul>
-</nav>
+        <nav class="site-nav-sidebar" aria-label="Site navigation">
+            <h3>Navigation</h3>
+            <div class="solution-finder-embed">
+                <form id="solution-form" novalidate>
+                    <label for="solution-query">What do you need help with?</label>
+                    <textarea id="solution-query" name="query" rows="4" placeholder="For example: my website is slow on phones"></textarea>
+                    <button type="submit">Find my solution</button>
+                </form>
+                <section id="solution-output" aria-live="polite"></section>
+            </div>
+            <ul id="navList">
+                <li><a href="#intro">1. Introduction</a></li>
+                <li><a href="#know">2. What You Should Know</a></li>
+                <li><a href="#performance">3. PC & Performance</a></li>
+                <li><a href="#network">4. Network World</a></li>
+                <li><a href="#ping">5. Ping Test</a></li>
+                <li><a href="#virus">6. Virus Scan</a></li>
+                <li><a href="#restore">7. Restore Without Disk</a></li>
+                <li><a href="#powershell">8. PowerShell ISE</a></li>
+                <li><a href="#activedirectory">9. Active Directory</a></li>
+                <li><a href="#cipher">10. Wipe Free Space (cipher /w)</a></li>
+                <li><a href="#seo">11. SEO & Responsive Design</a></li>
+            </ul>
+        </nav>
 
         <!-- Main Content Area -->
         <main>
-            
+
             <!-- Section 1: Introduction -->
             <section id="intro">
-                <h2>Introduction</h2>
+                <h2>1. Introduction</h2>
                 <p>Small businesses need to invest capital into network upgrades. Yes, Windows Server 2012 includes Active Directory for small business. To install Active Directory on Windows Server 2012 R2 using Server Manager is the easiest method.</p>
-                
+
                 <p>You can also install and configure Windows Server Essentials or Windows Server Essentials Experience. Windows Server Essentials is an ideal first server for small businesses with up to 25 users and 50 devices.</p>
-                
+
                 <div class="highlight-box">
                     <strong>Hardware Spotlight:</strong> NETGEAR Nighthawk WiFi 6E Router (RAXE300) | AXE7800 Tri-Band Wireless Gigabit Speed (Up to 7.8Gbps) | New 6GHz Band | 8-Streams Cover up to 2,500 sq. ft., 40 Devices
                 </div>
 
                 <p><strong>Cyber Security:</strong> The NETGEAR ProSafe VPN Firewall 25-port with 4 Gigabit LAN is a business-class security firewall that includes an SPI firewall and an Intrusion Detection System.</p>
-                
+
                 <p>Use wireless access points with IP cameras for long-range wireless. The main purpose of the access point is to take the network traffic from your IP camera and make it wireless while acting as a transparent bridge.</p>
 
                 <p><strong>Virtual Business Networks Disadvantages:</strong> Cyber Security database and network isolation.</p>
@@ -363,7 +271,7 @@
 
             <!-- Section 2: What You Should Know -->
             <section id="know">
-                <h2>What You Should Know</h2>
+                <h2>2. What You Should Know</h2>
                 <p>This guide assumes you have the following basic background:</p>
                 <ul>
                     <li>A general understanding of the Internet and the World Wide Web (WWW)</li>
@@ -375,7 +283,7 @@
 
             <!-- Section 3: PC and Performance -->
             <section id="performance">
-                <h2>PC and Performance</h2>
+                <h2>3. PC and Performance</h2>
                 <p>Windows 11 64-bit PC Performance is hardware based. Example: HP Victus 15.6" Gaming Laptop with Intel Core i7-12650H, 16GB Memory, NVIDIA GeForce RTX 3050 Ti, and 512GB SSD is a gaming laptop built for performance.</p>
                 <p>Your browser of choice to surf the Web is Microsoft Edge and Opera are the newest browser versions with excellent standards compliance.</p>
                 <p><strong>Things to know about PC performance:</strong></p>
@@ -389,7 +297,7 @@
 
             <!-- Section 4: Network World -->
             <section id="network">
-                <h2>Network World</h2>
+                <h2>4. Network World</h2>
                 <p>To get started with entering command scripts, open the Command Prompt and write your first network commands:</p>
                 <div class="code-container">
                     <pre><code>ipconfig /flushdns
@@ -401,7 +309,7 @@ ipconfig /renew</code></pre>
 
             <!-- Section 5: Ping Test -->
             <section id="ping">
-                <h2>Ping Test</h2>
+                <h2>5. Ping Test</h2>
                 <p>Ping to test your host server on a remote address by typing the following command:</p>
                 <div class="code-container">
                     <pre><code>ping 8.8.8.8</code></pre>
@@ -412,7 +320,7 @@ ipconfig /renew</code></pre>
 
             <!-- Section 6: Virus Scan -->
             <section id="virus">
-                <h2>Virus Scan</h2>
+                <h2>6. Virus Scan</h2>
                 <p>You can scan for viruses in three easy steps on Windows 11:</p>
                 <ol>
                     <li>Right-click the Windows Logo</li>
@@ -426,7 +334,7 @@ ipconfig /renew</code></pre>
 
             <!-- Section 7: Restore Without Disk -->
             <section id="restore">
-                <h2>Restore Without Disk</h2>
+                <h2>7. Restore Without Disk</h2>
                 <p>To change the guest account to an administrator account in Windows, follow these steps:</p>
                 <ol>
                     <li>Sign in with an Administrator account</li>
@@ -442,8 +350,8 @@ ipconfig /renew</code></pre>
             </section>
 
             <!-- Section 8: PowerShell ISE -->
-            <section>
-                <h2>PowerShell ISE</h2>
+            <section id="powershell">
+                <h2>8. PowerShell ISE</h2>
                 <p>To create a new script file in PowerShell ISE, click the "New" button on the toolbar or go to File > New. You can then start typing your script.</p>
                 <div class="code-container">
                     <pre><code>powershell_ise.exe C:\PSBackup_AD_DC.ps1</code></pre>
@@ -452,7 +360,7 @@ ipconfig /renew</code></pre>
                 <div class="code-container">
                     <pre><code>New-LocalUser -Name "user_name" -Description "Description of your new account." -NoPassword</code></pre>
                 </div>
-                <h3>Common PowerShell Cmdlets:</h3>
+                <h3>Common PowerShell Cmdlets</h3>
                 <ul>
                     <li><strong>Get-Command:</strong> View all PowerShell commands installed on your computer</li>
                     <li><strong>Get-Help:</strong> Find information for commands, concepts, and functions</li>
@@ -464,8 +372,8 @@ ipconfig /renew</code></pre>
             </section>
 
             <!-- Section 9: Active Directory -->
-            <section>
-                <h2>Active Directory</h2>
+            <section id="activedirectory">
+                <h2>9. Active Directory</h2>
                 <p>Users and granting Active Directory permissions in PowerShell:</p>
                 <div class="code-container">
                     <pre><code>Add-Computer -DomainName "domain.com" -Credential (Get-Credential) -Restart
@@ -474,32 +382,39 @@ Add-PublicFolderClientPermission "folder_name" -User Default -AccessRights Owner
                 </div>
             </section>
 
-            <!-- Section 10: PC Repair -->
-            <h1>How to Wipe Free Space in Windows with cipher /w</h1>
+            <!-- Section 10: Wipe Free Space with cipher /w -->
+            <section id="cipher">
+                <h2>10. How to Wipe Free Space in Windows with cipher /w</h2>
 
-    <p>The Windows <strong>cipher /w</strong> command overwrites the free space on a drive, making files you have already deleted much harder to recover. Deleting a file or emptying the Recycle Bin only removes its directory entry, and the data remains on the disk until those sectors are reused. Running <code>cipher /w</code> is a common step before selling, recycling, or repurposing a PC.</p>
+                <p>The Windows <strong>cipher /w</strong> command overwrites the free space on a drive, making files you have already deleted much harder to recover. Deleting a file or emptying the Recycle Bin only removes its directory entry, and the data remains on the disk until those sectors are reused. Running <code>cipher /w</code> is a common step before selling, recycling, or repurposing a PC.</p>
 
-    <h2>Run cipher /w Step by Step</h2>
-    <p>Empty the Recycle Bin first, because <code>cipher /w</code> only affects free space and leaves existing files untouched. The command requires administrator rights, and it can take hours on a large drive.</p>
-    <ol>
-      <li>Empty the Recycle Bin.</li>
-      <li>Open Start, type <strong>cmd</strong>, right-click <strong>Command Prompt</strong>, and select <strong>Run as administrator</strong>.</li>
-      <li>Run the command, replacing <code>C:\</code> with the drive letter you want to clean:</li>
-    </ol>
+                <h3>Run cipher /w Step by Step</h3>
+                <p>Empty the Recycle Bin first, because <code>cipher /w</code> only affects free space and leaves existing files untouched. The command requires administrator rights, and it can take hours on a large drive.</p>
+                <ol>
+                    <li>Empty the Recycle Bin.</li>
+                    <li>Open Start, type <strong>cmd</strong>, right-click <strong>Command Prompt</strong>, and select <strong>Run as administrator</strong>.</li>
+                    <li>Run the command, replacing <code>C:\</code> with the drive letter you want to clean:</li>
+                </ol>
 
-    <pre><code>cipher /w:C:\</code></pre>
+                <div class="code-container">
+                    <pre><code>cipher /w:C:\</code></pre>
+                </div>
 
-    <p>The tool overwrites free space in three passes. Keep the computer powered on and avoid using the drive until it finishes.</p>
+                <p>The tool overwrites free space in three passes. Keep the computer powered on and avoid using the drive until it finishes.</p>
 
-    <h2>Limitations for SSDs</h2>
-    <p>On solid-state drives, <code>cipher /w</code> may not reach every physical block that held deleted data, because SSDs use wear leveling and remap writes internally. For SSDs, enable BitLocker or device encryption, which renders existing data unreadable, or use the manufacturer's secure erase tool.</p>
+                <h3>Limitations for SSDs</h3>
+                <p>On solid-state drives, <code>cipher /w</code> may not reach every physical block that held deleted data, because SSDs use wear leveling and remap writes internally. For SSDs, enable BitLocker or device encryption, which renders existing data unreadable, or use the manufacturer's secure erase tool.</p>
 
-    <h2>Frequently Asked Questions</h2>
-    <h3>Does cipher /w speed up a slow computer?</h3>
-    <p>No. A full Recycle Bin only uses disk space. If your computer is slow, check free disk space, background processes, and the health of the drive.</p>
-    <h3>Is cipher /w a security monitoring tool?</h3>
-    <p>No. It is a data sanitization tool. It reduces the chance of recovering deleted files, but it does not detect or prevent attacks.</p>
-                <h2>Keys to SEO & Responsive Web Design</h2>
+                <h3>Frequently Asked Questions</h3>
+                <h4>Does cipher /w speed up a slow computer?</h4>
+                <p>No. A full Recycle Bin only uses disk space. If your computer is slow, check free disk space, background processes, and the health of the drive.</p>
+                <h4>Is cipher /w a security monitoring tool?</h4>
+                <p>No. It is a data sanitization tool. It reduces the chance of recovering deleted files, but it does not detect or prevent attacks.</p>
+            </section>
+
+            <!-- Section 11: SEO & Responsive Design -->
+            <section id="seo">
+                <h2>11. Keys to SEO & Responsive Web Design</h2>
                 <p><strong>Search Engine Optimization:</strong></p>
                 <ul>
                     <li>Add Search Engine (Bing.com) with proper domain submission</li>
@@ -516,8 +431,19 @@ Add-PublicFolderClientPermission "folder_name" -User Default -AccessRights Owner
 
     <!-- Footer Section -->
     <footer>
+        <nav aria-label="Footer links" style="margin-bottom: 12px;">
+            <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 18px;">
+                <li><a href="https://aiaio1techusa.github.io/legal-memo-interactive.htm" style="color: #4da6ff; text-decoration: none;">Paralegal-IT Legal Memo</a></li>
+                <li><a href="https://aiaio1techusa.github.io/demandLetter.htm" style="color: #4da6ff; text-decoration: none;">Paralegal-IT Demand</a></li>
+                <li><a href="https://aiaio1techusa.github.io/family-media-agent.html" style="color: #4da6ff; text-decoration: none;">Digital Photo Wallet</a></li>
+                <li><a href="https://aiaio1techusa.github.io/core-services-form.html" style="color: #4da6ff; text-decoration: none;">Services Calendar Meeting</a></li>
+                <li><a href="https://aiaio1techusa.github.io/thegeakspeaks.html" style="color: #4da6ff; text-decoration: none;">Vegas Entertainment</a></li>
+                <li><a href="https://aiaio1techusa.github.io/hCaptcha.htm" style="color: #4da6ff; text-decoration: none;">Registration</a></li>
+                <li><a href="https://aiaio1techusa.github.io/index.html" style="color: #4da6ff; text-decoration: none;">E-commerce</a></li>
+            </ul>
+        </nav>
         <p>&copy; 2026 IT AI - Information Technology 103. All rights reserved. | Powered by #1TECHUSA</p>
     </footer>
-<script src="solution-finder.js" defer></script>    
+    <script src="solution-finder.js" defer></script>
 </body>
 </html>
