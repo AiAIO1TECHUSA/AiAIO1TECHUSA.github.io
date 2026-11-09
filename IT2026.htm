@@ -475,19 +475,30 @@ Add-PublicFolderClientPermission "folder_name" -User Default -AccessRights Owner
             </section>
 
             <!-- Section 10: PC Repair -->
-            <section>
-                <h2>cipher</h2>
-                <p>Common issue: Recycle bin deleted items full, system slow suspectable to attack, options delete permanently further slowing system or wipe space overwritten thoroughly resulting in a more difficult trace. in this case the data could still be hacked although now the effort would be laborious acting therefore as a white hat deterant, a cyber security proactive system monitoring action.</p>
-<p> Solution: The command you're after is **`cipher`**. Deleting files to the Recycle Bin and emptying it only removes the directory entries, so the data stays recoverable until the disk sectors are overwritten. `cipher /w` overwrites the free space on a drive, which makes deleted files much harder to recover.</p>
-                <div class="code-container">
-                    <pre><code>cipher /w:C:\</code></pre>
-                </div>
-<p>To use it, open an elevated Command Prompt and run, replacing `C:\` with the drive you want to clean. 
-</p>
-            </section>
+            <h1>How to Wipe Free Space in Windows with cipher /w</h1>
 
-            <!-- Section 11: SEO and Responsive Web Design -->
-            <section>
+    <p>The Windows <strong>cipher /w</strong> command overwrites the free space on a drive, making files you have already deleted much harder to recover. Deleting a file or emptying the Recycle Bin only removes its directory entry, and the data remains on the disk until those sectors are reused. Running <code>cipher /w</code> is a common step before selling, recycling, or repurposing a PC.</p>
+
+    <h2>Run cipher /w Step by Step</h2>
+    <p>Empty the Recycle Bin first, because <code>cipher /w</code> only affects free space and leaves existing files untouched. The command requires administrator rights, and it can take hours on a large drive.</p>
+    <ol>
+      <li>Empty the Recycle Bin.</li>
+      <li>Open Start, type <strong>cmd</strong>, right-click <strong>Command Prompt</strong>, and select <strong>Run as administrator</strong>.</li>
+      <li>Run the command, replacing <code>C:\</code> with the drive letter you want to clean:</li>
+    </ol>
+
+    <pre><code>cipher /w:C:\</code></pre>
+
+    <p>The tool overwrites free space in three passes. Keep the computer powered on and avoid using the drive until it finishes.</p>
+
+    <h2>Limitations for SSDs</h2>
+    <p>On solid-state drives, <code>cipher /w</code> may not reach every physical block that held deleted data, because SSDs use wear leveling and remap writes internally. For SSDs, enable BitLocker or device encryption, which renders existing data unreadable, or use the manufacturer's secure erase tool.</p>
+
+    <h2>Frequently Asked Questions</h2>
+    <h3>Does cipher /w speed up a slow computer?</h3>
+    <p>No. A full Recycle Bin only uses disk space. If your computer is slow, check free disk space, background processes, and the health of the drive.</p>
+    <h3>Is cipher /w a security monitoring tool?</h3>
+    <p>No. It is a data sanitization tool. It reduces the chance of recovering deleted files, but it does not detect or prevent attacks.</p>
                 <h2>Keys to SEO & Responsive Web Design</h2>
                 <p><strong>Search Engine Optimization:</strong></p>
                 <ul>
