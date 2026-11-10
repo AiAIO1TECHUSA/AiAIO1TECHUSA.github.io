@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Windows Server 2012 R2 vs. Windows Server 2025 for Small Businesses</title>
+  <meta name="description" content="Compare Windows Server 2012 R2 and Windows Server 2025 for small businesses, covering client connections, authentication, user rights, NTLM, migration, and budget planning.">
+  <style>
+    body { font-family: Arial, Helvetica, sans-serif; line-height: 1.6; color: #222; max-width: 900px; margin: 0 auto; padding: 24px; }
+    h1 { color: #0b3d62; }
+    h2 { color: #0b3d62; border-bottom: 2px solid #e1e8ef; padding-bottom: 6px; margin-top: 36px; }
+    h3 { color: #1f5f8b; margin-top: 24px; }
+    table { border-collapse: collapse; width: 100%; margin: 16px 0; }
+    th, td { border: 1px solid #ccd6e0; padding: 10px; text-align: left; vertical-align: top; }
+    th { background: #eef4fa; }
+    hr { border: none; border-top: 1px solid #e1e8ef; margin: 32px 0; }
+    .note { background: #fff8e5; border-left: 4px solid #e0a800; padding: 12px 16px; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Windows Server 2012 R2 vs. Windows Server 2025 for Small Businesses</h1>
+    <p>Small businesses need to invest capital into network upgrades. Active Directory Domain Services (AD DS) is included in every edition of Windows Server 2012 R2, not only the small business edition. Installing AD DS on Windows Server 2012 R2 is easiest through Server Manager.</p>
+  </header>
+
+  <hr>
+
+  <section>
+    <h2>Why the Upgrade Matters Now</h2>
+    <p>Windows Server 2012 R2 extended support ended on <strong>October 10, 2023</strong>, so these servers no longer receive security updates. Upgrading to Windows Server 2025 is the most direct way to close that gap while adopting current security defaults.</p>
+  </section>
+
+  <hr>
+
+  <section>
+    <h2>Side-by-Side Comparison</h2>
+    <p>The table below summarizes the key differences for a small business domain.</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Area</th>
+          <th>Windows Server 2012 R2</th>
+          <th>Windows Server 2025</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Support status</td>
+          <td>Extended support ended October 10, 2023</td>
+          <td>Current, supported release</td>
+        </tr>
+        <tr>
+          <td>Kernel</td>
+          <td>NT 6.3</td>
+          <td>NT 10.0 (same family as Windows 10 and 11)</td>
+        </tr>
+        <tr>
+          <td>Client connections</td>
+          <td>Essentials: up to 25 users and 50 devices, no CALs required. Standard: no hard device limit, CALs required.</td>
+          <td>Per-core licensing plus CALs, with no fixed connection cap.</td>
+        </tr>
+        <tr>
+          <td>Virtual machine rights</td>
+          <td>Standard supports up to two virtual machines.</td>
+          <td>Licensing depends on core count and edition.</td>
+        </tr>
+        <tr>
+          <td>Primary authentication</td>
+          <td>Kerberos with NTLM available for legacy systems.</td>
+          <td>Kerberos is the primary protocol, with AES-SHA2 encryption by default and NTLM being phased out.</td>
+        </tr>
+        <tr>
+          <td>NTLM</td>
+          <td>NTLMv1 and NTLMv2 available.</td>
+          <td>NTLMv2 supported; NTLMv1 disabled by default.</td>
+        </tr>
+        <tr>
+          <td>LDAP and channel binding</td>
+          <td>Standard signing rules.</td>
+          <td>Stricter LDAP signing and channel binding.</td>
+        </tr>
+        <tr>
+          <td>Service accounts</td>
+          <td>Managed service accounts (gMSA).</td>
+          <td>Adds delegated managed service accounts (dMSA).</td>
+        </tr>
+        <tr>
+          <td>Local admin passwords</td>
+          <td>Managed manually or through custom tools.</td>
+          <td>Windows LAPS rotates local administrator passwords.</td>
+        </tr>
+        <tr>
+          <td>SMB</td>
+          <td>SMB 1.0 may still be present depending on configuration.</td>
+          <td>SMB 1.0 and NTLMv1 removed; stronger SMB signing and encryption.</td>
+        </tr>
+        <tr>
+          <td>User rights and policies</td>
+          <td>Group Policy controls user rights such as Allow log on locally and Remote Desktop Services, plus account lockout settings.</td>
+          <td>Same Group Policy structure for user rights and lockout settings, with stricter security defaults.</td>
+        </tr>
+        <tr>
+          <td>Hardware baseline</td>
+          <td>Supports older platforms.</td>
+          <td>Requires a 64-bit CPU with NX and SSE2; Secure Boot and TPM 2.0 work by default.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <hr>
+
+  <section>
+    <h2>Authentication: NTLM and Kerberos</h2>
+    <p><strong>NTLM is not a kernel component, and it is still backward compatible.</strong> It is an authentication protocol handled in user mode by the Local Security Authority Subsystem Service (LSASS), using the MSV1_0 authentication package. The kernel only plays a supporting role, for example when SMB or other network drivers pass authentication traffic along.</p>
+    <p>Because it lives in LSASS, Windows Server 2025 still supports NTLM, including <strong>NTLMv2</strong>, so older applications, devices, and file shares that depend on it will keep working. What is changing is the default posture: <strong>NTLMv1 is disabled by default</strong> in Server 2025, and Microsoft wants NTLM replaced by Kerberos wherever possible. NTLM is deprecated, not removed.</p>
+    <p>Before restricting NTLM, identify which systems still depend on it. Enable NTLM auditing through the "Restrict NTLM" Group Policy settings on the 2012 R2 domain controller, review the event logs for several weeks, and then decide which applications need fixing and which policies to tighten.</p>
+    <p>MSV1_0 handles local logons by checking the password against the local SAM database. For domain accounts, it passes the request through the Netlogon service to a domain controller, which performs the verification.</p>
+    <p>NTLM does not define whether a machine is a server. The edition and installed roles do that. NTLM is one authentication protocol that both versions include.</p>
+  </section>
+
+  <hr>
+
+  <section>
+    <h2>What Changed in the Kernel</h2>
+    <p><strong>The biggest change is that Windows Server 2025 uses the NT 10.0 kernel, the same family as Windows 10 and 11, while 2012 R2 uses the older NT 6.3 kernel.</strong> That shift brought most of the kernel-level differences.</p>
+    <ul>
+      <li><strong>Hardware-backed security:</strong> Virtualization-based security (VBS) and Hypervisor-protected Code Integrity (HVCI) can run on Server 2025 with fewer compromises, using CPU virtualization features to isolate the kernel from drivers.</li>
+      <li><strong>Control-flow protection:</strong> Server 2025 supports hardware features such as Intel CET that make it harder for attackers to hijack kernel code paths. 2012 R2 has no equivalent.</li>
+      <li><strong>Stricter driver requirements:</strong> Server 2025 expects modern signed drivers and rejects legacy signing methods, so older drivers may need updates.</li>
+      <li><strong>Secure Boot and TPM defaults:</strong> Server 2025 is designed to work with Secure Boot and TPM 2.0 out of the box.</li>
+      <li><strong>Modern hardware baseline:</strong> Server 2025 requires a 64-bit CPU with NX and SSE2 and drops support for some older platforms that 2012 R2 still runs on.</li>
+    </ul>
+  </section>
+
+  <hr>
+
+  <section>
+    <h2>Releases Between 2012 R2 and 2025</h2>
+    <p>Microsoft released several versions in between. The main long-term releases were:</p>
+    <ul>
+      <li><strong>Windows Server 2016</strong> (October 2016), the first NT 10.0 server release, which introduced Nano Server and Windows containers.</li>
+      <li><strong>Windows Server 2019</strong> (October 2018), which added Windows Admin Center integration and storage improvements.</li>
+      <li><strong>Windows Server 2022</strong> (August 2021), which added Secured-core server features, TLS 1.3 support, and hotpatching in Azure Edition.</li>
+    </ul>
+    <p>Microsoft also shipped Semi-Annual Channel versions, along with 23H2 and 24H2, mainly for container and testing scenarios.</p>
+  </section>
+
+  <hr>
+
+  <section>
+    <h2>What Windows Server 2025 Adds</h2>
+    <p>Windows Server 2025 kept the main pillars from 2016, 2019, and 2022, including Hyper-V, Storage Spaces Direct, Windows containers, Secured-core protections, TLS 1.3, and Windows Admin Center. Nano Server as a standalone deployment option was dropped.</p>
+    <p>The features that are new in 2025 are mainly:</p>
+    <ul>
+      <li><strong>Delegated Managed Service Accounts (dMSA):</strong> a successor to group managed service accounts that helps migrate older service accounts to a more secure model.</li>
+      <li><strong>Native NVMe support:</strong> improved storage performance on modern solid-state drives.</li>
+      <li><strong>Kerberos AES-SHA2 by default:</strong> stronger encryption for Kerberos tickets.</li>
+      <li><strong>Hotpatching for Arc-enabled servers:</strong> extends hotpatching beyond Azure Edition and requires a subscription.</li>
+      <li><strong>NTLMv1 disabled by default:</strong> a policy change that matters for migration.</li>
+    </ul>
+    <p class="note">Windows LAPS is often described as new in 2025, but it was added to Server 2019 and 2022 through updates in 2023.</p>
+  </section>
+
+  <hr>
+
+  <section>
+    <h2>Consultation Talking Points</h2>
+    <ul>
+      <li>Your 2012 R2 servers have been out of extended support since <strong>October 10, 2023</strong>, so they no longer receive security patches. This is the main reason to act now.</li>
+      <li>AD DS is included in every edition, so the decision is which edition and licensing model fits your user and device count.</li>
+      <li>Migration is staged, not an in-place upgrade: install a new 2025 server, promote it as a second domain controller, move the FSMO roles and file shares, and then retire the 2012 R2 server. Plan a system state backup and schema and functional level checks first.</li>
+      <li>NTLM is still supported in 2025, but NTLMv1 is disabled by default. Auditing NTLM use is the first step.</li>
+      <li>The network investments, such as the NETGEAR Nighthawk RAXE300 router, the ProSafe 25-port VPN firewall, and wireless access points bridging IP cameras, should be budgeted separately from the server project, though they often happen in the same window.</li>
+    </ul>
+  </section>
+
+  <hr>
+
+  <section>
+    <h2>Budget Estimate</h2>
+    <p>For a small business with one domain and a modest number of users, a realistic all-in project often lands in the <strong>low five figures</strong>. Labor and new hardware are usually the largest costs.</p>
+    <ul>
+      <li><strong>Labor:</strong> roughly <strong>$5,000 to $15,000</strong> for planning, the 2025 build, domain controller promotion, migration, testing, and cutover. This depends on the number of applications and how much NTLM cleanup is needed.</li>
+      <li><strong>Server licensing:</strong> roughly <strong>$1,000 to $2,000</strong> for a Standard edition license covering up to 16 cores, plus <strong>$40 to $60 per user CAL</strong>.</li>
+      <li><strong>Hardware:</strong> a new server typically runs <strong>$3,000 to $8,000</strong>. If your current hardware is recent, you may only need licensing and labor.</li>
+      <li><strong>Network and security gear:</strong> roughly <strong>$1,000 to $3,000</strong>, depending on how many devices you buy and whether they replace existing equipment.</li>
+      <li><strong>Backup and power:</strong> budget for a reliable backup solution and a UPS, which is often overlooked.</li>
+    </ul>
+    <p class="note">These figures are rough market ranges, not quotes. Licensing and hardware prices change, so confirm exact figures with your reseller or Microsoft partner before committing to a budget.</p>
+  </section>
+
+  <hr>
+
+  <section>
+    <h2>Key Questions Before Quoting</h2>
+    <ul>
+      <li>How many users and devices connect to the domain?</li>
+      <li>Which line-of-business applications need NTLM, and do their vendors support Kerberos?</li>
+      <li>Is your current hardware recent enough to run Server 2025, or do you need new equipment?</li>
+      <li>Do older network devices or cameras depend on NTLM or other legacy protocols?</li>
+      <li>Can you schedule a maintenance window for cutover?</li>
+    </ul>
+  </section>
+
+</body>
+</html>
