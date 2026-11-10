@@ -1,6 +1,7 @@
 // solution-finder.js
-// Combined routing agent: common-issue troubleshooting plus sales service matching.
-// Keyword, synonym, combination, and single-edit typo matching. No external API.
+// Combined routing agent: common-issue troubleshooting, sales service matching,
+// Windows Server upgrade intel, and data sanitization guides. Keyword, synonym,
+// combination, and single-edit typo matching. No external API.
 
 const BOOKING_URL = "https://calendly.com/patlucero2026/30min";
 
@@ -8,6 +9,8 @@ const MIN_SCORE = 2;
 const CLOSE_RATIO = 0.6;
 const COMBINED_MIN = 3;
 const ISSUE_LIMIT = 3;
+const INTEL_MIN = 1;
+const INTEL_LIMIT = 2;
 
 const STOP = new Set([
     "a", "an", "and", "the", "of", "for", "to", "in", "on", "at", "is", "are",
@@ -17,7 +20,7 @@ const STOP = new Set([
 ]);
 
 // Common English words one edit away from a concept. Exempt from typo matching.
-const NO_FUZZY = new Set(["remove", "match", "matches", "setting", "settings"]);
+const NO_FUZZY = new Set(["remove", "match", "matches", "setting", "settings", "driver", "drivers"]);
 
 const SYNONYMS = {
     site: "website", webpage: "website", web: "website", page: "website",
@@ -26,10 +29,12 @@ const SYNONYMS = {
     seo: "search", google: "search", ranking: "search",
     html: "markup", html5: "markup", javascript: "markup", js: "markup",
     secure: "security", hack: "security", hacked: "security", malware: "security", virus: "security",
-    backups: "backup", backing: "backup", restore: "recovery",
+    backups: "backup", backing: "backup",
+    restore: "recovery",
     pc: "workstation", laptop: "workstation", computer: "workstation", desktop: "workstation",
     windows: "workstation", os: "workstation",
-    network: "network", wifi: "network", router: "network", cloud: "cloud",
+    network: "network", wifi: "network", router: "network",
+    cloud: "cloud",
     update: "upgrade", upgrading: "upgrade",
     install: "setup", installation: "setup",
     monitor: "monitoring"
@@ -240,6 +245,110 @@ const COMMON_ISSUES = [
     }
 ];
 
+// Windows Server 2012 R2 to 2025 upgrade knowledge base.
+const UPGRADE_INTEL = [
+    {
+        id: "eol-2012r2",
+        title: "Support Status",
+        keywords: ["eol", "unsupported", "expired", "2012", "r2"],
+        facts: [
+            "Windows Server 2012 R2 reached the end of extended support on October 10, 2023, so it no longer receives security updates.",
+            "The domain controller handles logins for every PC on the network, so this server is a priority to replace.",
+            "On both 2012 R2 and 2025, AD DS is installed through Server Manager's Add Roles and Features wizard, then the server is promoted to a domain controller."
+        ]
+    },
+    {
+        id: "licensing",
+        title: "Device Connections and Licensing",
+        keywords: ["license", "licenses", "licensing", "cals", "essentials", "datacenter", "cores"],
+        facts: [
+            "Windows Server 2012 R2 Essentials supports up to 25 users and 50 devices without client access licenses (CALs).",
+            "Windows Server 2012 R2 Standard has no fixed device cap, but each user or device requires a CAL.",
+            "Windows Server 2025 Standard and Datacenter use per-core licensing plus CALs, with no fixed connection limit.",
+            "Offices with fewer than 25 users usually save money with Essentials-style licensing, while growing businesses avoid a future migration by starting with Standard and CALs."
+        ],
+        verify: "Microsoft has changed Essentials availability in newer releases, so confirm current limits before purchasing."
+    },
+    {
+        id: "authentication",
+        title: "Kerberos and NTLM",
+        keywords: ["kerberos", "ntlm", "ldap", "dmsa", "aes", "authentication", "logins"],
+        facts: [
+            "Windows Server 2012 R2 uses Kerberos for domain logins and NTLM as a fallback, and supports Kerberos armoring, the Protected Users group, and authentication policies.",
+            "Windows Server 2025 keeps Kerberos as the primary protocol, adds AES-SHA2 encryption by default, and enforces stricter LDAP signing and channel binding.",
+            "NTLM is being phased out, and Microsoft provides auditing tools to find applications that still depend on it.",
+            "Delegated managed service accounts (dMSA) simplify service account management."
+        ],
+        verify: "Check Microsoft's documentation for the current NTLM phase-out timeline and auditing tools."
+    },
+    {
+        id: "legacy-apps",
+        title: "Legacy Application Risks",
+        keywords: ["legacy", "printers", "unsigned", "compatibility"],
+        facts: [
+            "The main migration risk is legacy software. Applications, printers, and older devices that rely on NTLM or unsigned LDAP may fail on Windows Server 2025.",
+            "Audit these devices and applications before cutover."
+        ]
+    },
+    {
+        id: "policy-rights",
+        title: "Group Policy and User Rights",
+        keywords: ["policy", "policies", "gpo", "gpos", "laps", "smb", "rights", "lockout"],
+        facts: [
+            "User rights such as Allow log on locally, Allow log on through Remote Desktop Services, and Deny access to this computer from the network are managed through Group Policy Management in both versions.",
+            "Password and account lockout policies work the same way in both, applied through the Default Domain Policy or a dedicated GPO.",
+            "Windows Server 2025 adds Windows LAPS for automatic, encrypted rotation of local administrator passwords, which 2012 R2 does not include.",
+            "Windows Server 2025 enforces stronger SMB signing and encryption, and removes support for SMB 1.0 and NTLMv1."
+        ]
+    },
+    {
+        id: "upgrade-path",
+        title: "Recommended Upgrade Path",
+        keywords: ["migrate", "migration", "upgrade", "cutover", "controller", "fsmo", "backup"],
+        facts: [
+            "Back up Active Directory with a system state backup first.",
+            "Install a new Windows Server 2025 machine and promote it as a second domain controller.",
+            "Move the FSMO roles and file shares to the new server.",
+            "Retire the 2012 R2 server."
+        ],
+        verify: "Check current schema and functional level requirements in Microsoft's documentation."
+    }
+];
+
+// Data sanitization guides: explanation, steps, limitations, and FAQ.
+const WIPE_GUIDES = [
+    {
+        id: "cipher-wipe",
+        title: "Wiping Free Space with cipher /w",
+        keywords: ["cipher", "wipe", "wiping", "erase", "erasing", "sanitize", "sanitization", "recover", "recoverable", "recycle", "recycling", "repurpose", "sell", "selling", "deleted", "delete", "deleting"],
+        overview: [
+            "The Windows cipher /w command overwrites the free space on a drive, making files you have already deleted much harder to recover.",
+            "Deleting a file or emptying the Recycle Bin only removes its directory entry, and the data remains on the disk until those sectors are reused.",
+            "Running cipher /w is a common step before selling, recycling, or repurposing a PC."
+        ],
+        steps: [
+            "Empty the Recycle Bin first, because cipher /w only affects free space and leaves existing files untouched.",
+            "Open Start, type cmd, right-click Command Prompt, and select Run as administrator. The command requires administrator rights.",
+            "Run the command, replacing C:\\ with the drive letter you want to clean: cipher /w:C:\\",
+            "The tool overwrites free space in three passes. Keep the computer powered on and avoid using the drive until it finishes, since it can take hours on a large drive."
+        ],
+        ssdLimitations: [
+            "On solid-state drives, cipher /w may not reach every physical block that held deleted data, because SSDs use wear leveling and remap writes internally.",
+            "For SSDs, enable BitLocker or device encryption, which renders existing data unreadable, or use the manufacturer's secure erase tool."
+        ],
+        faqs: [
+            {
+                question: "Does cipher /w speed up a slow computer?",
+                answer: "No. A full Recycle Bin only uses disk space. If your computer is slow, check free disk space, background processes, and the health of the drive."
+            },
+            {
+                question: "Is cipher /w a security monitoring tool?",
+                answer: "No. It is a data sanitization tool. It reduces the chance of recovering deleted files, but it does not detect or prevent attacks."
+            }
+        ]
+    }
+];
+
 // ---------- helpers ----------
 
 function escapeHtml(value) {
@@ -349,6 +458,7 @@ function rankSolutions(tokens) {
 // Routes services only. Returns one of: none, combined, single.
 function routeServices(tokens) {
     const ranked = rankSolutions(tokens);
+
     if (ranked.length === 0) {
         return { type: "none" };
     }
@@ -387,15 +497,74 @@ function routeQuery(query) {
     return { type: "results", issues, services, booking: BOOKING_URL };
 }
 
+// ---------- upgrade intel matcher ----------
+// Reconstructed from the described behavior: hasConcept over each entry's keywords,
+// filtered by INTEL_MIN, sliced by INTEL_LIMIT. Verify against your version.
+
+function findUpgradeIntel(tokens, limit = INTEL_LIMIT) {
+    return UPGRADE_INTEL
+        .map(entry => {
+            const matched = entry.keywords
+                .map(normalizeKeyword)
+                .filter(keyword => hasConcept(tokens, keyword));
+            return { entry, score: matched.length, matched };
+        })
+        .filter(result => result.score >= INTEL_MIN)
+        .sort((a, b) => b.score - a.score)
+        .slice(0, limit)
+        .map(result => result.entry);
+}
+
+// ---------- wipe guide matcher ----------
+// Same matching as upgrade intel. Guides are few, so no slice limit is applied.
+
+function findWipeGuides(tokens) {
+    return WIPE_GUIDES
+        .map(guide => {
+            const matched = guide.keywords
+                .map(normalizeKeyword)
+                .filter(keyword => hasConcept(tokens, keyword));
+            return { guide, score: matched.length };
+        })
+        .filter(result => result.score >= INTEL_MIN)
+        .sort((a, b) => b.score - a.score)
+        .map(result => result.guide);
+}
+
+// Wraps routeQuery and appends intel and guides. A no-match becomes results when either matches.
+function routeQueryWithIntel(query) {
+    const route = routeQuery(query);
+    if (route.type === "empty") return route;
+
+    const tokens = tokenize(query);
+    const intel = findUpgradeIntel(tokens);
+    const guides = findWipeGuides(tokens);
+
+    if (route.type === "no-match") {
+        if (intel.length === 0 && guides.length === 0) return route;
+        return {
+            type: "results",
+            issues: [],
+            services: { type: "none" },
+            intel,
+            guides,
+            booking: BOOKING_URL
+        };
+    }
+
+    return { ...route, intel, guides };
+}
+
 // ---------- rendering ----------
 
 function describeMatch(needs) {
     const labels = {
         website: "website", upgrade: "upgrade", performance: "performance",
-        responsive: "mobile-friendly design", markup: "HTML5 markup", search: "search visibility",
-        security: "security", network: "network", monitoring: "monitoring",
-        backup: "backup", cloud: "cloud", recovery: "recovery",
-        workstation: "computer", setup: "setup", migration: "migration"
+        responsive: "mobile-friendly design", markup: "HTML5 markup",
+        search: "search visibility", security: "security", network: "network",
+        monitoring: "monitoring", backup: "backup", cloud: "cloud",
+        recovery: "recovery", workstation: "computer", setup: "setup",
+        migration: "migration"
     };
     return needs.map(need => labels[need] || need).join(" and ");
 }
@@ -434,6 +603,42 @@ function renderIssueCard({ issue }) {
         </div>`;
 }
 
+// Reconstructed from the described behavior. Verify against your version.
+function renderIntelCard(entry) {
+    const facts = entry.facts.map(fact => `<li>${escapeHtml(fact)}</li>`).join("");
+    const verify = entry.verify
+        ? `<p><strong>To confirm:</strong> ${escapeHtml(entry.verify)}</p>`
+        : "";
+    return `
+        <div class="solution-card">
+            <h3>${escapeHtml(entry.title)}</h3>
+            <p class="match-reason">Windows Server upgrade: 2012 R2 to 2025</p>
+            <ul>${facts}</ul>
+            ${verify}
+        </div>`;
+}
+
+function renderWipeGuide(guide) {
+    const overview = guide.overview.map(p => `<p>${escapeHtml(p)}</p>`).join("");
+    const steps = guide.steps.map(step => `<li>${escapeHtml(step)}</li>`).join("");
+    const limits = guide.ssdLimitations.map(p => `<li>${escapeHtml(p)}</li>`).join("");
+    const faqs = guide.faqs
+        .map(faq => `<p><strong>${escapeHtml(faq.question)}</strong><br>${escapeHtml(faq.answer)}</p>`)
+        .join("");
+    return `
+        <div class="solution-card">
+            <h3>${escapeHtml(guide.title)}</h3>
+            <p class="match-reason">Data sanitization</p>
+            ${overview}
+            <p><strong>Run cipher /w step by step</strong></p>
+            <ol>${steps}</ol>
+            <p><strong>Limitations for SSDs</strong></p>
+            <ul>${limits}</ul>
+            <p><strong>Frequently asked questions</strong></p>
+            ${faqs}
+        </div>`;
+}
+
 function renderServices(services) {
     if (services.type === "combined") {
         const cards = services.items.map(renderServiceCard).join("");
@@ -441,7 +646,6 @@ function renderServices(services) {
             <p>Your request touches several areas. A combined plan covering ${escapeHtml(joinTitles(services.items))} would likely work best.</p>
             ${cards}`;
     }
-
     if (services.type === "single") {
         const altText = services.alternatives.length
             ? `<p>You may also want to look at:</p>${services.alternatives.map(renderServiceCard).join("")}`
@@ -451,7 +655,6 @@ function renderServices(services) {
             ${renderServiceCard(services.top)}
             ${altText}`;
     }
-
     return "";
 }
 
@@ -472,11 +675,19 @@ function renderRoute(route) {
 
     const servicesHtml = renderServices(route.services);
 
+    const intelHtml = route.intel && route.intel.length
+        ? `<p>Relevant Windows Server upgrade guidance:</p>${route.intel.map(renderIntelCard).join("")}`
+        : "";
+
+    const guidesHtml = route.guides && route.guides.length
+        ? `<p>Here is a guide for securely erasing data:</p>${route.guides.map(renderWipeGuide).join("")}`
+        : "";
+
     const closing = route.issues.length && route.services.type === "none"
         ? `<p>If these steps do not resolve the problem, a consultation can help narrow it down.</p>`
         : "";
 
-    return `${issuesHtml}${servicesHtml}${closing}${booking}`;
+    return `${issuesHtml}${servicesHtml}${intelHtml}${guidesHtml}${closing}${booking}`;
 }
 
 // ---------- wiring ----------
@@ -487,7 +698,7 @@ function handleSubmit(event) {
     const output = document.getElementById("solution-output");
     if (!input || !output) return;
 
-    const route = routeQuery(input.value);
+    const route = routeQueryWithIntel(input.value);
     output.innerHTML = renderRoute(route);
 }
 
