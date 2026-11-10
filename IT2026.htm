@@ -252,22 +252,41 @@
         <main>
 
             <!-- Section 1: Introduction -->
-            <section id="intro">
-                <h2>1. Introduction</h2>
-                <p>Small businesses need to invest capital into network upgrades. Yes, Windows Server 2012 includes Active Directory for small business. To install Active Directory on Windows Server 2012 R2 using Server Manager is the easiest method.</p>
+            <!-- SEO: <title>Upgrade Windows Server 2012 R2 to 2025: Small Business Comparison</title> -->
+<!-- SEO: <meta name="description" content="Compare Windows Server 2012 R2 and 2025 for small businesses: device limits, Kerberos and NTLM authentication, user rights, and Group Policy."> -->
 
-                <p>You can also install and configure Windows Server Essentials or Windows Server Essentials Experience. Windows Server Essentials is an ideal first server for small businesses with up to 25 users and 50 devices.</p>
+<section id="intro">
+    <h2>1. Introduction: Why Upgrade from Windows Server 2012 R2 to Windows Server 2025</h2>
+    <p>Small businesses should treat network upgrades as a capital priority, because the domain controller handles logins for every PC on the network. Windows Server 2012 R2 reached the end of extended support on October 10, 2023, so it no longer receives security updates. Active Directory Domain Services (AD DS) is included in all editions of Windows Server 2012. The edition built for small offices was Windows Server 2012 Essentials, which offered simplified setup and a client connector. On both 2012 R2 and 2025, the standard method is to install AD DS through Server Manager's Add Roles and Features wizard, then promote the server to a domain controller.</p>
 
-                <div class="highlight-box">
-                    <strong>Hardware Spotlight:</strong> NETGEAR Nighthawk WiFi 6E Router (RAXE300) | AXE7800 Tri-Band Wireless Gigabit Speed (Up to 7.8Gbps) | New 6GHz Band | 8-Streams Cover up to 2,500 sq. ft., 40 Devices
-                </div>
+    <section id="licensing">
+        <h3>Device Connections and Licensing</h3>
+        <p><strong>Windows Server 2012 R2 Essentials supports up to 25 users and 50 devices</strong> without client access licenses (CALs). Windows Server 2012 R2 Standard has no fixed device cap, but each user or device requires a CAL. Windows Server 2025 Standard and Datacenter use per-core licensing plus CALs, with no fixed connection limit. Because Microsoft has changed Essentials availability in newer releases, confirm current limits before purchasing. Offices with fewer than 25 users usually save money with Essentials-style licensing, while growing businesses avoid a future migration by starting with Standard and CALs.</p>
+    </section>
 
-                <p><strong>Cyber Security:</strong> The NETGEAR ProSafe VPN Firewall 25-port with 4 Gigabit LAN is a business-class security firewall that includes an SPI firewall and an Intrusion Detection System.</p>
+    <section id="authentication">
+        <h3>Server Authentication: Kerberos and NTLM</h3>
+        <p><strong>Windows Server 2012 R2 uses Kerberos for domain logins and NTLM as a fallback.</strong> It supports Kerberos armoring, the Protected Users security group, and authentication policies. <strong>Windows Server 2025 keeps Kerberos as the primary protocol</strong>, adds AES-SHA2 encryption by default, and enforces stricter LDAP signing and channel binding. NTLM is being phased out, and Microsoft provides auditing tools to find applications that still depend on it. Delegated managed service accounts (dMSA) also simplify service account management.</p>
+        <p>The main risk during migration is legacy software. Applications, printers, and older devices that rely on NTLM or unsigned LDAP may fail on 2025, so audit them before cutover.</p>
+    </section>
 
-                <p>Use wireless access points with IP cameras for long-range wireless. The main purpose of the access point is to take the network traffic from your IP camera and make it wireless while acting as a transparent bridge.</p>
+    <section id="policy">
+        <h3>User Rights and Group Policy</h3>
+        <p>User rights assignments, such as Allow log on locally, Allow log on through Remote Desktop Services, and Deny access to this computer from the network, are managed through Group Policy Management in both versions. Password and account lockout policies also work the same way, applied through the Default Domain Policy or a dedicated GPO. Windows Server 2025 adds <strong>Windows LAPS</strong> for automatic, encrypted rotation of local administrator passwords, a feature 2012 R2 does not include. It also enforces stronger SMB signing and encryption and removes support for SMB 1.0 and NTLMv1.</p>
+    </section>
 
-                <p><strong>Virtual Business Networks Disadvantages:</strong> Cyber Security database and network isolation.</p>
-            </section>
+    <div class="highlight-box">
+        <strong>Recommended Upgrade Path:</strong> Install a new Windows Server 2025 machine, promote it as a second domain controller, move the FSMO roles and file shares, then retire the 2012 R2 server. Back up Active Directory with a system state backup first, and check current schema and functional level requirements in Microsoft's documentation.
+    </div>
+
+    <p><strong>Network Hardware Spotlight:</strong> The NETGEAR Nighthawk WiFi 6E Router (RAXE300) offers AXE7800 tri-band wireless with speeds up to 7.8 Gbps, a new 6 GHz band, and 8 streams, covering up to 2,500 sq. ft. and 40 devices.</p>
+
+    <p><strong>Network Security:</strong> The NETGEAR ProSafe VPN Firewall with 25 ports and 4 Gigabit LAN ports includes an SPI firewall and an intrusion detection system, making it a business-class option for protecting the server and its clients.</p>
+
+    <p><strong>Wireless Coverage for Cameras:</strong> Wireless access points can bridge IP camera traffic over longer distances. The access point acts as a transparent bridge, carrying the camera's network traffic over wireless without changing it.</p>
+
+    <p><strong>Segmenting the Network:</strong> Virtual business networks isolate traffic, which limits how far an intrusion can spread. The tradeoff is added configuration work and more devices to monitor, so plan the VLAN design before deployment.</p>
+</section>
 
             <!-- Section 2: What You Should Know -->
             <section id="know">
