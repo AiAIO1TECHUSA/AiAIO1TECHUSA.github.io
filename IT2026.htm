@@ -237,12 +237,12 @@
                 <li><a href="#intro">1. Windows Server 2025 Upgrade</a></li>
                 <li><a href="#know">2. What You Should Know</a></li>
                 <li><a href="#performance">3. PC & Performance</a></li>
-                <li><a href="#network">4. Network World</a></li>
-                <li><a href="#ping">5. Ping Test</a></li>
-                <li><a href="#virus">6. Virus Scan</a></li>
-                <li><a href="#restore">7. Restore Without Disk</a></li>
-                <li><a href="#powershell">8. PowerShell ISE</a></li>
-                <li><a href="#activedirectory">9. Active Directory</a></li>
+                <li><a href="#entering-commands">4. Entering Command Scripts</a></li>
+                <li><a href="#ping-test">5. Ping Test</a></li>
+                <li><a href="#dns-tests">6. DNS Testing</a></li>
+                <li><a href="#tracert">7. Route Tracing</a></li>
+                <li><a href="#virus">8. Virus Scan</a></li>
+                <li><a href="#activedirectory">9. Restore Without Disk</a></li>
                 <li><a href="#cipher">10. Wipe Free Space (cipher /w)</a></li>
                 <li><a href="#seo">11. SEO & Responsive Design</a></li>
             </ul>
@@ -331,7 +331,7 @@
             <h1>Windows Network Troubleshooting Commands</h1>
 
   <section id="entering-commands">
-    <h2>Entering Command Scripts</h2>
+    <h2>4. Entering Command Scripts</h2>
     <p>To get started with entering command scripts, open the Command Prompt and run the following network commands. Run the Command Prompt as administrator for the ARP and release/renew commands.</p>
     <pre><code>ipconfig /flushdns
 netsh int ip delete arpcache
@@ -349,7 +349,7 @@ ipconfig /renew</code></pre>
   </section>
 
   <section id="ping-test">
-    <h2>Ping Test</h2>
+    <h2>5. Ping Test</h2>
     <p>Ping a remote address to test internet connectivity:</p>
     <pre><code>ping 8.8.8.8</code></pre>
     <p>A reply from Google's DNS server at 8.8.8.8 confirms that your PC can reach the internet. This test does not check DNS, because it uses a raw IP address rather than a hostname.</p>
@@ -359,7 +359,7 @@ ipconfig /renew</code></pre>
   </section>
 
   <section id="dns-tests">
-    <h2>Testing DNS</h2>
+    <h2>6. Testing DNS</h2>
     <p>To check DNS, resolve a hostname:</p>
     <pre><code>ping google.com
 nslookup google.com
@@ -372,14 +372,14 @@ nslookup google.com 8.8.8.8</code></pre>
   </section>
 
   <section id="tracert">
-    <h2>Route Tracing</h2>
+    <h2>7. Route Tracing</h2>
     <p>Trace the route to a destination:</p>
     <pre><code>tracert google.com</code></pre>
     <p>If you see "Unable to resolve target system name," the hostname failed to resolve, which points to a DNS problem. Otherwise, tracert shows each hop on the route, which tests the path rather than DNS itself.</p>
   </section>
             <!-- Section 6: Virus Scan -->
             <section id="virus">
-                <h2>6. Virus Scan</h2>
+                <h2>8. Virus Scan</h2>
                 <p>You can scan for viruses in three easy steps on Windows 11:</p>
                 <ol>
                     <li>Right-click the Windows Logo</li>
@@ -393,7 +393,7 @@ nslookup google.com 8.8.8.8</code></pre>
 
             <!-- Section 7: Restore Without Disk -->
             <section id="restore">
-                <h2>7. Restore Without Disk</h2>
+                <h2>9. Restore Without Disk</h2>
                 <p>To change the guest account to an administrator account in Windows, follow these steps:</p>
                 <ol>
                     <li>Sign in with an Administrator account</li>
@@ -408,38 +408,7 @@ nslookup google.com 8.8.8.8</code></pre>
                 <p><strong>Safe Boot:</strong> Hold down the Windows Logo Key and press X. Select Run, type msconfig and press Enter. Go to the Boot tab and select Safe Boot.</p>
             </section>
 
-            <!-- Section 8: PowerShell ISE -->
-            <section id="powershell">
-                <h2>8. PowerShell ISE</h2>
-                <p>To create a new script file in PowerShell ISE, click the "New" button on the toolbar or go to File > New. You can then start typing your script.</p>
-                <div class="code-container">
-                    <pre><code>powershell_ise.exe C:\PSBackup_AD_DC.ps1</code></pre>
-                </div>
-                <p>To create a user account on PowerShell, use the New-LocalUser cmdlet:</p>
-                <div class="code-container">
-                    <pre><code>New-LocalUser -Name "user_name" -Description "Description of your new account." -NoPassword</code></pre>
-                </div>
-                <h3>Common PowerShell Cmdlets</h3>
-                <ul>
-                    <li><strong>Get-Command:</strong> View all PowerShell commands installed on your computer</li>
-                    <li><strong>Get-Help:</strong> Find information for commands, concepts, and functions</li>
-                    <li><strong>Clear-Host:</strong> Clear the PowerShell console screen</li>
-                    <li><strong>Set-Location:</strong> Change the current location in PowerShell</li>
-                    <li><strong>Get-ChildItem:</strong> List all files and directories in the current directory</li>
-                    <li><strong>Get-Alias:</strong> List all aliases for PowerShell commands</li>
-                </ul>
-            </section>
-
-            <!-- Section 9: Active Directory -->
-            <section id="activedirectory">
-                <h2>9. Active Directory</h2>
-                <p>Users and granting Active Directory permissions in PowerShell:</p>
-                <div class="code-container">
-                    <pre><code>Add-Computer -DomainName "domain.com" -Credential (Get-Credential) -Restart
-attrib +r "full path of file with extension"
-Add-PublicFolderClientPermission "folder_name" -User Default -AccessRights Owner</code></pre>
-                </div>
-            </section>
+            
 
             <!-- Section 10: Wipe Free Space with cipher /w -->
             <section id="cipher">
@@ -470,7 +439,7 @@ Add-PublicFolderClientPermission "folder_name" -User Default -AccessRights Owner
                 <h4>Is cipher /w a security monitoring tool?</h4>
                 <p>No. It is a data sanitization tool. It reduces the chance of recovering deleted files, but it does not detect or prevent attacks.</p>
             </section>
-
+    
             <!-- Section 11: SEO & Responsive Design -->
             <section id="seo">
                 <h2>11. Keys to SEO & Responsive Web Design</h2>
