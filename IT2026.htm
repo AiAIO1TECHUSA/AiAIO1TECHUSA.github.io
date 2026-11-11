@@ -209,6 +209,51 @@
             }
             main { padding: 20px; }
         }
+        /* Responsive Chart PC Comparison (RWD) */
+  #hardware-comparison {
+    margin: 2rem 0;
+    overflow-x: auto;
+  }
+
+  #hardware-comparison table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+    background: #ffffff;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  }
+
+  #hardware-comparison th,
+  #hardware-comparison td {
+    border: 1px solid #d0d7de;
+    padding: 0.6rem 0.75rem;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  #hardware-comparison thead th {
+    background: #1f3a5f;
+    color: #ffffff;
+    font-weight: 600;
+  }
+
+  #hardware-comparison tbody tr:nth-child(even) {
+    background: #f4f6f8;
+  }
+
+  #hardware-comparison tbody th,
+  #hardware-comparison tbody td:first-child {
+    font-weight: 600;
+  }
+
+  @media (max-width: 600px) {
+    #hardware-comparison th,
+    #hardware-comparison td {
+      padding: 0.5rem;
+      font-size: 0.85rem;
+    }
+  }
+
     </style>
 </head>
 <body>
