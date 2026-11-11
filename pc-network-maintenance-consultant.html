@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PC Network Maintenance Consultant | Performance Tuning and Virus Scans</title>
+<meta name="description" content="Freelance PC network maintenance: network troubleshooting, firewall setup, startup and service optimization, and monthly virus scans. Book a 30-minute consultation.">
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; max-width: 900px; margin: 0 auto; padding: 20px; color: #222; }
+        h1 { color: #1a3c6e; }
+        h2 { color: #1a3c6e; border-bottom: 2px solid #4da6ff; padding-bottom: 4px; }
+        pre { background: #f4f6f8; padding: 12px; overflow-x: auto; border-left: 4px solid #4da6ff; }
+        code { font-family: Consolas, monospace; }
+        .booking { margin-top: 30px; }
+    </style>
+</head>
+<body>
+
+    <h1>PC Network Performance, Security Basics, and Maintenance</h1>
+
+    <h2>Network Troubleshooting Commands</h2>
+    <p>Run these from an administrator Command Prompt when diagnosing connectivity problems. Work through them in order, from the local machine outward.</p>
+    <pre><code>ipconfig /release
+ipconfig /renew
+ipconfig /flushdns
+netsh interface ip delete arpcache
+ping 8.8.8.8
+ping google.com
+nslookup google.com
+nslookup google.com 8.8.8.8
+tracert google.com</code></pre>
+    <p><strong>Key point:</strong> <code>ping 8.8.8.8</code> tests raw internet connectivity by IP address and does not test DNS. If <code>ping google.com</code> fails but <code>ping 8.8.8.8</code> succeeds, the problem is DNS. If <code>tracert</code> reports that it cannot resolve the target system name, the problem is also DNS.</p>
+
+    <h2>Windows Defender Firewall</h2>
+    <p>Back up your rules before changing anything, then restore defaults if the rule set has become cluttered or untrustworthy.</p>
+    <pre><code>netsh advfirewall export "C:\fw-backup.wfw"
+netsh advfirewall reset</code></pre>
+    <p>Keep the Public network profile strict. Block inbound connections by default, enable logging, and make sure your Wi-Fi network is classified as Public. Create block rules for specific remote addresses in <code>wf.msc</code> rather than relying on a blacklist feature, since Windows doesn't include one.</p>
+
+    <h2>Background Services and System Speed</h2>
+    <p>Use Task Manager to reduce load. The Startup apps tab controls what launches at boot, and the Processes tab shows which programs consume CPU, memory, disk, or network bandwidth. Stopping a service in the Services tab is temporary. For permanent changes, use <code>msconfig</code> with <strong>Hide all Microsoft services</strong> checked, then disable third-party services you don't need.</p>
+    <p>Do not disable Windows Defender Antivirus, Windows Update, Windows Defender Firewall (mpssvc), or the Windows Event Log.</p>
+
+    <h2>Malware Checks</h2>
+    <p>Run the Microsoft Malicious Software Removal Tool monthly, and use the Kaspersky Virus Removal Tool or Kaspersky Rescue Disk when you suspect a rootkit. Run one third-party scanner at a time to avoid conflicts.</p>
+    <pre><code>schtasks /create /tn "Monthly Malware Scan" /tr "%SystemRoot%\System32\MRT.exe /Q /F:Y" /sc monthly /d 1 /st 02:00 /ru SYSTEM /rl HIGHEST</code></pre>
+
+    <h2>Wi-Fi and Network Segmentation</h2>
+    <p>Hiding the Wi-Fi network name does not provide real security. Use WPA3, or WPA2-AES if your equipment doesn't support WPA3, with a long passphrase. Place public or guest Wi-Fi on its own VLAN and route it to the internet only. Do not bridge public Wi-Fi directly into the business LAN or substation VLANs. Use default-deny rules between zones and allow only the specific hosts and ports that must communicate.</p>
+
+    <div class="booking">
+      <h2>Schedule Your Appointment</h2>
+      <p style="text-align: center; margin: 20px 0;">
+            <a href="https://aiaio1techusa.github.io/pc-network-maintenance-consultant.html"
+               style="display: inline-block; padding: 12px 24px; margin: 8px; background-color: #4da6ff; color: #ffffff; text-decoration: none; border-radius: 6px; font-weight: bold;">
+                PC Network Maintenance Consultant
+            </a>
+        </p>
+        
+        <p style="text-align: center; margin: 20px 0;">
+            <a href="https://aiaio1techusa.github.io/windows-server-2025-upgrade.html"
+               style="display: inline-block; padding: 12px 24px; margin: 8px; background-color: #4da6ff; color: #ffffff; text-decoration: none; border-radius: 6px; font-weight: bold;">
+                Windows Server 2025 Consultant
+            </a>
+        </p>
+      
+        <!-- Calendly inline widget begin -->
+        <div class="calendly-inline-widget" data-url="https://calendly.com/patlucero2026/30min" style="min-width:320px;height:700px;"></div>
+        <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+        <!-- Calendly inline widget end -->
+    </div>
+
+</body>
+</html>
