@@ -327,29 +327,56 @@
                 </ul>
             </section>
 
-            <!-- Section 4: Network World -->
-            <section id="network">
-                <h2>4. Network World</h2>
-                <p>To get started with entering command scripts, open the Command Prompt and write your first network commands:</p>
-                <div class="code-container">
-                    <pre><code>ipconfig /flushdns
+             <!-- Section 4: Network World names IDs changed  upgrade-->
+            <h1>Windows Network Troubleshooting Commands</h1>
+
+  <section id="entering-commands">
+    <h2>Entering Command Scripts</h2>
+    <p>To get started with entering command scripts, open the Command Prompt and run the following network commands. Run the Command Prompt as administrator for the ARP and release/renew commands.</p>
+    <pre><code>ipconfig /flushdns
 netsh int ip delete arpcache
 ipconfig /release
 ipconfig /renew</code></pre>
-                </div>
-            </section>
+    <ul>
+      <li><strong>ipconfig /flushdns</strong> clears the local DNS cache.</li>
+      <li><strong>netsh int ip delete arpcache</strong> clears the ARP table. <code>int</code> is shorthand for <code>interface</code>.</li>
+      <li><strong>ipconfig /release</strong> releases the current DHCP-assigned IP address.</li>
+      <li><strong>ipconfig /renew</strong> requests a new IP address from the DHCP server.</li>
+    </ul>
+    <div class="note">
+      <strong>Note:</strong> Releasing the IP address drops the connection briefly. If you are connected remotely, you may lose your session. To target one adapter, use <code>ipconfig /release "Wi-Fi"</code> and <code>ipconfig /renew "Wi-Fi"</code>.
+    </div>
+  </section>
 
-            <!-- Section 5: Ping Test -->
-            <section id="ping">
-                <h2>5. Ping Test</h2>
-                <p>Ping to test your host server on a remote address by typing the following command:</p>
-                <div class="code-container">
-                    <pre><code>ping 8.8.8.8</code></pre>
-                </div>
-                <p>If it reaches Google's DNS server, your DNS server is working and you have internet connectivity.</p>
-                <p>If you still have issues, clear your browser history and cache completely.</p>
-            </section>
+  <section id="ping-test">
+    <h2>Ping Test</h2>
+    <p>Ping a remote address to test internet connectivity:</p>
+    <pre><code>ping 8.8.8.8</code></pre>
+    <p>A reply from Google's DNS server at 8.8.8.8 confirms that your PC can reach the internet. This test does not check DNS, because it uses a raw IP address rather than a hostname.</p>
+    <div class="note">
+      <strong>Note:</strong> Firewalls often block ping, so a timeout does not always mean there is no connection. Clearing browser history and cache does not fix network connectivity problems.
+    </div>
+  </section>
 
+  <section id="dns-tests">
+    <h2>Testing DNS</h2>
+    <p>To check DNS, resolve a hostname:</p>
+    <pre><code>ping google.com
+nslookup google.com
+nslookup google.com 8.8.8.8</code></pre>
+    <ul>
+      <li><strong>ping google.com</strong> tests whether the name resolves and the host responds.</li>
+      <li><strong>nslookup google.com</strong> shows which DNS server answered and the IP addresses it returned.</li>
+      <li><strong>nslookup google.com 8.8.8.8</strong> queries a specific DNS server to see whether your default server is at fault.</li>
+    </ul>
+  </section>
+
+  <section id="tracert">
+    <h2>Route Tracing</h2>
+    <p>Trace the route to a destination:</p>
+    <pre><code>tracert google.com</code></pre>
+    <p>If you see "Unable to resolve target system name," the hostname failed to resolve, which points to a DNS problem. Otherwise, tracert shows each hop on the route, which tests the path rather than DNS itself.</p>
+  </section>
             <!-- Section 6: Virus Scan -->
             <section id="virus">
                 <h2>6. Virus Scan</h2>
