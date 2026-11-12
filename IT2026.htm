@@ -412,13 +412,20 @@
     <div class="grid">
 
       <article class="card">
-        <h3>Order-to-Inventory Sync</h3>
-        <p>Pulls new orders from the storefront, updates stock counts, and flags low-stock items for reorder.</p>
-        <ul>
-          <li>Tools: [Platform], [Automation tool]</li>
-          <li>Runs: [Frequency]</li>
-        </ul>
-        <p class="result">Result: [Measured outcome, e.g., hours saved per week]</p>
+        <h3>Ecom-AI-Automation</h3>
+        <p>Structured JSON output is useful because you can process it, not just read it. Some practical uses for your scanner:
+
+Validation before publishing. Your script can check that sku matches a pattern, confidence is between 0 and 1, and category is in an allowed list. The US Army Tee output would have failed the category check and the invented-SKU check automatically.
+Filtering the false positives. If the output includes the matched keywords or source field, you can reject any result where the AI flag came from the page text instead of the product fields, which is the problem you just found.
+Generating structured data. The same JSON can fill a Product schema block for the page, with name, SKU, description, and offers, so the product page and the search metadata stay consistent.
+Batch processing. Running the scan over a whole catalog and saving each result as a line in a file lets you sort by confidence, find duplicates, or flag products missing a Stripe link or image.
+Audit trail. Storing each scan's JSON with a timestamp lets you compare runs over time, so you can see whether a change to the page template caused new false positives.
+Connecting to other tools. The same output can feed a spreadsheet, a Stripe product sync, or a database without re-entering anything.
+If you share one sample JSON output, I can suggest which fields to validate and which to drop from the page-level content.</p>
+        <div class="card">
+  
+  <iframe class="example-frame" src="Ecom-AI-Automation.html" title="Ecom-AI-Automation example" loading="lazy"></iframe>
+        </div>
       </article>
 
       <article class="card">
