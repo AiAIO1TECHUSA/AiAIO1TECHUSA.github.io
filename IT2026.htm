@@ -453,7 +453,24 @@
         scroll-behavior: auto !important;
     }
 }
+.contact-toggle {
+  display: block;
+  cursor: pointer;
+  padding: 14px 20px;
+  min-height: 44px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #1f3a5f 0%, #3b6ea5 100%);
+  color: #ffffff;
+  font-weight: 600;
+  list-style: none;
+}
+.contact-toggle::-webkit-details-marker {
+  display: none;
+}
 
+.contact-collapse[open] .contact-toggle {
+  margin-bottom: 16px;
+        }
     </style>
 </head>
 <body>
@@ -461,52 +478,54 @@
     <!-- Header Section -->
     <header>
         <section class="contact-section" id="contact">
-    <h2 class="contact-title">Message Me</h2>
-    <p class="contact-intro">Tell me a bit about your IT problem or project. I'll reply within one business day.</p>
+    <details class="contact-collapse">
+        <summary class="contact-toggle">Message Me</summary>
 
-    <form class="contact-form" action="https://formsubmit.co/patlucero2025@proton.me" method="POST" novalidate>
-        <input type="hidden" name="_captcha" value="false">
-        <input type="hidden" name="_subject" value="New website inquiry">
-        <input type="hidden" name="_template" value="table">
-        <input type="hidden" name="_autoresponse" value="Thanks for reaching out. I'll reply within one business day.">
-        <input type="text" name="_honey" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <p class="contact-intro">Tell me a bit about your IT problem or project. I'll reply within one business day.</p>
 
-        <div class="form-group">
-            <label for="name">Your name <span class="required" aria-hidden="true">*</span></label>
-            <input type="text" id="name" name="name" autocomplete="name" required maxlength="100" placeholder="Jane Smith" aria-describedby="name-error">
-            <p class="field-error" id="name-error" role="alert" hidden>Please enter your name.</p>
-        </div>
+        <form class="contact-form" action="https://formsubmit.co/patlucero2025@proton.me" method="POST" novalidate>
+            <input type="hidden" name="_captcha" value="false">
+            <input type="hidden" name="_subject" value="New website inquiry">
+            <input type="hidden" name="_template" value="table">
+            <input type="hidden" name="_autoresponse" value="Thanks for reaching out. I'll reply within one business day.">
+            <input type="text" name="_honey" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true">
 
-        <div class="form-group">
-            <label for="email">Email address <span class="required" aria-hidden="true">*</span></label>
-            <input type="email" id="email" name="email" autocomplete="email" inputmode="email" required maxlength="150" placeholder="you@example.com" aria-describedby="email-error">
-            <p class="field-error" id="email-error" role="alert" hidden>Please enter a valid email address.</p>
-        </div>
+            <div class="form-group">
+                <label for="name">Your name <span class="required" aria-hidden="true">*</span></label>
+                <input type="text" id="name" name="name" autocomplete="name" required maxlength="100" placeholder="Jane Smith" aria-describedby="name-error">
+                <p class="field-error" id="name-error" role="alert" hidden>Please enter your name.</p>
+            </div>
 
-        <div class="form-group">
-            <label for="service">What do you need help with?</label>
-            <select id="service" name="service">
-                <option value="">Choose one (optional)</option>
-                <option>PC performance tuning</option>
-                <option>Network troubleshooting</option>
-                <option>Malware scans and cleanup</option>
-                <option>AI automation</option>
-                <option>Something else</option>
-            </select>
-        </div>
+            <div class="form-group">
+                <label for="email">Email address <span class="required" aria-hidden="true">*</span></label>
+                <input type="email" id="email" name="email" autocomplete="email" inputmode="email" required maxlength="150" placeholder="you@example.com" aria-describedby="email-error">
+                <p class="field-error" id="email-error" role="alert" hidden>Please enter a valid email address.</p>
+            </div>
 
-        <div class="form-group">
-            <label for="message">Message <span class="required" aria-hidden="true">*</span></label>
-            <textarea id="message" name="message" rows="5" required minlength="10" maxlength="2000" placeholder="Briefly describe your issue or goal..." aria-describedby="message-help message-error"></textarea>
-            <p class="field-help" id="message-help">Up to 2,000 characters. No passwords, please.</p>
-            <p class="field-error" id="message-error" role="alert" hidden>Please write at least 10 characters.</p>
-        </div>
+            <div class="form-group">
+                <label for="service">What do you need help with?</label>
+                <select id="service" name="service">
+                    <option value="">Choose one (optional)</option>
+                    <option>PC performance tuning</option>
+                    <option>Network troubleshooting</option>
+                    <option>Malware scans and cleanup</option>
+                    <option>AI automation</option>
+                    <option>Something else</option>
+                </select>
+            </div>
 
-        <button type="submit" class="contact-submit">Send Message</button>
-        <p class="form-note">Your details are used only to reply to you.</p>
-    </form>
+            <div class="form-group">
+                <label for="message">Message <span class="required" aria-hidden="true">*</span></label>
+                <textarea id="message" name="message" rows="5" required minlength="10" maxlength="2000" placeholder="Briefly describe your issue or goal..." aria-describedby="message-help message-error"></textarea>
+                <p class="field-help" id="message-help">Up to 2,000 characters. No passwords, please.</p>
+                <p class="field-error" id="message-error" role="alert" hidden>Please write at least 10 characters.</p>
+            </div>
+
+            <button type="submit" class="contact-submit">Send Message</button>
+            <p class="form-note">Your details are used only to reply to you.</p>
+        </form>
+    </details>
 </section>
-
     </header>
 
     <!-- Main Flex Layout Setup -->
