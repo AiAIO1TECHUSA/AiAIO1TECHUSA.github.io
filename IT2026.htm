@@ -322,14 +322,191 @@
   overflow: hidden;
   background-color: #ffffff;
                    }
+        /* Responsive & Contact Upgrade (Trust) */
+*, *::before, *::after { box-sizing: border-box; }
+
+.hero-actions { margin: 24px 0; }
+
+.btn-primary {
+    display: inline-block;
+    min-height: 44px;
+    padding: 14px 28px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #1f3a5f 0%, #3b6ea5 100%);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.btn-primary:hover,
+.btn-primary:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(31, 58, 95, 0.25);
+}
+
+.trust-section {
+    width: 100%;
+    max-width: 720px;
+    margin: 40px auto;
+    padding: clamp(20px, 4vw, 28px);
+    border-radius: 18px;
+    background: #f7f9fc;
+    border: 1px solid #e3e9f2;
+}
+.trust-title { margin-top: 0; color: #1f3a5f; }
+.trust-list { padding-left: 20px; line-height: 1.7; }
+.trust-list li { margin-bottom: 10px; }
+
+.contact-section {
+    width: 100%;
+    max-width: 640px;
+    margin: 40px auto;
+    padding: clamp(20px, 4vw, 36px);
+    border-radius: 22px;
+    background: #ffffff;
+    box-shadow: 0 10px 30px rgba(31, 58, 95, 0.08);
+}
+.contact-title { margin-top: 0; color: #1f3a5f; }
+.contact-intro { color: #4a5568; line-height: 1.6; }
+
+.contact-form { display: grid; gap: 18px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+
+.form-group label {
+    font-weight: 600;
+    color: #1f2937;
+}
+.required { color: #c53030; }
+
+.contact-form input,
+.contact-form select,
+.contact-form textarea {
+    width: 100%;
+    min-height: 44px;
+    padding: 12px 14px;
+    font: inherit;
+    font-size: 16px;
+    color: #1f2937;
+    background: #fbfcfe;
+    border: 1px solid #cbd5e0;
+    border-radius: 12px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.contact-form textarea { resize: vertical; min-height: 130px; }
+
+.contact-form input:focus,
+.contact-form select:focus,
+.contact-form textarea:focus {
+    outline: none;
+    border-color: #3b6ea5;
+    box-shadow: 0 0 0 3px rgba(59, 110, 165, 0.25);
+}
+
+.contact-form [aria-invalid="true"] { border-color: #c53030; }
+
+.field-help,
+.form-note { margin: 0; font-size: 0.9rem; color: #4a5568; }
+.field-error { margin: 0; font-size: 0.9rem; color: #c53030; }
+.field-error[hidden] { display: none; }
+
+.hp-field {
+    position: absolute !important;
+    left: -9999px !important;
+    width: 1px !important;
+    height: 1px !important;
+    opacity: 0 !important;
+}
+
+.contact-submit {
+    width: 100%;
+    min-height: 48px;
+    padding: 14px;
+    border: none;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #1f3a5f 0%, #3b6ea5 100%);
+    color: #fff;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.contact-submit:hover,
+.contact-submit:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(31, 58, 95, 0.25);
+    outline: none;
+}
+
+@media (min-width: 600px) {
+    .hero-actions .btn-primary { width: auto; }
+}
+
+@media (max-width: 480px) {
+    .btn-primary { width: 100%; text-align: center; }
+    .contact-section, .trust-section { margin: 24px 12px; border-radius: 16px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        transition: none !important;
+        animation: none !important;
+        scroll-behavior: auto !important;
+    }
+}
+
     </style>
 </head>
 <body>
 
     <!-- Header Section -->
     <header>
-        <h1>IT AI Consultant</h1>
-        <p>IT Solution Finder</p>
+        <section class="contact-section" id="contact">
+    <h2 class="contact-title">Message Me</h2>
+    <p class="contact-intro">Tell me a bit about your IT problem or project. I'll reply within one business day.</p>
+
+    <form class="contact-form" action="https://formsubmit.co/patlucero2025@proton.me" method="POST" novalidate>
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_subject" value="New website inquiry">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_autoresponse" value="Thanks for reaching out. I'll reply within one business day.">
+        <input type="text" name="_honey" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+        <div class="form-group">
+            <label for="name">Your name <span class="required" aria-hidden="true">*</span></label>
+            <input type="text" id="name" name="name" autocomplete="name" required maxlength="100" placeholder="Jane Smith" aria-describedby="name-error">
+            <p class="field-error" id="name-error" role="alert" hidden>Please enter your name.</p>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email address <span class="required" aria-hidden="true">*</span></label>
+            <input type="email" id="email" name="email" autocomplete="email" inputmode="email" required maxlength="150" placeholder="you@example.com" aria-describedby="email-error">
+            <p class="field-error" id="email-error" role="alert" hidden>Please enter a valid email address.</p>
+        </div>
+
+        <div class="form-group">
+            <label for="service">What do you need help with?</label>
+            <select id="service" name="service">
+                <option value="">Choose one (optional)</option>
+                <option>PC performance tuning</option>
+                <option>Network troubleshooting</option>
+                <option>Malware scans and cleanup</option>
+                <option>AI automation</option>
+                <option>Something else</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="message">Message <span class="required" aria-hidden="true">*</span></label>
+            <textarea id="message" name="message" rows="5" required minlength="10" maxlength="2000" placeholder="Briefly describe your issue or goal..." aria-describedby="message-help message-error"></textarea>
+            <p class="field-help" id="message-help">Up to 2,000 characters. No passwords, please.</p>
+            <p class="field-error" id="message-error" role="alert" hidden>Please write at least 10 characters.</p>
+        </div>
+
+        <button type="submit" class="contact-submit">Send Message</button>
+        <p class="form-note">Your details are used only to reply to you.</p>
+    </form>
+</section>
+
     </header>
 
     <!-- Main Flex Layout Setup -->
@@ -717,6 +894,28 @@ nslookup google.com 8.8.8.8</code></pre>
         </nav>
         <p>&copy; 2026 IT AI - Information Technology 103. All rights reserved. | Powered by #1TECHUSA</p>
     </footer>
+    <script>
+(function () {
+    const form = document.querySelector('.contact-form');
+    if (!form) return;
+
+    form.addEventListener('submit', function (event) {
+        let firstInvalid = null;
+        form.querySelectorAll('[required], [minlength]').forEach(function (field) {
+            const error = document.getElementById(field.id + '-error');
+            const valid = field.checkValidity();
+            if (error) error.hidden = valid;
+            field.setAttribute('aria-invalid', valid ? 'false' : 'true');
+            if (!valid && !firstInvalid) firstInvalid = field;
+        });
+        if (firstInvalid) {
+            event.preventDefault();
+            firstInvalid.focus();
+        }
+    });
+})();
+    </script>
+    
     <script src="solution-finder.js" defer></script>
 </body>
 </html>
