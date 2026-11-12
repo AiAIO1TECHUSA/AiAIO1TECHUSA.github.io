@@ -253,7 +253,46 @@
       font-size: 0.85rem;
     }
   }
-
+/* AI Automation Page */
+.hero {
+  background-color: var(--primary-color, #1f3a5f);
+  color: #ffffff;
+  padding: 40px 20px;
+  text-align: center;
+}
+.hero h1 { margin: 0 0 12px; font-size: clamp(1.8rem, 4vw, 2.5rem); }
+.btn {
+  display: inline-block;
+  background-color: #ffffff;
+  color: var(--primary-color, #1f3a5f);
+  text-decoration: none;
+  padding: 12px 26px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+.card {
+  background-color: var(--secondary-color, #f4f6f8);
+  border: 1px solid #d0d7de;
+  border-left: 4px solid var(--primary-color, #1f3a5f);
+  border-radius: 4px;
+  padding: 20px;
+}
+.calendly-box {
+  background-color: var(--secondary-color, #f4f6f8);
+  border: 1px solid #d0d7de;
+  border-radius: 4px;
+  padding: 20px;
+  text-align: center;
+}
+@media (max-width: 600px) {
+  .hero { padding: 28px 16px; }
+        }
+            
     </style>
 </head>
 <body>
@@ -349,14 +388,73 @@
             <!-- Section 2: What You Should Know -->
             <section id="know">
                 <h2>2. What You Should Know</h2>
-                <p>This guide assumes you have the following basic background:</p>
-                <ul>
-                    <li>A general understanding of the Internet and the World Wide Web (WWW)</li>
-                    <li>Good working knowledge of Windows 11 and Cyber Security</li>
-                    <li>Some form of experience. If you are new to technology in 2026 and websites powered by RWD, don't worry. Relax and follow along.</li>
-                </ul>
-                <p>Web Developer, Internet Marketing Consultant, Web Design Templates available. Responsive Web Design and Marketing Solutions for business growth.</p>
-            </section>
+                <section>
+    <h2>Examples We Have Built</h2>
+    <p class="lead">Replace these placeholders with your actual projects, the tools used, and measured results.</p>
+    <div class="grid">
+
+      <article class="card">
+        <h3>Order-to-Inventory Sync</h3>
+        <p>Pulls new orders from the storefront, updates stock counts, and flags low-stock items for reorder.</p>
+        <ul>
+          <li>Tools: [Platform], [Automation tool]</li>
+          <li>Runs: [Frequency]</li>
+        </ul>
+        <p class="result">Result: [Measured outcome, e.g., hours saved per week]</p>
+      </article>
+
+      <article class="card">
+        <h3>Customer Email Triage</h3>
+        <p>Reads incoming support emails, sorts them by topic and urgency, and drafts replies for staff to approve.</p>
+        <ul>
+          <li>Tools: [Email platform], [AI model]</li>
+          <li>Human review: [Yes/No, and where]</li>
+        </ul>
+        <p class="result">Result: [Measured outcome, e.g., average response time]</p>
+      </article>
+
+      <article class="card">
+        <h3>Product Data Checks</h3>
+        <p>Scans product listings for missing fields, inconsistent <code>SKU</code> values, and incorrect categories before they go live.</p>
+        <ul>
+          <li>Tools: [Platform], [Script or tool]</li>
+          <li>Output: [e.g., validated JSON report]</li>
+        </ul>
+        <p class="result">Result: [Measured outcome, e.g., errors caught before publishing]</p>
+      </article>
+
+      <article class="card">
+        <h3>Invoice Data Extraction</h3>
+        <p>Reads invoices, extracts vendor, amount, and due date, and enters them into the accounting system.</p>
+        <ul>
+          <li>Tools: [OCR or AI tool], [Accounting software]</li>
+          <li>Exceptions: [Routed to a person]</li>
+        </ul>
+        <p class="result">Result: [Measured outcome, e.g., entry time reduced]</p>
+      </article>
+
+    </div>
+  </section>
+
+  <section>
+    <h2>How an Automation Project Works</h2>
+    <p class="lead">Every project starts with the process you already run, not with the tool.</p>
+    <ol class="steps">
+      <li><strong>Map the process.</strong> We document each manual step, who does it, and how often.</li>
+      <li><strong>Build a working version.</strong> We automate the highest-volume step first and test it on real data.</li>
+      <li><strong>Add checks.</strong> Every automation logs what it did and sends exceptions to a person.</li>
+      <li><strong>Hand over and monitor.</strong> You receive documentation, and we review performance on a schedule you choose.</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Book a Consultation</h2>
+    <p class="lead">Choose a 30-minute time to discuss which of your processes are worth automating.</p>
+    <div class="calendly-box">
+      <div class="calendly-inline-widget" data-url="https://calendly.com/patlucero2026/30min"></div>
+      <p style="margin-top:16px;">Prefer a new tab? <a href="https://calendly.com/patlucero2026/30min" target="_blank" rel="noopener">Open the booking calendar</a>.</p>
+    </div>
+  </section>
 
             <!-- Section 3: PC and Performance -->
             <section id="performance">
