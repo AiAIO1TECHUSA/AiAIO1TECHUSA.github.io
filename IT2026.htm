@@ -253,45 +253,79 @@
       font-size: 0.85rem;
     }
   }
-/* AI Automation Page */
+/* AI Automation Page: uplifting, effortless feel */
 .hero {
-  background-color: var(--primary-color, #1f3a5f);
+  background: linear-gradient(135deg, var(--primary-color, #1f3a5f) 0%, #3b6ea5 100%);
   color: #ffffff;
-  padding: 40px 20px;
+  padding: 72px 24px;
   text-align: center;
+  border-radius: 0 0 28px 28px;
 }
-.hero h1 { margin: 0 0 12px; font-size: clamp(1.8rem, 4vw, 2.5rem); }
+.hero h1 {
+  margin: 0 0 16px;
+  font-size: clamp(2rem, 4.5vw, 2.9rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.hero p {
+  max-width: 620px;
+  margin: 0 auto 28px;
+  font-size: 1.15rem;
+  opacity: 0.92;
+}
 .btn {
   display: inline-block;
   background-color: #ffffff;
   color: var(--primary-color, #1f3a5f);
   text-decoration: none;
-  padding: 12px 26px;
-  border-radius: 6px;
+  padding: 14px 30px;
+  border-radius: 999px;
   font-weight: 600;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.btn:hover, .btn:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
 }
 .card-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 20px;
+  gap: 24px;
+  margin-top: 28px;
 }
 .card {
-  background-color: var(--secondary-color, #f4f6f8);
-  border: 1px solid #d0d7de;
-  border-left: 4px solid var(--primary-color, #1f3a5f);
-  border-radius: 4px;
-  padding: 20px;
+  background: #ffffff;
+  border: 1px solid #e3e8ef;
+  border-radius: 18px;
+  padding: 26px;
+  box-shadow: 0 4px 14px rgba(31, 58, 95, 0.06);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(31, 58, 95, 0.12);
+}
+.card h3 {
+  margin: 0 0 8px;
+  color: var(--primary-color, #1f3a5f);
+  font-size: 1.15rem;
 }
 .calendly-box {
-  background-color: var(--secondary-color, #f4f6f8);
-  border: 1px solid #d0d7de;
-  border-radius: 4px;
-  padding: 20px;
+  background: linear-gradient(180deg, #f7fbff 0%, var(--secondary-color, #f4f6f8) 100%);
+  border: 1px solid #e3e8ef;
+  border-radius: 18px;
+  padding: 28px;
   text-align: center;
 }
+@media (prefers-reduced-motion: reduce) {
+  .btn, .card { transition: none; }
+  .btn:hover, .card:hover { transform: none; }
+}
 @media (max-width: 600px) {
-  .hero { padding: 28px 16px; }
-        }
+  .hero { padding: 48px 18px; border-radius: 0 0 20px 20px; }
+  .card { padding: 20px; }
+}
             
     </style>
 </head>
