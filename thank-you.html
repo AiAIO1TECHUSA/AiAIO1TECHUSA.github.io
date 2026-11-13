@@ -48,14 +48,18 @@
   <main class="card">
     <h1>Thank you!</h1>
     <p>Your message has been sent. I'll reply to the email address you provided, usually within one business day.</p>
-    <a href="https://aiaio1techusa.github.io/" id="return-home" class="btn">Return to Home</a>
+    <a href="#" id="return-home" class="btn">Return to Home</a>
   </main>
   <script>
-    const from = new URLSearchParams(window.location.search).get("from");
-    const allowedPrefix = "https://aiaio1techusa.github.io/";
-    if (from && from.startsWith(allowedPrefix)) {
-        document.getElementById("return-home").href = from;
-    }
-  </script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const button = document.getElementById("return-home");
+        const params = new URLSearchParams(window.location.search);
+        const from = params.get("from");
+        const allowedPrefix = "https://aiaio1techusa.github.io/";
+        button.href = (from && from.startsWith(allowedPrefix))
+            ? from
+            : allowedPrefix;
+    });
+</script>
 </body>
 </html>
