@@ -51,15 +51,17 @@
     <a href="#" id="return-home" class="btn">Return to Home</a>
   </main>
   <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const button = document.getElementById("return-home");
-        const params = new URLSearchParams(window.location.search);
-        const from = params.get("from");
-        const allowedPrefix = "https://aiaio1techusa.github.io/";
-        button.href = (from && from.startsWith(allowedPrefix))
-            ? from
-            : allowedPrefix;
-    });
+    const params = new URLSearchParams(window.location.search);
+    const from = params.get("from");
+    const home = "https://aiaio1techusa.github.io/";
+    const button = document.getElementById("return-home");
+
+    if (from && from.startsWith(home)) {
+        button.href = from;
+    } else {
+        button.href = home;
+    }
 </script>
+
 </body>
 </html>
