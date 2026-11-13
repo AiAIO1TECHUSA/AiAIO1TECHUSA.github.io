@@ -64,6 +64,38 @@
 </section>
 
             </p>
+            <form action="https://api.web3forms.com/submit" method="POST">
+  <input type="hidden" name="access_key" value="b093fedf-606d-416a-ac22-791cc18d72ec">
+  <input type="hidden" name="subject" value="New website inquiry">
+  <input type="hidden" name="redirect" value="https://aiaio1techusa.github.io/thank-you.html">
+  <input type="checkbox" name="botcheck" style="display:none">
+
+  <label>Name
+    <input type="text" name="name" maxlength="100" required>
+  </label>
+
+  <label>Email
+    <input type="email" name="email" maxlength="150" required>
+  </label>
+
+  <label>Service
+    <select name="service" required>
+      <option value="">Choose one</option>
+      <option>PC performance tuning</option>
+      <option>Network troubleshooting</option>
+      <option>Malware scans and cleanup</option>
+      <option>AI automation</option>
+      <option>Something else</option>
+    </select>
+  </label>
+
+  <label>Message
+    <textarea name="message" minlength="10" maxlength="2000" required></textarea>
+  </label>
+
+  <button type="submit">Submit</button>
+            </form>
+    
 
         </header>
 
