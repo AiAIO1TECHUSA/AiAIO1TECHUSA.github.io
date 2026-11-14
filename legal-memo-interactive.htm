@@ -369,7 +369,27 @@ document.addEventListener('DOMContentLoaded', function() {
     font-weight: bold;
 }
 </style>
+<script>
+(function () {
+    const form = document.querySelector('.contact-form');
+    if (!form) return;
 
+    form.addEventListener('submit', function (event) {
+        let firstInvalid = null;
+        form.querySelectorAll('[required], [minlength]').forEach(function (field) {
+            const error = document.getElementById(field.id + '-error');
+            const valid = field.checkValidity();
+            if (error) error.hidden = valid;
+            field.setAttribute('aria-invalid', valid ? 'false' : 'true');
+            if (!valid && !firstInvalid) firstInvalid = field;
+        });
+        if (firstInvalid) {
+            event.preventDefault();
+            firstInvalid.focus();
+        }
+    });
+})();
+</script>
 </body>
 </html>
 
