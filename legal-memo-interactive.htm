@@ -6,6 +6,7 @@
 <meta name="description" content="Interactive presentation of the supplied Capital Punishment Constitutional Analysis memorandum.">
 <title>Capital Punishment Constitutional Analysis — Interactive Memo</title>
 <link rel="stylesheet" href="newsletter-1.css">
+<link rel="stylesheet" href="contact.css">
 <style>
 :root { --memo-ink:#17202a; --memo-muted:#5d6875; --memo-line:#d8dee6; --memo-panel:#f6f8fa; --memo-accent:#2457a6; --memo-accent-soft:#eaf1fb; }
 body { color:var(--memo-ink); }
@@ -49,53 +50,6 @@ mark.memo-hit { background:#ffe08a; padding:0 .08em; border-radius:2px; }
 <body>
 <main class="memo-app" id="memoApp">
   <header class="memo-topbar">
-    <section class="contact-section" id="contact">
-    <details class="contact-collapse">
-        <summary class="contact-toggle">Message Me</summary>
-
-        <p class="contact-intro">Tell me a bit about your IT problem or project. I'll reply within one business day.</p>
-<form class="contact-form" id="form" action="https://api.web3forms.com/submit" method="POST" novalidate>
-            <input type="hidden" name="access_key" value="b093fedf-606d-416a-ac22-791cc18d72ec">
-            <input type="hidden" name="subject" value="New website inquiry">
-            <input type="hidden" name="redirect" value="https://aiaio1techusa.github.io/IT2026.htm">
-            <input type="checkbox" name="botcheck" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true">
-
-            <div class="form-group">
-                <label for="name">Your name <span class="required" aria-hidden="true">*</span></label>
-                <input type="text" id="name" name="name" autocomplete="name" required maxlength="100" placeholder="Jane Smith" aria-describedby="name-error">
-                <p class="field-error" id="name-error" role="alert" hidden>Please enter your name.</p>
-            </div>
-
-            <div class="form-group">
-                <label for="email">Email address <span class="required" aria-hidden="true">*</span></label>
-                <input type="email" id="email" name="email" autocomplete="email" inputmode="email" required maxlength="150" placeholder="you@example.com" aria-describedby="email-error">
-                <p class="field-error" id="email-error" role="alert" hidden>Please enter a valid email address.</p>
-            </div>
-
-            <div class="form-group">
-                <label for="service">What do you need help with?</label>
-                <select id="service" name="service">
-                    <option value="">Choose one (optional)</option>
-                    <option>PC performance tuning</option>
-                    <option>Network troubleshooting</option>
-                    <option>Malware scans and cleanup</option>
-                    <option>AI automation</option>
-                    <option>Something else</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="message">Message <span class="required" aria-hidden="true">*</span></label>
-                <textarea id="message" name="message" rows="5" required minlength="10" maxlength="2000" placeholder="Briefly describe your issue or goal..." aria-describedby="message-help message-error"></textarea>
-                <p class="field-help" id="message-help">Up to 2,000 characters. No passwords, please.</p>
-                <p class="field-error" id="message-error" role="alert" hidden>Please write at least 10 characters.</p>
-            </div>
-
-            <button type="submit" class="contact-submit">Send Message</button>
-            <p class="form-note">Your details are used only to reply to you.</p>
-        </form>
-    </details>
-</section>
     <div class="actions">
       <a class="memo-btn" href="Paralegal-1.htm#paralegal">← Back to Paralegal-1</a>
      <button id="focusModeButton" type="button" aria-pressed="false">
@@ -304,6 +258,53 @@ mark.memo-hit { background:#ffe08a; padding:0 .08em; border-radius:2px; }
 </section>
     </article>
   </div>
+      <section class="contact-section" id="contact">
+    <details class="contact-collapse">
+        <summary class="contact-toggle">Message Me</summary>
+
+        <p class="contact-intro">Tell me a bit about your IT problem or project. I'll reply within one business day.</p>
+<form class="contact-form" id="form" action="https://api.web3forms.com/submit" method="POST" novalidate>
+            <input type="hidden" name="access_key" value="b093fedf-606d-416a-ac22-791cc18d72ec">
+            <input type="hidden" name="subject" value="New website inquiry">
+            <input type="hidden" name="redirect" value="https://aiaio1techusa.github.io/IT2026.htm">
+            <input type="checkbox" name="botcheck" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+            <div class="form-group">
+                <label for="name">Your name <span class="required" aria-hidden="true">*</span></label>
+                <input type="text" id="name" name="name" autocomplete="name" required maxlength="100" placeholder="Jane Smith" aria-describedby="name-error">
+                <p class="field-error" id="name-error" role="alert" hidden>Please enter your name.</p>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email address <span class="required" aria-hidden="true">*</span></label>
+                <input type="email" id="email" name="email" autocomplete="email" inputmode="email" required maxlength="150" placeholder="you@example.com" aria-describedby="email-error">
+                <p class="field-error" id="email-error" role="alert" hidden>Please enter a valid email address.</p>
+            </div>
+
+            <div class="form-group">
+                <label for="service">What do you need help with?</label>
+                <select id="service" name="service">
+                    <option value="">Choose one (optional)</option>
+                    <option>Legal Memorandum</option>
+                    <option>Litigation | Billable work product</option>
+                    <option>Demand Letter</option>
+                    <option>AI automation</option>
+                    <option>Something else</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="message">Message <span class="required" aria-hidden="true">*</span></label>
+                <textarea id="message" name="message" rows="5" required minlength="10" maxlength="2000" placeholder="Briefly describe your issue or goal..." aria-describedby="message-help message-error"></textarea>
+                <p class="field-help" id="message-help">Up to 2,000 characters. No passwords, please.</p>
+                <p class="field-error" id="message-error" role="alert" hidden>Please write at least 10 characters.</p>
+            </div>
+
+            <button type="submit" class="contact-submit">Send Message</button>
+            <p class="form-note">Your details are used only to reply to you.</p>
+        </form>
+    </details>
+</section>
 </main>
 <script src="standards-2027.js" defer></script>
   <script>
