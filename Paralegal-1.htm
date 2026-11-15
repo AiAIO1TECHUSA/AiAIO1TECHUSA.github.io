@@ -525,12 +525,61 @@
 </section>
 
         <ul class="lists">
-            <li>
-                <p>
-                    <span class="list-subtitle">Internet Network Speed Optimization</span><br>
-                    Tailored solutions for Windows 11 and Android...
-                </p>
-            </li>
+            
+    <li>
+        <span class="list-subtitle">Temporary IT Tech and Paralegal Support</span>
+        <button type="button" class="more-info-btn" aria-expanded="false" aria-controls="info-core-services">More information</button>
+        <div id="info-core-services" class="more-info-panel" hidden>
+            <p>Ready to work from day one with 30 years of combined experience. Certified professionals available 24/7 on a 1099 gig, contract, or temporary basis.</p>
+            <ul class="core-services-list">
+                <li>
+                    <span class="list-subtitle">Legal Document Preparation</span>
+                    <p>Drafting, formatting, and proofreading of contracts, pleadings, and correspondence.</p>
+                </li>
+                <li>
+                    <span class="list-subtitle">Legal Research Support</span>
+                    <p>Case law, statute, and regulation searches with organized summaries for attorneys.</p>
+                </li>
+                <li>
+                    <span class="list-subtitle">Discovery Management</span>
+                    <p>Document collection, review coding, privilege logs, and production tracking.</p>
+                </li>
+                <li>
+                    <span class="list-subtitle">Court Filing and E-Filing Services</span>
+                    <p>Preparing and submitting filings, tracking deadlines, and confirming acceptance.</p>
+                </li>
+                <li>
+                    <span class="list-subtitle">Client Intake and Case Administration</span>
+                    <p>New client onboarding, conflict check support, file opening, and calendar management.</p>
+                </li>
+                <li>
+                    <span class="list-subtitle">Business Formation and Compliance</span>
+                    <p>Entity setup, annual filings, registered agent coordination, and compliance calendars.</p>
+                </li>
+                <li>
+                    <span class="list-subtitle">Contract Review and Management</span>
+                    <p>Tracking key dates, renewals, and obligations across vendor and client agreements.</p>
+                </li>
+                <li>
+                    <span class="list-subtitle">IT Systems Support for Law Firms and Small Businesses</span>
+                    <p>Help desk coverage, secure document systems setup, and data backup checks.</p>
+                </li>
+                <li>
+                    <span class="list-subtitle">Records Management and Data Security</span>
+                    <p>Secure file storage, retention schedules, and confidential document destruction.</p>
+                </li>
+            </ul>
+        </div>
+    </li>
+    <li>
+        <p>
+            <span class="list-subtitle">Tech Insights &amp; Tips</span>
+            Curated updates and expert guidance...
+        </p>
+    </li>
+        </ul>
+    </li>
+</ul>
             <li>
                 <p>
                     <span class="list-subtitle">Tech Insights &amp; Tips</span>
@@ -1394,5 +1443,16 @@ document
 </script>
 
 <script src="llm-agent-1.js"></script>
+ <script>
+document.querySelectorAll('.more-info-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+        const panel = document.getElementById(btn.getAttribute('aria-controls'));
+        const open = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', open ? 'false' : 'true');
+        btn.textContent = open ? 'More information' : 'Less information';
+        panel.hidden = open;
+    });
+});
+ </script>
 </div> <!-- /.page-container --></body>
 </html>
