@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SEO | Web 3.0 | Social Media Campaign</title>
+<style>
+  :root { --accent: #2457a6; --gold: #ffb020; --ink: #1d2433; --soft: #f4f6fa; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: var(--ink); background: #fff; line-height: 1.55; }
+  header.site { background: var(--accent); color: #fff; padding: 2rem 1.25rem; text-align: center; }
+  header.site h1 { margin: 0 0 .25rem; font-size: 1.9rem; }
+  header.site p { margin: 0; opacity: .9; }
+  main { max-width: 960px; margin: 0 auto; padding: 1.25rem; }
+  section { margin: 2rem 0; padding-bottom: 1.5rem; border-bottom: 1px solid #e3e7ef; }
+  h2 { color: var(--accent); margin-bottom: .5rem; }
+  h3 { margin: 1.25rem 0 .4rem; font-size: 1.05rem; }
+  .list-subtitle { font-weight: 700; }
+  .service { background: var(--soft); border-radius: 10px; padding: 1rem 1.2rem; }
+  .more-info-btn, .btn { background: var(--accent); color: #fff; border: 0; border-radius: 6px; padding: .55rem 1rem; cursor: pointer; font-size: .95rem; }
+  .more-info-btn:focus-visible, .btn:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+  .more-info-panel { margin-top: .9rem; }
+  .core-services-list { list-style: none; padding: 0; margin: .5rem 0 0; }
+  .core-services-list li { margin: 0 0 .9rem; padding-left: .75rem; border-left: 3px solid var(--gold); }
+  .core-services-list p { margin: .2rem 0 0; }
+  .power-words { display: flex; flex-wrap: wrap; gap: .5rem; }
+  .power-words span { background: var(--soft); border: 1px solid #d7deea; border-radius: 999px; padding: .3rem .8rem; font-size: .92rem; }
+  .day { margin: 1rem 0; }
+  .day h3 { margin-bottom: .3rem; }
+  .slot { display: grid; grid-template-columns: 70px 1fr; gap: .75rem; padding: .35rem 0; border-bottom: 1px dashed #e3e7ef; }
+  .slot time { font-weight: 700; color: var(--accent); }
+  .grid { display: grid; gap: .6rem; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); margin-top: .75rem; }
+  .grid img { width: 100%; height: 140px; object-fit: cover; border-radius: 8px; border: 1px solid #d7deea; }
+  .note { font-size: .9rem; color: #4a5366; }
+  textarea, input[type="text"], input[type="url"], select { width: 100%; padding: .55rem .7rem; border: 1px solid #c9d1df; border-radius: 6px; font: inherit; }
+  textarea { min-height: 120px; }
+  .row { display: flex; flex-wrap: wrap; gap: .5rem; margin: .6rem 0; }
+  .output { background: var(--soft); border-radius: 8px; padding: .9rem 1rem; white-space: pre-wrap; margin-top: .6rem; }
+  iframe { border-radius: 12px; width: 100%; }
+  .status { font-size: .9rem; color: #2f6b3a; min-height: 1.2em; }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <h1>SEO | Web 3.0 | Social Media Campaign</h1>
+  <p>Honoring service. Building a story, one post at a time.</p>
+</header>
+
+<main>
+
+  <section id="services" aria-labelledby="services-title">
+    <h2 id="services-title">Core Services</h2>
+    <div class="service">
+      <span class="list-subtitle">Temporary IT Tech and Paralegal Support</span>
+      <p>Ready to work from day one with 30 years of combined experience. Certified professionals available 24/7 on a 1099 gig, contract, or temporary basis.</p>
+      <button type="button" class="more-info-btn" aria-expanded="false" aria-controls="info-core-services">More information</button>
+      <div id="info-core-services" class="more-info-panel" hidden>
+        <ul class="core-services-list">
+          <li><span class="list-subtitle">Legal Document Preparation</span><p>Drafting, formatting, and proofreading of contracts, pleadings, and correspondence.</p></li>
+          <li><span class="list-subtitle">Legal Research Support</span><p>Case law, statute, and regulation searches with organized summaries for attorneys.</p></li>
+          <li><span class="list-subtitle">Discovery Management</span><p>Document collection, review coding, privilege logs, and production tracking.</p></li>
+          <li><span class="list-subtitle">Court Filing and E-Filing Services</span><p>Preparing and submitting filings, tracking deadlines, and confirming acceptance.</p></li>
+          <li><span class="list-subtitle">Client Intake and Case Administration</span><p>New client onboarding, conflict check support, file opening, and calendar management.</p></li>
+          <li><span class="list-subtitle">Business Formation and Compliance</span><p>Entity setup, annual filings, registered agent coordination, and compliance calendars.</p></li>
+          <li><span class="list-subtitle">Contract Review and Management</span><p>Tracking key dates, renewals, and obligations across vendor and client agreements.</p></li>
+          <li><span class="list-subtitle">IT Systems Support for Law Firms and Small Businesses</span><p>Help desk coverage, secure document systems setup, and data backup checks.</p></li>
+          <li><span class="list-subtitle">Records Management and Data Security</span><p>Secure file storage, retention schedules, and confidential document destruction.</p></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="power-words" aria-labelledby="pw-title">
+    <h2 id="pw-title">Power Words and Phrases</h2>
+    <p>Use these to resonate with the campaign and to plan captions.</p>
+    <h3>Verbs</h3>
+    <div class="power-words">
+      <span>honor</span><span>remember</span><span>support</span><span>fund</span><span>share</span><span>uncover</span><span>restore</span><span>connect</span><span>protect</span><span>unlock</span>
+    </div>
+    <h3>Nouns</h3>
+    <div class="power-words">
+      <span>veteran</span><span>family</span><span>legacy</span><span>exposure</span><span>generation</span><span>tribute</span><span>campaign</span><span>soundtrack</span><span>service</span><span>community</span>
+    </div>
+    <h3>Adjectives</h3>
+    <div class="power-words">
+      <span>unfinished</span><span>enduring</span><span>inherited</span><span>unseen</span><span>unbroken</span><span>steadfast</span><span>dependable</span><span>certified</span><span>grateful</span><span>around-the-clock</span>
+    </div>
+    <h3>Phrases</h3>
+    <div class="power-words">
+      <span>The exposure didn't end in 1975.</span>
+      <span>Every share is a voice for families still waiting.</span>
+      <span>Music that carries the story.</span>
+      <span>Thirty years of experience, available around the clock.</span>
+    </div>
+  </section>
+
+  <section id="calendar" aria-labelledby="cal-title">
+    <h2 id="cal-title">Hour-by-Hour Content Calendar</h2>
+    <p class="note">Seven days starting November 17, 2026. Times are local to your device.</p>
+    <div id="calendarOut"></div>
+  </section>
+
+  <section id="ai-content" aria-labelledby="ai-title">
+    <h2 id="ai-title">Content Creation with AI Tools (Web 3.0)</h2>
+    <p>Pick a calendar slot topic, add your details, and generate a draft prompt to paste into any AI tool you choose. The prompt is built here in your browser and is not sent anywhere.</p>
+    <label for="topicSelect">Topic</label>
+    <select id="topicSelect">
+      <option>Tribute post: Veterans</option>
+      <option>Core service spotlight</option>
+      <option>Playlist drop (PlayMeSUM)</option>
+      <option>Behind the campaign story</option>
+      <option>Agent Orange awareness</option>
+      <option>Support call to action</option>
+    </select>
+    <label for="detailsInput">Your details (names, dates, unit, goals)</label>
+    <textarea id="detailsInput" placeholder="Example: Campaign for families affected by Agent Orange. Use power words: honor, legacy, unseen."></textarea>
+    <div class="row">
+      <button type="button" class="btn" id="buildPrompt">Build AI prompt</button>
+      <button type="button" class="btn" id="copyPrompt">Copy prompt</button>
+    </div>
+    <div id="promptOut" class="output" aria-live="polite"></div>
+    <div class="status" id="promptStatus"></div>
+  </section>
+
+  <section id="photos" aria-labelledby="photo-title">
+    <h2 id="photo-title">Photo Mass Upload (Private, On This Device)</h2>
+    <p class="note">Photos are previewed locally only. Nothing is uploaded to a server, and nothing is stored after you close this page or click Clear.</p>
+    <input type="file" id="photoInput" accept="image/*" multiple>
+    <div class="row">
+      <button type="button" class="btn" id="clearPhotos">Clear previews</button>
+    </div>
+    <div class="grid" id="photoGrid"></div>
+  </section>
+
+  <section id="narrative" aria-labelledby="narr-title">
+    <h2 id="narr-title">Campaign Narrative and Video Chronology</h2>
+    <p>Build the story in order, then use it as the base for video scripts. This step builds on the content above. Your draft saves in this browser only.</p>
+    <label for="narrativeInput">Narrative draft</label>
+    <textarea id="narrativeInput" placeholder="1. The inherited exposure&#10;2. The families still waiting&#10;3. The service and the support&#10;4. The call to share"></textarea>
+    <div class="row">
+      <button type="button" class="btn" id="saveNarrative">Save draft</button>
+      <button type="button" class="btn" id="buildChrono">Build video chronology</button>
+    </div>
+    <div id="chronoOut" class="output" aria-live="polite"></div>
+    <div class="status" id="narrStatus"></div>
+  </section>
+
+  <section id="music" aria-labelledby="music-title">
+    <h2 id="music-title">Music Integration (Spotify)</h2>
+    <p>Spotify is the music platform for this campaign. Paste a playlist or track link below to create an embeddable player for your site, and use the same link in your Instagram bio or link-in-bio tool. Instagram captions cannot hold clickable links.</p>
+    <label for="spotifyUrl">Spotify link (playlist, album, or track)</label>
+    <input type="url" id="spotifyUrl" placeholder="https://open.spotify.com/playlist/...">
+    <div class="row">
+      <button type="button" class="btn" id="embedSpotify">Create player</button>
+    </div>
+    <div id="spotifyOut"></div>
+    <div class="status" id="spotifyStatus"></div>
+  </section>
+
+  <section id="captions" aria-labelledby="cap-title">
+    <h2 id="cap-title">Caption Generator (Vertical Story and Feed)</h2>
+    <p class="note">Captions contain no song lyrics and no references to sound, pitch, or audio. They describe the story and link to the music in the bio.</p>
+    <label for="capFormat">Format</label>
+    <select id="capFormat">
+      <option value="feed">Instagram feed post</option>
+      <option value="story">Vertical story (external link option)</option>
+    </select>
+    <div class="row">
+      <button type="button" class="btn" id="buildCaption">Generate caption</button>
+      <button type="button" class="btn" id="copyCaption">Copy caption</button>
+    </div>
+    <div id="captionOut" class="output" aria-live="polite"></div>
+    <div class="status" id="capStatus"></div>
+  </section>
+
+</main>
+
+<script>
+(function () {
+  "use strict";
+
+  // Services expander
+  var btn = document.querySelector(".more-info-btn");
+  var panel = document.getElementById("info-core-services");
+  btn.addEventListener("click", function () {
+    var open = btn.getAttribute("aria-expanded") === "true";
+    btn.setAttribute("aria-expanded", String(!open));
+    panel.hidden = open;
+    btn.textContent = open ? "More information" : "Less information";
+  });
+
+  // Hour-by-hour calendar, generated from a fixed topic rotation
+  var slots = ["07:00", "09:00", "12:00", "15:00", "18:00", "20:00"];
+  var topics = [
+    "Tribute post: honor the veterans in your family",
+    "Core service spotlight: Temporary IT and Paralegal Support",
+    "PlayMeSUM playlist drop with a short story behind it",
+    "Behind the campaign: a family document or photo",
+    "Agent Orange awareness: the exposure that continued",
+    "Support call to action: share, follow, and give"
+  ];
+  var calOut = document.getElementById("calendarOut");
+  var start = new Date(2026, 10, 17);
+  var dayNames = ["Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday", "Monday"];
+  for (var d = 0; d < 7; d++) {
+    var date = new Date(start.getFullYear(), start.getMonth(), start.getDate() + d);
+    var dayBox = document.createElement("div");
+    dayBox.className = "day";
+    var h = document.createElement("h3");
+    h.textContent = dayNames[d] + ", " + date.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
+    dayBox.appendChild(h);
+    for (var s = 0; s < slots.length; s++) {
+      var row = document.createElement("div");
+      row.className = "slot";
+      var t = document.createElement("time");
+      t.textContent = slots[s];
+      var c = document.createElement("span");
+      c.textContent = topics[(d * slots.length + s) % topics.length];
+      row.appendChild(t);
+      row.appendChild(c);
+      dayBox.appendChild(row);
+    }
+    calOut.appendChild(dayBox);
+  }
+
+  // AI prompt builder (local only)
+  function setStatus(id, msg) { document.getElementById(id).textContent = msg; }
+  function copyText(text, statusId, okMsg) {
+    if (!navigator.clipboard) { setStatus(statusId, "Clipboard not available. Select and copy the text manually."); return; }
+    navigator.clipboard.writeText(text).then(function () { setStatus(statusId, okMsg); },
+      function () { setStatus(statusId, "Copy failed. Select and copy the text manually."); });
+  }
+  document.getElementById("buildPrompt").addEventListener("click", function () {
+    var topic = document.getElementById("topicSelect").value;
+    var details = document.getElementById("detailsInput").value.trim() || "(add your details)";
+    var prompt = "Write social media content for the topic: " + topic + ".\n" +
+      "Campaign: Raise funds for families affected by the genetic effects of Agent Orange exposure.\n" +
+      "Use power words: honor, remember, support, legacy, exposure, steadfast, unseen.\n" +
+      "Tone: respectful, warm, factual. No song lyrics. No references to sound or pitch.\n" +
+      "Details: " + details + "\n" +
+      "Give 3 versions: a feed caption under 150 words, a short vertical story script, and a 3-line video voiceover.";
+    document.getElementById("promptOut").textContent = prompt;
+    setStatus("promptStatus", "Prompt ready.");
+  });
+  document.getElementById("copyPrompt").addEventListener("click", function () {
+    copyText(document.getElementById("promptOut").textContent, "promptStatus", "Prompt copied.");
+  });
+
+  // Photo mass upload (object URLs only, nothing sent)
+  var photoInput = document.getElementById("photoInput");
+  var photoGrid = document.getElementById("photoGrid");
+  var urls = [];
+  photoInput.addEventListener("change", function () {
+    Array.prototype.forEach.call(photoInput.files, function (file) {
+      if (!file.type.indexOf("image/") === 0) return;
+      var url = URL.createObjectURL(file);
+      urls.push(url);
+      var img = document.createElement("img");
+      img.src = url;
+      img.alt = file.name;
+      img.loading = "lazy";
+      photoGrid.appendChild(img);
+    });
+  });
+  document.getElementById("clearPhotos").addEventListener("click", function () {
+    urls.forEach(function (u) { URL.revokeObjectURL(u); });
+    urls = [];
+    photoGrid.textContent = "";
+    photoInput.value = "";
+  });
+
+  // Narrative draft (localStorage stays in this browser)
+  var narr = document.getElementById("narrativeInput");
+  narr.value = localStorage.getItem("campaignNarrative") || "";
+  document.getElementById("saveNarrative").addEventListener("click", function () {
+    localStorage.setItem("campaignNarrative", narr.value);
+    setStatus("narrStatus", "Draft saved in this browser.");
+  });
+  document.getElementById("buildChrono").addEventListener("click", function () {
+    var lines = narr.value.split("\n").map(function (l) { return l.trim(); }).filter(Boolean);
+    if (!lines.length) { setStatus("narrStatus", "Add a narrative first."); return; }
+    var out = lines.map(function (l, i) {
+      return "Scene " + (i + 1) + ": " + l + "\n  Visual: photo or clip matching this beat.\n  Caption cue: one power word from the list.";
+    }).join("\n\n");
+    document.getElementById("chronoOut").textContent = out;
+    setStatus("narrStatus", "Chronology built.");
+  });
+
+  // Spotify player (builds an embed from the public link)
+  document.getElementById("embedSpotify").addEventListener("click", function () {
+    var raw = document.getElementById("spotifyUrl").value.trim();
+    var m = raw.match(/^https:\/\/open\.spotify\.com\/(playlist|album|track)\/([A-Za-z0-9]+)/);
+    var box = document.getElementById("spotifyOut");
+    box.textContent = "";
+    if (!m) { setStatus("spotifyStatus", "Enter a valid open.spotify.com playlist, album, or track link."); return; }
+    var iframe = document.createElement("iframe");
+    iframe.src = "https://open.spotify.com/embed/" + m[1] + "/" + m[2];
+    iframe.height = m[1] === "track" ? "152" : "352";
+    iframe.setAttribute("loading", "lazy");
+    iframe.setAttribute("allow", "encrypted-media");
+    iframe.title = "Spotify player";
+    box.appendChild(iframe);
+    setStatus("spotifyStatus", "Player created. Add this link to your Instagram bio.");
+  });
+
+  // Caption generator (no lyrics, no sound or pitch references)
+  document.getElementById("buildCaption").addEventListener("click", function () {
+    var format = document.getElementById("capFormat").value;
+    var feed = "Honoring the veterans whose service and families still carry the exposure. " +
+      "Every share helps restore what was lost.\n\n" +
+      "Follow the story and the playlist in our bio.\n\n" +
+      "#PlayMeSUM #VeteransDay #AgentOrange #Legacy #Honor";
+    var story = "Swipe up or tap the link: the playlist and the campaign are here. " +
+      "Share this to honor a family still waiting.";
+    document.getElementById("captionOut").textContent = format === "story" ? story : feed;
+    setStatus("capStatus", "Caption generated.");
+  });
+  document.getElementById("copyCaption").addEventListener("click", function () {
+    copyText(document.getElementById("captionOut").textContent, "capStatus", "Caption copied.");
+  });
+})();
+</script>
+</body>
+</html>
