@@ -237,6 +237,28 @@ img {
     gap: 12px;
 	
 	}
+	  /* Keep everything inside the screen width */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  overflow-x: hidden;
+}
+
+/* Videos, images, and iframes scale down instead of spilling out */
+video, img, iframe {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+/* Let long lines of text wrap, including the concert list and playlists */
+p, li, .container {
+  overflow-wrap: anywhere;
+  word-wrap: break-word;
+	}
+	  
   </style>
 	 
 	 <script src="../cdn.iubenda.com/cs/iubenda_cs.js" async=""></script><link rel="modulepreload" href="aes.js"></head><!-- AlterVista Custom CSS --><!-- End AlterVista Custom CSS -->
@@ -483,21 +505,15 @@ Bellagio Fountains Your Amazing! Alexandara Daddario Ya I Know!</font></p>
 </div>
 	
 
-<!-- HIGHLIGHTED SECTION -->
-<div class="highlight-section">
-  <a href="https://1024terabox.com/s/1rB3wLG3orq2AteKKlA_c3w" target="_blank" class="cta-button">
-    DuaLipa-Video-Hotter-Than-Hell
-  </a>
+<!-- nee dualipa section with uploaded aiVideos-->
+<select id="videoList" size="4" onchange="playVideo(this.value)">
+  <option value="">-- Select a video --</option>
+  <option value="https://aiaio1techusa.github.io/Video/duaLipa-HoTTer-Than-Hell.mp4">Dua Lipa - Hotter Than Hell</option>
+  <option value="https://aiaio1techusa.github.io/Video/duaLipa-HotterThanHell-compressed.mp4">Dua Lipa - Hotter Than Hell (Compressed)</option>
+  <option value="https://aiaio1techusa.github.io/Video/Vegas-Poolside-Hot.mp4">Vegas Poolside Hot</option>
+</select>
 
-  <a href="https://1024terabox.com/s/1CCuAubxzbtBuDoafjzsmdg" target="_blank" class="cta-button">
-    DuaLipa-Video-Vegas-Hot
-  </a>
-
-  <a href="https://1024terabox.com/s/1hQg7H2XmTGVFksCXIWo2AA" target="_blank" class="cta-button">
-    DuaLipa-Video-Vegas-Poolside
-  </a>
-</div>
-
+<video id="player" controls width="640"></video>
 
 </font>
 </article>
@@ -530,8 +546,14 @@ Bellagio Fountains Your Amazing! Alexandara Daddario Ya I Know!</font></p>
 </section>
 
 <script src="video-upload.js"></script>
-	<script src="aIPlayMeSUM.js"></script>
-	
-
+	<script src="aIPlayMeSUM.js"></script>	
+<script>
+  function playVideo(src) {
+    if (!src) return;
+    const player = document.getElementById('player');
+    player.src = src;
+    player.play();
+  }
+</script>
 </body>
 </html>
