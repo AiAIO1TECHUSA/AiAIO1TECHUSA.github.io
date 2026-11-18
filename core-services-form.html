@@ -20,6 +20,12 @@
         .total-box { margin-top: 28px; padding: 16px; background: #f4f6f8; border-radius: 6px; font-size: 1.2rem; }
         .note { font-size: 0.85rem; color: #666; margin-top: 8px; }
         .booking { margin-top: 32px; }
+  .legal-excellence-highlight {
+    background: #fff3b0;
+    box-shadow: 0 0 0 4px #fff3b0;
+    border-radius: 6px;
+    padding: 12px;
+  } 
     </style>
 </head>
 <body>
@@ -37,11 +43,12 @@
                 <span class="list-subtitle">Temporary IT Tech and Paralegal Support</span><br>
                 Drafting, formatting, and proofreading of contracts, pleadings, and correspondence....
             </p>
+            <a href="https://aiaio1techusa.github.io/legal-memo-interactive.htm#toexactspot" class="list-link">View samples of legal excellence</a>
         </li>
         <li>
             <p>
-                <span class="list-subtitle">Tech Insights &amp; Tips</span><br>
-                Curated updates and expert guidance...
+                <span class="list-subtitle">AI-AIO-1-TECH-USA&amp; Brings It! Fastest Network Speeds on Tablets • Smartphones • PC</span><br>
+                Find out how professionals...
             </p>
         </li>
         <li>
@@ -52,8 +59,8 @@
         </li>
         <li>
             <p>
-                <span class="list-subtitle">Responsive Web Development (Coming Soon)</span><br>
-                Future-proof your online presence...
+                <span class="list-subtitle">Entertainment Fully-Immersed Vegas</span><br>
+                Future-AI 'The Real Geek Speaks' YouTube Vlog (Coming December 2026)
             </p>
         </li>
     </ul>
@@ -135,7 +142,29 @@
             <!-- Calendly inline widget end -->
         </div>
     </section>
+<script>
+(function () {
+  var ID = 'toexactspot';
+  var itemHTML =
+    '<h2>Samples of Legal Excellence</h2>' +
+    '<p><span class="list-subtitle">Temporary IT Tech and Paralegal Support</span><br>' +
+    'Drafting, formatting, and proofreading of contracts, pleadings, and correspondence....</p>';
 
+  var target = document.getElementById(ID);
+  if (!target) {
+    target = document.createElement('section');
+    target.id = ID;
+    (document.querySelector('main') || document.body).appendChild(target);
+  }
+
+  target.insertAdjacentHTML('afterbegin', itemHTML);
+  target.classList.add('legal-excellence-highlight');
+
+  if (location.hash === '#' + ID) {
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+})();
+</script>
     <script>
         document.getElementById('publish-date').textContent = new Date().toLocaleDateString('en-US', {
             year: 'numeric', month: 'long', day: 'numeric'
