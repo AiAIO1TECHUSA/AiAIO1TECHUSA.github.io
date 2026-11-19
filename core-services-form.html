@@ -145,29 +145,7 @@
             <!-- Calendly inline widget end -->
         </div>
     </section>
-<script>
-(function () {
-  var ID = 'toexactspot';
-  var itemHTML =
-    '<h2>Samples of Legal Excellence</h2>' +
-    '<p><span class="list-subtitle">Temporary IT Tech and Paralegal Support</span><br>' +
-    'Drafting, formatting, and proofreading of contracts, pleadings, and correspondence....</p>';
 
-  var target = document.getElementById(ID);
-  if (!target) {
-    target = document.createElement('section');
-    target.id = ID;
-    (document.querySelector('main') || document.body).appendChild(target);
-  }
-
-  target.insertAdjacentHTML('afterbegin', itemHTML);
-  target.classList.add('legal-excellence-highlight');
-
-  if (location.hash === '#' + ID) {
-    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
-})();
-</script>
     <script>
         document.getElementById('publish-date').textContent = new Date().toLocaleDateString('en-US', {
             year: 'numeric', month: 'long', day: 'numeric'
