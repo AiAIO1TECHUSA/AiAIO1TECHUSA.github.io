@@ -880,19 +880,46 @@ nslookup google.com 8.8.8.8</code></pre>
             <!-- Calendly inline widget end -->
         </div>
 </div>
-            <!-- Section 11: SEO & Responsive Design -->
-            <section id="seo">
-                <h2>11. Keys to SEO & Responsive Web Design</h2>
-                <p><strong>Search Engine Optimization:</strong></p>
-                <ul>
-                    <li>Add Search Engine (Bing.com) with proper domain submission</li>
-                    <li>Implement full Responsive Web Design for all devices</li>
-                    <li>Optimize for bots to place your site at top of search results</li>
-                </ul>
-                <p><strong>Social Media Strategy:</strong> Collaboration is essential for success. Use Twitter trends and LinkedIn networking to drive traffic to your content.</p>
-                <p><strong>Unique Selling Proposition (USP):</strong> #1TECHUSA - Phenomenal Cyber Security Pro, Free of viruses, Super Fast Expert PC Restore to Factory New.</p>
-                <p><strong>Domain Metrics:</strong> Domain Rating (DR): 19 | URL Rating (UR): 17 | Organic Keywords: 1.2K | Organic Traffic: 1.1K</p>
-            </section>
+            <figure id="campaignQR" class="qr-figure" style="text-align:center; max-width:320px; margin:20px auto;">
+  <div id="qrTarget"></div>
+  <figcaption style="margin-top:12px;">
+    <strong>Scan for samples of legal excellence</strong><br>
+    Open the memo, jump straight to the samples, and ask our AI assistant a question.
+  </figcaption>
+  <ul class="qr-tags" id="qrTags" style="list-style:none; padding:0; margin-top:10px; display:flex; flex-wrap:wrap; justify-content:center; gap:6px;"></ul>
+</figure>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+<script>
+(function () {
+  const prompt = 'Summarize the samples of legal excellence';
+  const url = 'https://aiaio1techusa.github.io/legal-memo-interactive.htm?prompt=' +
+              encodeURIComponent(prompt) + '#toexactspot';
+
+  const tags = ['LegalExcellence', 'AIPowered', 'SEO', 'Web3', 'AITools', 'CampaignPlan', 'ParalegalSupport'];
+
+  // Build the QR code locally
+  const qr = qrcode(0, 'M');
+  qr.addData(url);
+  qr.make();
+
+  const target = document.getElementById('qrTarget');
+  target.innerHTML = qr.createImgTag(6, 4);
+  const img = target.querySelector('img');
+  if (img) img.alt = 'QR code linking to samples of legal excellence';
+
+  // Add content tags
+  const list = document.getElementById('qrTags');
+  tags.forEach(tag => {
+    const li = document.createElement('li');
+    li.textContent = '#' + tag;
+    li.style.cssText = 'background:#fff3b0; padding:2px 8px; border-radius:12px; font-size:13px;';
+    list.appendChild(li);
+  });
+
+  document.getElementById('campaignQR').dataset.url = url;
+})();
+</script>
 
         </main>
     </div>
