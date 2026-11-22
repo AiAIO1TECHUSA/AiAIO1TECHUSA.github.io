@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Browser Video Stabilizer</title>
+<style>
+  body { font-family: sans-serif; max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
+  video, canvas { width: 100%; background: #000; }
+  label { display: block; margin: 0.5rem 0; }
+</style>
+</head>
+<body>
+<h1>Browser Video Stabilizer</h1>
+<input type="file" id="file" accept="video/*">
+<label>Smoothing (frames): <input type="range" id="smooth" min="2" max="60" value="20"> <span id="sv">20</span></label>
+<button id="go" disabled>Stabilize and record</button>
+<p id="status"></p>
+<video id="src" controls muted playsinline></video>
+<canvas id="out"></canvas>
+<a id="dl" hidden>Download stabilized video</a>
+
+<script>
+const $ = id => document.getElementById(id);
+const src = $('src'), out = $('out'), ctx = out.getContext('2d');
+const small = document.createElement('canvas');
+const sctx = small.getContext('2d', { willReadFrequently: true });
+const SW = 160;   // analysis width in pixels
+const R = 8;      // search radius in analysis pixels
+const ZOOM = 1.08; // slight zoom hides the empty edges
+let prev = null, path = [], cur = { x: 0, y: 0 }, rec = null, chunks = [];
+
+$('smooth').oninput = e => $('sv').textContent = e.target.value;
+
+$('file').onchange = e => {
+  src.src = URL.createObjectURL(e.target.files[0]);
+  src.onloadedmetadata = () => {
+    out.width = src.videoWidth;
+    out.height = src.videoHeight;
+    small.width = SW;
+    small.height = Math.round(SW * src.videoHeight / src.videoWidth);
+    $('go').disabled = false;
+    $('status').textContent = 'Ready.';
+  };
+};
+
+function grayFrame() {
+  sctx.drawImage(src, 0, 0, small.width, small.height);
+  const d = sctx.getImageData(0, 0, small.width, small.height).data;
+  const g = new Float32Array(small.width * small.height);
+  for (let i = 0, j = 0; i < d.length; i += 4, j++)
+    g[j] = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
+  return g;
+}
+
+// Brute-force block matching: find the shift (dx, dy) that best aligns b with a.
+function estimateShift(a, b) {
+  const w = small.width, h = small.height, m = R + 4;
+  let best = Infinity, bx = 0, by = 0;
+  for (let dy = -R; dy <= R; dy++) {
+    for (let dx = -R; dx <= R; dx++) {
+      let s = 0, n = 0;
+      for (let y = m; y < h - m; y += 2)
+        for (let x = m; x < w - m; x += 2) {
+          s += Math.abs(a[y * w + x] - b[(y + dy) * w + x + dx]);
+          n++;
+        }
+      s /= n;
+      if (s < best) { best = s; bx = dx; by = dy; }
+    }
+  }
+  return { x: bx, y: by };
+}
+
+function step() {
+  if (src.ended || src.paused) return finish();
+  const g = grayFrame();
+  if (prev) {
+    const d = estimateShift(prev, g);
+    cur.x += d.x;
+    cur.y += d.y;
+  }
+  prev = g;
+  path.push({ x: cur.x, y: cur.y });
+
+  // Trailing average of the camera path = the smoothed "intended" motion
+  const K = +$('smooth').value;
+  const win = path.slice(-K);
+  const sx = win.reduce((s, p) => s + p.x, 0) / win.length;
+  const sy = win.reduce((s, p) => s + p.y, 0) / win.length;
+  const f = out.width / SW;
+  const ox = (sx - cur.x) * f, oy = (sy - cur.y) * f;
+
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0, 0, out.width, out.height);
+  ctx.save();
+  ctx.translate(out.width / 2, out.height / 2);
+  ctx.scale(ZOOM, ZOOM);
+  ctx.translate(-out.width / 2 + ox, -out.height / 2 + oy);
+  ctx.drawImage(src, 0, 0, out.width, out.height);
+  ctx.restore();
+
+  $('status').textContent = `Processing: ${Math.round(src.currentTime)}s / ${Math.round(src.duration)}s`;
+  src.requestVideoFrameCallback(step);
+}
+
+function finish() {
+  if (rec && rec.state !== 'inactive') rec.stop();
+}
+
+$('go').onclick = () => {
+  prev = null; path = []; cur = { x: 0, y: 0 }; chunks = [];
+  const stream = out.captureStream(30);
+  rec = new MediaRecorder(stream, { mimeType: 'video/webm' });
+  rec.ondataavailable = e => chunks.push(e.data);
+  rec.onstop = () => {
+    const url = URL.createObjectURL(new Blob(chunks, { type: 'video/webm' }));
+    const dl = $('dl');
+    dl.href = url;
+    dl.download = 'stabilized.webm';
+    dl.hidden = false;
+    dl.textContent = 'Download stabilized video';
+    $('status').textContent = 'Done.';
+  };
+  src.onended = finish;
+  src.currentTime = 0;
+  rec.start();
+  src.play();
+  src.requestVideoFrameCallback(step);
+};
+</script>
+</body>
+</html>
