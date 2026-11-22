@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Browser Video Stabilizer</title>
+<style>
+  body { font-family: sans-serif; max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
+  video, canvas { width: 100%; background: #000; }
+  label { display: block; margin: 0.5rem 0; }
+</style>
+</head>
+<body>
+<h1>Browser Video Stabilizer</h1>
+<input type="file" id="file" accept="video/*">
+<label>Smoothing (frames): <input type="range" id="smooth" min="2" max="60" value="20"> <span id="sv">20</span></label>
+<button id="go" disabled>Analyze, then render and record</button>
+<p id="status"></p>
+<video id="src" controls muted playsinline></video>
+<canvas id="out"></canvas>
+<a id="dl" hidden>Download stabilized video</a>
+
+<script>
+const $ = id => document.getElementById(id);
+const src = $('src'), out = $('out'), ctx = out.getContext('2d');
+const small = document.createElement('canvas');
+const sctx = small.getContext('2d', { willReadFrequently: true });
+const SW = 160;     // analysis width in pixels
+const R = 8;        // search radius in analysis pixels
+const ZOOM = 1.08;  // slight zoom hides the empty edges
+
+let prev = null, cur = { x: 0, y: 0 };
+let track = [];     // pass 1 output: {t, x, y} per frame
+let offs = [];      // pass 2 input: {t, ox, oy} smoothed correction per frame
+let rec = null, chunks = [], oi = 0;
+
+$('smooth').oninput = e => $('sv').textContent = e.target.value;
+
+$('file').onchange = e => {
+  src.src = URL.createObjectURL(e.target.files[0]);
+  src.onloadedmetadata = () => {
+    out.width = src.videoWidth;
+    out.height = src.videoHeight;
+    small.width = SW;
+    small.height = Math.round(SW * src.videoHeight / src.videoWidth);
+    $('go').disabled = false;
+    $('status').textContent = 'Ready.';
+  };
+};
+
+function grayFrame() {
+  sctx.drawImage(src, 0, 0, small.width, small.height);
+  const d = sctx.getImageData(0, 0, small.width, small.height).data;
+  const g = new Float32Array(small.width * small.height);
+  for (let i = 0, j = 0; i < d.length; i += 4, j++)
+    g[j] = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
+  return g;
+}
+
+// Brute-force block matching: find the shift (dx, dy) that best aligns b with a.
+function estimateShift(a, b) {
+  const w = small.width, h = small.height, m = R + 4;
+  let best = Infinity, bx = 0, by = 0;
+  for (let dy = -R; dy <= R; dy++) {
+    for (let dx = -R; dx <= R; dx++) {
+      let s = 0, n = 0;
+      for (let y = m; y < h - m; y += 2)
+        for (let x = m; x < w - m; x += 2) {
+          s += Math.abs(a[y * w + x] - b[(y + dy) * w + x + dx]);
+          n++;
+        }
+      s /= n;
+      if (s < best) { best = s; bx = dx; by = dy; }
+    }
+  }
+  return { x: bx, y: by };
+}
+
+// PASS 1: play the clip at high speed and record the raw camera path
+function analyze() {
+  return new Promise(resolve => {
+    prev = null; cur = { x: 0, y: 0 }; track = [];
+    src.muted = true;
+    src.playbackRate = 4;
+    src.onended = () => resolve();
+    const cb = (now, meta) => {
+      if (src.ended) return;
+      const g = grayFrame();
+      if (prev) {
+        const d = estimateShift(prev, g);
+        cur.x += d.x;
+        cur.y += d.y;
+      }
+      prev = g;
+      track.push({ t: meta.mediaTime, x: cur.x, y: cur.y });
+      $('status').textContent = `Pass 1 (analyzing): ${Math.round(src.currentTime)}s / ${Math.round(src.duration)}s`;
+      src.requestVideoFrameCallback(cb);
+    };
+    src.currentTime = 0;
+    src.requestVideoFrameCallback(cb);
+    src.play();
+  });
+}
+
+// Centered moving average: each frame uses motion from both before and after it.
+function smoothedOffsets(K) {
+  const h = Math.floor(K / 2);
+  return track.map((p, i) => {
+    let sx = 0, sy = 0, n = 0;
+    const lo = Math.max(0, i - h), hi = Math.min(track.length - 1, i + h);
+    for (let j = lo; j <= hi; j++) { sx += track[j].x; sy += track[j].y; n++; }
+    return { t: p.t, ox: sx / n - p.x, oy: sy / n - p.y };
+  });
+}
+
+// PASS 2: render each frame using the offset whose timestamp matches it
+function render(now, meta) {
+  if (src.ended) return;
+  const t = meta.mediaTime;
+  while (oi < offs.length - 1 && offs[oi + 1].t <= t) oi++;
+  const o = offs[oi] || { ox: 0, oy: 0 };
+  const f = out.width / SW;
+
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0, 0, out.width, out.height);
+  ctx.save();
+  ctx.translate(out.width / 2, out.height / 2);
+  ctx.scale(ZOOM, ZOOM);
+  ctx.translate(-out.width / 2 + o.ox * f, -out.height / 2 + o.oy * f);
+  ctx.drawImage(src, 0, 0, out.width, out.height);
+  ctx.restore();
+
+  $('status').textContent = `Pass 2 (rendering): ${Math.round(src.currentTime)}s / ${Math.round(src.duration)}s`;
+  src.requestVideoFrameCallback(render);
+}
+
+function finish() {
+  if (rec && rec.state !== 'inactive') rec.stop();
+}
+
+$('go').onclick = async () => {
+  $('go').disabled = true;
+  await analyze();
+
+  offs = smoothedOffsets(+$('smooth').value);
+  oi = 0;
+  src.playbackRate = 1;
+  src.muted = true;
+  src.currentTime = 0;
+
+  chunks = [];
+  const stream = out.captureStream(30);
+  rec = new MediaRecorder(stream, { mimeType: 'video/webm' });
+  rec.ondataavailable = e => chunks.push(e.data);
+  rec.onstop = () => {
+    const dl = $('dl');
+    dl.href = URL.createObjectURL(new Blob(chunks, { type: 'video/webm' }));
+    dl.download = 'stabilized.webm';
+    dl.hidden = false;
+    $('status').textContent = 'Done.';
+    $('go').disabled = false;
+  };
+  src.onended = finish;
+  rec.start();
+  src.play();
+  src.requestVideoFrameCallback(render);
+};
+</script>
+</body>
+</html>
