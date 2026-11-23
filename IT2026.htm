@@ -671,14 +671,52 @@
       <iframe class="example-frame" src="https://aiaio1techusa.github.io/thegeakspeaks.html" title="Steady Hindsight video stabilization example" loading="lazy"></iframe>
     </div>
   </section>
-                  
-     <section id="steady-hindsight" class="sh-showcase" data-steady-hindsight>
-  <h2>Steady Hindsight</h2>
-  <p>The One-Two Punch: two stabilization passes, then a platform export.</p>
-  <input type="file" accept="video/*" data-sh-input>
-  <!-- Step 1, Step 2, Step 3 blocks with data-sh-step attributes -->
+                  <section id="video-stabilizer" aria-labelledby="video-stabilizer-title">
+  <h2 id="video-stabilizer-title"> Stabilizer: Steady Shaky Clips for Reels, TikTok and Shorts</h2>
+  <p><p>The One-Two Punch: two stabilization passes, then a platform export: Run your clip througVideoh Step 1, save the result, feed it into Step 2, then convert the final WebM to MP4 for your platform in Step 3. All processing happens in your browser, so your video is never uploaded to a server.</p>
+  <noscript><p><strong>JavaScript is required</strong> to run the stabilizer. Please enable it and reload the page.</p></noscript>
+Run
+  <section id="step1" class="stabilizer-step" aria-labelledby="step1-title">
+    <h3 id="step1-title">Step 1: First stabilization pass</h3>
+    <label for="in1">Your clip</label>
+    <input type="file" id="in1" accept="video/*">
+    <label for="k1">Smoothing (frames): <span id="k1v">20</span></label>
+    <input type="range" id="k1" min="2" max="60" value="20" aria-describedby="k1v">
+    <button id="run1" disabled>Stabilize</button>
+    <p class="status" id="st1" role="status" aria-live="polite"></p>
+    <a class="save" id="save1" hidden>Save Step 1 result</a>
+  </section>
+
+  <section id="step2" class="stabilizer-step" aria-labelledby="step2-title">
+    <h3 id="step2-title">Step 2: Second stabilization pass</h3>
+    <p>Use the Step 1 result directly, or upload the file you saved.</p>
+    <button id="use1" disabled>Use Step 1 result</button>
+    <label for="in2">Or upload a saved file</label>
+    <input type="file" id="in2" accept="video/*">
+    <label for="k2">Smoothing (frames): <span id="k2v">20</span></label>
+    <input type="range" id="k2" min="2" max="60" value="20" aria-describedby="k2v">
+    <button id="run2" disabled>Stabilize again</button>
+    <p class="status" id="st2" role="status" aria-live="polite"></p>
+    <a class="save" id="save2" hidden>Save final WebM</a>
+  </section>
+
+  <section id="step3" class="stabilizer-step" aria-labelledby="step3-title">
+    <h3 id="step3-title">Step 3: Convert to MP4 for your platform</h3>
+    <label for="preset">Target platform</label>
+    <select id="preset">
+      <option value="instagram">Instagram Reels (1080×1920, 9:16)</option>
+      <option value="tiktok">TikTok (1080×1920, 9:16)</option>
+      <option value="youtube_shorts">YouTube Shorts (1080×1920, 9:16)</option>
+      <option value="youtube">YouTube landscape (1920×1080, 16:9)</option>
+    </select>
+    <p>Clips are scaled to fit and padded with black bars if the proportions differ. The first conversion downloads a conversion engine of roughly 30 MB.</p>
+    <p class="note"><strong>Heads up:</strong> The exported video has no audio. The browser recording captures only the picture. Add music or voiceover in your platform's editor or a separate app before you post.</p>
+    <button id="run3" disabled>Convert to MP4</button>
+    <p class="status" id="st3" role="status" aria-live="polite"></p>
+    <a class="save" id="save3" hidden>Save MP4</a>
+  </section>
 </section>
-             
+                  
 </article> 
 
     </div>
