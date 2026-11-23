@@ -1,16 +1,257 @@
 // steady-hindsight.js
-(function () {
-  const CONFIG = { ZOOM1: 1.08, ZOOM2: 1.04, SW: 160, R: 8 };
+import { FFmpeg } from 'https://unpkg.com/@ffmpeg/ffmpeg@0.12.10/dist/esm/index.js';
+import { fetchFile, toBlobURL } from 'https://unpkg.com/@ffmpeg/util@0.12.1/dist/esm/index.js';
 
-  function initShowcase(root) {
-    const input   = root.querySelector('[data-sh-input]');
-    const step1   = root.querySelector('[data-sh-step="1"]');
-    const step2   = root.querySelector('[data-sh-step="2"]');
-    const step3   = root.querySelector('[data-sh-step="3"]');
-    const preset  = root.querySelector('[data-sh-preset]');
-    // Pass 1 analyzes at 4x, pass 2 renders at 1x, step 3 converts with FFmpeg.wasm
-    // Each step gets progress feedback and a download link when done
+const $ = id => document.getElementById(id);
+const SW = 160;      // analysis width in pixels
+const R = 8;         // search radius in analysis pixels
+const ZOOM1 = 1.08;  // zoom for Step 1 hides the empty edges
+const ZOOM2 = 1.04;  // gentler zoom for Step 2, since footage is already zoomed once
+
+// Export settings per platform
+const PRESETS = {
+  instagram:      { w: 1080, h: 1920, crf: 23, maxrate: '6M',  bufsize: '12M', file: 'instagram_stabilized.mp4' },
+  tiktok:         { w: 1080, h: 1920, crf: 20, maxrate: '8M',  bufsize: '16M', file: 'tiktok_stabilized.mp4' },
+  youtube_shorts: { w: 1080, h: 1920, crf: 18, maxrate: '12M', bufsize: '24M', file: 'youtube_shorts_stabilized.mp4' },
+  youtube:        { w: 1920, h: 1080, crf: 18, maxrate: '12M', bufsize: '24M', file: 'youtube_stabilized.mp4' }
+};
+
+let blob1 = null;    // Step 1 output
+let src2 = null;     // input for Step 2
+let blob2 = null;    // Step 2 output
+
+const pickMime = () =>
+  MediaRecorder.isTypeSupported('video/webm;codecs=vp9') ? 'video/webm;codecs=vp9' : 'video/webm';
+
+// Two-pass stabilizer: analyze the raw camera path, smooth it, then re-render and record.
+async function stabilize(blob, K, zoom, setStatus) {
+  const url = URL.createObjectURL(blob);
+  const v = document.createElement('video');
+  v.src = url;
+  v.muted = true;
+  v.playsInline = true;
+  await new Promise((res, rej) => {
+    v.onloadedmetadata = res;
+    v.onerror = () => rej(new Error('Could not load this video.'));
+  });
+
+  const W = v.videoWidth, H = v.videoHeight;
+  const SH = Math.round(SW * H / W);
+  const small = document.createElement('canvas');
+  small.width = SW; small.height = SH;
+  const sctx = small.getContext('2d', { willReadFrequently: true });
+  const out = document.createElement('canvas');
+  out.width = W; out.height = H;
+  const ctx = out.getContext('2d');
+
+  const grayFrame = () => {
+    sctx.drawImage(v, 0, 0, SW, SH);
+    const d = sctx.getImageData(0, 0, SW, SH).data;
+    const g = new Float32Array(SW * SH);
+    for (let i = 0, j = 0; i < d.length; i += 4, j++)
+      g[j] = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
+    return g;
+  };
+
+  // Brute-force block matching: shift that best aligns b with a.
+  const estimateShift = (a, b) => {
+    const m = R + 4;
+    let best = Infinity, bx = 0, by = 0;
+    for (let dy = -R; dy <= R; dy++) {
+      for (let dx = -R; dx <= R; dx++) {
+        let s = 0, n = 0;
+        for (let y = m; y < SH - m; y += 2)
+          for (let x = m; x < SW - m; x += 2) {
+            s += Math.abs(a[y * SW + x] - b[(y + dy) * SW + x + dx]);
+            n++;
+          }
+        s /= n;
+        if (s < best) { best = s; bx = dx; by = dy; }
+      }
+    }
+    return { x: bx, y: by };
+  };
+
+  // PASS 1: play at 4x and record the cumulative camera path.
+  const track = [];
+  await new Promise(resolve => {
+    let prev = null, cx = 0, cy = 0;
+    v.playbackRate = 4;
+    v.onended = () => resolve();
+    const cb = (now, meta) => {
+      if (v.ended) return;
+      const g = grayFrame();
+      if (prev) {
+        const d = estimateShift(prev, g);
+        cx += d.x; cy += d.y;
+      }
+      prev = g;
+      track.push({ t: meta.mediaTime, x: cx, y: cy });
+      setStatus(`Pass 1 (analyzing): ${Math.round(v.currentTime)}s elapsed`);
+      v.requestVideoFrameCallback(cb);
+    };
+    v.requestVideoFrameCallback(cb);
+    v.play();
+  });
+
+  // Centered moving average: each frame is corrected against motion before and after it.
+  const h = Math.floor(K / 2);
+  const offs = track.map((p, i) => {
+    let sx = 0, sy = 0, n = 0;
+    const lo = Math.max(0, i - h), hi = Math.min(track.length - 1, i + h);
+    for (let j = lo; j <= hi; j++) { sx += track[j].x; sy += track[j].y; n++; }
+    return { t: p.t, ox: sx / n - p.x, oy: sy / n - p.y };
+  });
+
+  // PASS 2: re-render at 1x and record.
+  v.playbackRate = 1;
+  v.currentTime = 0;
+  const stream = out.captureStream(30);
+  const rec = new MediaRecorder(stream, { mimeType: pickMime() });
+  const chunks = [];
+  rec.ondataavailable = e => { if (e.data.size) chunks.push(e.data); };
+  const done = new Promise(resolve => { rec.onstop = resolve; });
+
+  let oi = 0;
+  const render = (now, meta) => {
+    if (v.ended) return;
+    const t = meta.mediaTime;
+    while (oi < offs.length - 1 && offs[oi + 1].t <= t) oi++;
+    const o = offs[oi] || { ox: 0, oy: 0 };
+    const f = W / SW;
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0, 0, W, H);
+    ctx.save();
+    ctx.translate(W / 2, H / 2);
+    ctx.scale(zoom, zoom);
+    ctx.translate(-W / 2 + o.ox * f, -H / 2 + o.oy * f);
+    ctx.drawImage(v, 0, 0, W, H);
+    ctx.restore();
+    setStatus(`Pass 2 (rendering): ${Math.round(v.currentTime)}s elapsed`);
+    v.requestVideoFrameCallback(render);
+  };
+
+  v.onended = () => { if (rec.state !== 'inactive') rec.stop(); };
+  rec.start();
+  v.play();
+  v.requestVideoFrameCallback(render);
+  await done;
+
+  URL.revokeObjectURL(url);
+  return new Blob(chunks, { type: 'video/webm' });
+}
+
+// Lazy-load FFmpeg the first time Step 3 runs.
+let ff = null;
+async function getFFmpeg(setStatus) {
+  if (ff) return ff;
+  ff = new FFmpeg();
+  ff.on('progress', ({ progress }) => {
+    setStatus(`Converting: ${Math.min(100, Math.round(progress * 100))}%`);
+  });
+  setStatus('Loading conversion engine (first run only)...');
+  const base = 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/esm';
+  await ff.load({
+    coreURL: await toBlobURL(`${base}/ffmpeg-core.js`, 'text/javascript'),
+    wasmURL: await toBlobURL(`${base}/ffmpeg-core.wasm`, 'application/wasm'),
+  });
+  return ff;
+}
+
+function saveLink(linkId, blob, filename) {
+  const a = $(linkId);
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.hidden = false;
+}
+
+// Wire up the sliders
+$('k1').oninput = e => $('k1v').textContent = e.target.value;
+$('k2').oninput = e => $('k2v').textContent = e.target.value;
+
+// STEP 1
+$('in1').onchange = e => { $('run1').disabled = !e.target.files[0]; };
+$('run1').onclick = async () => {
+  const file = $('in1').files[0];
+  if (!file) return;
+  $('run1').disabled = true;
+  $('save1').hidden = true;
+  try {
+    blob1 = await stabilize(file, +$('k1').value, ZOOM1, msg => $('st1').textContent = msg);
+    $('st1').textContent = 'Step 1 complete. Save the result, then continue to Step 2.';
+    saveLink('save1', blob1, 'stabilized_step1.webm');
+    $('use1').disabled = false;
+  } catch (err) {
+    $('st1').textContent = 'Error: ' + err.message;
   }
+  $('run1').disabled = false;
+};
 
-  document.querySelectorAll('[data-steady-hindsight]').forEach(initShowcase);
-})();
+// STEP 2
+$('use1').onclick = () => {
+  if (!blob1) return;
+  src2 = blob1;
+  $('st2').textContent = 'Using the Step 1 result.';
+  $('run2').disabled = false;
+};
+$('in2').onchange = e => {
+  src2 = e.target.files[0] || null;
+  $('run2').disabled = !src2;
+  if (src2) $('st2').textContent = `Loaded ${src2.name}.`;
+};
+$('run2').onclick = async () => {
+  if (!src2) return;
+  $('run2').disabled = true;
+  $('save2').hidden = true;
+  try {
+    blob2 = await stabilize(src2, +$('k2').value, ZOOM2, msg => $('st2').textContent = msg);
+    $('st2').textContent = 'Step 2 complete. Save the final WebM, then convert it in Step 3.';
+    saveLink('save2', blob2, 'stabilized_final.webm');
+    $('run3').disabled = false;
+  } catch (err) {
+    $('st2').textContent = 'Error: ' + err.message;
+  }
+  $('run2').disabled = false;
+};
+
+// STEP 3
+$('run3').onclick = async () => {
+  if (!blob2) return;
+  $('run3').disabled = true;
+  $('save3').hidden = true;
+  const setStatus = msg => $('st3').textContent = msg;
+  const p = PRESETS[$('preset').value];
+  const vf = [
+    `scale=${p.w}:${p.h}:force_original_aspect_ratio=decrease`,
+    `pad=${p.w}:${p.h}:(ow-iw)/2:(oh-ih)/2:black`,
+    'setsar=1',
+    'fps=30'
+  ].join(',');
+  try {
+    const f = await getFFmpeg(setStatus);
+    await f.writeFile('input.webm', await fetchFile(blob2));
+    await f.exec([
+      '-i', 'input.webm',
+      '-an',
+      '-vf', vf,
+      '-c:v', 'libx264',
+      '-profile:v', 'high',
+      '-preset', 'medium',
+      '-crf', String(p.crf),
+      '-maxrate', p.maxrate,
+      '-bufsize', p.bufsize,
+      '-pix_fmt', 'yuv420p',
+      '-movflags', '+faststart',
+      'output.mp4'
+    ]);
+    const data = await f.readFile('output.mp4');
+    const mp4 = new Blob([data.buffer], { type: 'video/mp4' });
+    setStatus('Done. Save the MP4 and upload it to your platform.');
+    saveLink('save3', mp4, p.file);
+    await f.deleteFile('input.webm');
+    await f.deleteFile('output.mp4');
+  } catch (err) {
+    setStatus('Error: ' + err.message);
+  }
+  $('run3').disabled = false;
+};
