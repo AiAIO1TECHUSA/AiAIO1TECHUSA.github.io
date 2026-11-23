@@ -471,6 +471,11 @@
 .contact-collapse[open] .contact-toggle {
   margin-bottom: 16px;
         }
+        .sh-showcase { display: grid; gap: 1rem; padding: 1rem; }
+.sh-showcase button { min-height: 44px; width: 100%; }
+@media (min-width: 768px) {
+  .sh-showcase { grid-template-columns: 1fr 1fr; }
+            }
     </style>
 </head>
 <body>
@@ -665,6 +670,14 @@
       <iframe class="example-frame" src="https://aiaio1techusa.github.io/thegeakspeaks.html" title="Steady Hindsight video stabilization example" loading="lazy"></iframe>
     </div>
   </section>
+                  
+     <section id="steady-hindsight" class="sh-showcase" data-steady-hindsight>
+  <h2>Steady Hindsight</h2>
+  <p>The One-Two Punch: two stabilization passes, then a platform export.</p>
+  <input type="file" accept="video/*" data-sh-input>
+  <!-- Step 1, Step 2, Step 3 blocks with data-sh-step attributes -->
+</section>
+             
 </article> 
 
     </div>
@@ -968,5 +981,6 @@ nslookup google.com 8.8.8.8</code></pre>
     </script>
     
     <script src="solution-finder.js" defer></script>
+   <script src="steady-hindsight.js" defer></script>
 </body>
 </html>
